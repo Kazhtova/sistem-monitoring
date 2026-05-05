@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Teknisi;
 use App\Models\User;
 
 return [
@@ -42,7 +43,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'teknisi' => [
+        'driver'    => 'session',
+        'provider'  => 'teknisi',
+        ],
     ],
+
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -71,6 +78,10 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        'teknisi'   => [
+            'driver'    => 'eloquent',
+            'model'     => Teknisi::class
+        ]
     ],
 
     /*

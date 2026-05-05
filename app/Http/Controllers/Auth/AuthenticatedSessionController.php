@@ -23,12 +23,12 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $teknisi = Teknisi::where('nama_teknisi', $request->teknisi)->first();
 
         if($teknisi){
-            Auth::guard('teknisi');
+            Auth::guard('teknisi')->login($teknisi);
             
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard', absolute: false));
@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         return back()->withErrors([
-           'nama_teknisi'   => 'Nama Tidak Terdaftar Di Sistem.' 
+           'teknisi'   => 'Nama Tidak Terdaftar Di Sistem.' 
         ]);
     }
 
