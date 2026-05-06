@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Mahasiswa;
 use App\Models\Teknisi;
 use App\Models\User;
 
@@ -47,6 +48,10 @@ return [
         'driver'    => 'session',
         'provider'  => 'teknisi',
         ],
+        'mahasiswa' => [
+            'driver'    => 'session',
+            'provider'  => 'mahasiswa',
+        ]
     ],
 
     
@@ -81,6 +86,10 @@ return [
         'teknisi'   => [
             'driver'    => 'eloquent',
             'model'     => Teknisi::class
+        ],
+        'mahasiswa' => [
+            'driver'    => 'eloquent',
+            'model'     => Mahasiswa::class
         ]
     ],
 

@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectTo(
-          guests: '/login',
+          guests: '/login-mahasiswa',
           users: '/dashboard',  
         );
     })
