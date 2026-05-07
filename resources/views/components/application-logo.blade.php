@@ -1,5 +1,5 @@
 <svg viewBox="0 0 224 225" xmlns="http://www.w3.org/2000/svg" {{ $attributes }}>
-    <g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="none">
+    <g transform="translate(0,225) scale(0.1,-0.1)" fill="currentColor" stroke="none">
         <path d="M976 2239 c-134 -18 -131 -16 -134 -91 l-3 -66 -47 -17 c-26 -10 -77
         -33 -113 -51 l-66 -33 -46 47 -46 46 -57 -40 c-74 -50 -197 -174 -251 -251
         l-43 -61 46 -50 45 -51 -27 -53 c-15 -29 -38 -82 -50 -118 l-23 -65 -65 -3
