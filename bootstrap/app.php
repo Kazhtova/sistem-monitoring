@@ -11,10 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->redirectTo(
-          guests: '/login-mahasiswa',
-          users: '/dashboard',  
-        );
+        // $middleware->redirectTo(
+        //   guests: function ($request) {
+        //     if($request->is('teknisi/*')){
+        //         return route('login.teknisi');
+        //     }
+
+        //     return route('login.mahasiswa');
+        //   },
+        //   users: '/dashboard',  
+        // );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

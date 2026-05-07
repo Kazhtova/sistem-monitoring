@@ -28,20 +28,25 @@ class AuthenticatedSessionController extends Controller
 
     public function storeMahasiswa(Request $request): RedirectResponse
     {
-        $mahasiswa = Mahasiswa::where('nrp', $request->nrp)->first();
-        if($mahasiswa){
-            Auth::guard('mahasiswa')->login($mahasiswa);
-
-            $request->session()->regenerate();
-            return redirect()->intended(route('dashboard', absolute: false));
+        $nama = Mahasiswa::where('nama_mahasiswa', $request->nama_mahasiswa)->exists();
+        if(!$nama){
+            return back()->withErrors([
+              'nama_mahasiswa'      => 'Nama Tidak Ditemukan'  
+            ])->withInput();
         }
         
-        $request->session()->regenerate();
+        $mahasiswa = Mahasiswa::where('nrp', $request->nrp)->first();
+        if(!$mahasiswa){
+            return back()->withErrors([
+               'nrp'    => 'NRP Tidak Sesuai Mahasiswa' 
+            ])->withInput();
+        }
 
-        return back()->withErrors([
-          'mahasiswa'   => 'Mahasiswa Tidak Tidak Ada'  
-        ]);
+        Auth::guard('mahasiswa')->login($mahasiswa, $request->boolean('remember'));
+            
+        $request->session()->regenerate();
         
+        return redirect()->intended(route('dashboard.mahasiswa', absolute: false));
     }
 
     /**
@@ -55,7 +60,7 @@ class AuthenticatedSessionController extends Controller
             Auth::guard('teknisi')->login($teknisi);
             
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard', absolute: false));
+            return redirect()->intended(route('dashboard.teknisi', absolute: false));
         }
 
         $request->session()->regenerate();
@@ -70,12 +75,24 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $teknisi   = Auth::guard('teknisi')->check();
+        $mahasiswa = Auth::guard('mahasiswa')->check();
+
         Auth::guard('teknisi')->logout();
         Auth::guard('mahasiswa')->logout();
+        
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('/');
+        if($teknisi){
+            return redirect()->route('login.teknisi');
+        }
+
+        if($mahasiswa){
+            return redirect()->route('login.mahasiswa');
+        }
+
+        return redirect('/');
     }
 }

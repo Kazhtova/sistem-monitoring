@@ -32,10 +32,10 @@ Route::middleware('guest')->group(function () {
         ->name('password.reset');
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
-        ->name('password.store');
+        ->name('password.store');   
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:mahasiswa,teknisi')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 

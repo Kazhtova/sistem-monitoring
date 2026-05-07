@@ -7,12 +7,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth:mahasiswa, teknisi'])->name('dashboard');
+// Menjadi rute fallback agar middleware auth tidak error
+// Route::get('/login', function () {
+//     return redirect()->route('login.mahasiswa');
+// })->name('login');
+
+Route::get('/dashboard-mahasiswa', function () {
+    return view('dashboard-mahasiswa');
+})->middleware(['auth:mahasiswa'])->name('dashboard.mahasiswa');
+
+Route::get('/dashboard-teknisi', function () {
+    return view('dashboard-teknisi');
+})->middleware(['auth:teknisi'])->name('dashboard.teknisi');
 
 // Jika Mahasiswa juga ingin masuk ke profil, tambahkan guard-nya di sini
-Route::middleware('auth:mahasiswa, teknisi')->group(function () {
+Route::middleware('auth:mahasiswa,teknisi')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
