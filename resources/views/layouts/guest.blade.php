@@ -17,7 +17,7 @@
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
     <div class="mb-14"> {{-- Tambah margin bawah lebih banyak --}}
-    <a href="/">
+    <a href="">
         {{-- Paksa lebar 200px melalui style --}}
         <x-application-logo style="width: 200px; height: auto;" class="text-gray-700 fill-current" />
     </a>

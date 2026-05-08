@@ -29,6 +29,11 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="$dashboardUrl" :active="request()->routeIs($route)">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div> --}}
             </div>
 
             <!-- Settings Dropdown -->
@@ -88,8 +93,8 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="font-medium text-base text-gray-800">{{ $name }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ $teknisi ? 'Teknisi' : $user->nrp }}</div>
             </div>
 
             <div class="mt-3 space-y-1">

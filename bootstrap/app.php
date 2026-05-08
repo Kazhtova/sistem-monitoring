@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\RestrictAccess;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,16 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // $middleware->redirectTo(
-        //   guests: function ($request) {
-        //     if($request->is('teknisi/*')){
-        //         return route('login.teknisi');
-        //     }
-
-        //     return route('login.mahasiswa');
-        //   },
-        //   users: '/dashboard',  
-        // );
+        $middleware->alias([
+           'restrict'   => RestrictAccess::class, 
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
