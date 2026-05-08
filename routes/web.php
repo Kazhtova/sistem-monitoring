@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Mahasiswa\RequestController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,8 @@ Route::middleware(['restrict:mahasiswa'])->group(function (){
     Route::get('/request-mahasiswa', function () {
         return view('mahasiswa.input-request-mahasiswa');
     })->name('request.mahasiswa');
+
+    Route::post('/request-mahasiswa', [RequestController::class, 'sendRequest'])->name('request.post');
 });
 
 

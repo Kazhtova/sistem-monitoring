@@ -8,8 +8,12 @@
                 </h2>
             </div>
 
-            <form method="POST" action="{{ route('login.teknisi') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('request.post') }}" enctype="multipart/form-data">
                 @csrf
+
+                <input type="hidden" name="id_teknisi" value="4">
+                <input type="hidden" name="id_mahasiswa" value="1">
+                <input type="hidden" name="id_komputer" value="1">
 
                 <!-- Input Teknisi -->
                 <div class="mb-2">
@@ -25,21 +29,27 @@
                 </div>
 
                 <div class="mb-2">
+                    <x-input-label for="no_hp" :value="__('No HP')" />
+                    <x-text-input id="no_hp" class="block mt-1 w-full text-sm" type="number" name="no_hp" :value="old('no_hp')" required autofocus />
+                    <x-input-error :messages="$errors->get('no_hp')" class="mt-1" />
+                </div>
+
+                <div class="mb-2">
                     <x-input-label for="tanggal_mulai" :value="__('Time Start')" />
-                    <x-text-input id="tanggal_mulai" class="block mt-1 w-full text-sm" type="date" name="tanggal_mulai" :value="old('tanggal_mulai')" required autofocus />
+                    <x-text-input id="tanggal_mulai" class="block mt-1 w-full text-sm" type="datetime-local" name="tanggal_mulai" :value="old('tanggal_mulai')" required autofocus />
                     <x-input-error :messages="$errors->get('tanggal_mulai')" class="mt-1" />
                 </div>
 
                 <div class="mb-2">
-                    <x-input-label for="teknisi" :value="__('Estimate Complete')" />
-                    <x-text-input id="teknisi" class="block mt-1 w-full text-sm" type="date" name="teknisi" :value="old('teknisi')" required autofocus />
-                    <x-input-error :messages="$errors->get('teknisi')" class="mt-1" />
+                    <x-input-label for="perkiraan_selesai" :value="__('Estimate Complete')" />
+                    <x-text-input id="perkiraan_selesai" class="block mt-1 w-full text-sm" type="datetime-local" name="perkiraan_selesai" :value="old('perkiraan_selesai')" required autofocus />
+                    <x-input-error :messages="$errors->get('perkiraan_selesai')" class="mt-1" />
                 </div>
 
                 <div class="mb-2">
-                    <x-input-label for="perkiraan_selesai" :value="__('Note')" />
-                    <x-text-input id="perkiraan_selesai" class="block mt-1 w-full text-sm" type="text" name="perkiraan_selesai" :value="old('perkiraan_selesai')" required autofocus />
-                    <x-input-error :messages="$errors->get('perkiraan_selesai')" class="mt-1" />
+                    <x-input-label for="catatan" :value="__('Note')" />
+                    <x-text-input id="catatan" class="block mt-1 w-full text-sm" type="text" name="catatan" :value="old('catatan')" required autofocus />
+                    <x-input-error :messages="$errors->get('catatan')" class="mt-1" />
                 </div>
 
                 <x-input-label for="foto_bukti" :value="__('Upload Photo')" class="mb-2 text-gray-700 font-semibold" />
