@@ -41,6 +41,6 @@ class RequestController extends Controller
             'id_komputer'           => $request->id_komputer
         ]);
 
-        return redirect()->route('request.mahasiswa');
-    }
+        return redirect()->route('request.mahasiswa')->with('success', 'Request Has Been Sent');
+    }  
 }

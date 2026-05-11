@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Mahasiswa\RequestController;
+use App\Http\Controllers\Mahasiswa\RequestController as MahasiswaRequest;
+use App\Http\Controllers\Teknisi\RequestController as TeknisiRequest;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.register');
 });
 
 Route::get('/login', function () {
@@ -15,9 +16,10 @@ Route::get('/login', function () {
 
 
 Route::middleware(['restrict:teknisi'])->group(function () {
-    Route::get('/dashboard-teknisi', function () {
-        return view('teknisi.dashboard-teknisi'); 
-    })->name('dashboard.teknisi');
+    Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.teknisi');
+    Route::patch('/request-list/{id}', [TeknisiRequest::class, 'acceptRequest'])->name('accept.request');
+
+    Route::get('/list-accept', [TeknisiRequest::class, 'listAccept'])->name('accept.teknisi');
 });
 
 Route::middleware(['restrict:mahasiswa'])->group(function (){
@@ -29,7 +31,7 @@ Route::middleware(['restrict:mahasiswa'])->group(function (){
         return view('mahasiswa.input-request-mahasiswa');
     })->name('request.mahasiswa');
 
-    Route::post('/request-mahasiswa', [RequestController::class, 'sendRequest'])->name('request.post');
+    Route::post('/request-mahasiswa', [MahasiswaRequest::class, 'sendRequest'])->name('request.post');
 });
 
 

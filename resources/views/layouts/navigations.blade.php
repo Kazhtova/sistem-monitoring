@@ -8,38 +8,41 @@
                     @php
 
                     $teknisi = Auth::guard('teknisi')->check();
+                    
+                    $mahasiswa = Auth::guard('mahasiswa')->check();
 
-                    $dashboardRequestUrl = $teknisi ? route('dashboard.teknisi') : route('dashboard.mahasiswa');
+                    $dashboardUrl = $teknisi ? route('dashboard.teknisi') : route('dashboard.mahasiswa');
 
-                    $routeRequest = $teknisi ? 'dashboard.teknisi' : 'dashboard.mahasiswa';
+                    $routeDashboard = $teknisi ? 'dashboard.teknisi' : 'dashboard.mahasiswa';
 
-                    $requestAcceptUrl = $teknisi ? route('accept.teknisi') : route('accept.teknisi');
+                    $requestMahasiswaUrl = $mahasiswa ? route('request.mahasiswa') : route('request.mahasiswa');
 
-                    $routeAccept = $teknisi ? 'accept.teknisi' : 'accept.teknisi';
+                    $routeRequestMahasiswa = $mahasiswa ? 'request.mahasiswa' : 'request.mahasiswa';
 
                     $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
 
                     $name = $teknisi ? $user->nama_teknisi : $user->nama_mahasiswa;
 
                     @endphp
-                    <a href="{{ $dashboardRequestUrl }}">
+                    <a href="{{ $dashboardUrl }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeRequest)">
-                        {{ __('Request List') }}
+                    <x-nav-link :href="$requestMahasiswaUrl" :active="request()->routeIs($routeRequestMahasiswa)">
+                        {{ __('Request') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="$requestAcceptUrl" :active="request()->routeIs($routeAccept)">
-                        {{ __('Accept List') }}
+                    <x-nav-link :href="$dashboardUrl" :active="request()->routeIs($routeDashboard)">
+                        {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                
                 {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="$dashboardUrl" :active="request()->routeIs($route)">
+                    <x-nav-link :href="$dashboardUrl" :active="request()->routeIs($routeDashboard)">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div> --}}
@@ -94,7 +97,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeAccept)">
+            <x-responsive-nav-link :href="$dashboardUrl" :active="request()->routeIs($routeDashboard)">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>

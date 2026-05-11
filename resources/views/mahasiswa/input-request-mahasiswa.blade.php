@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-apps-layout>
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div class="w-full sm:max-w-sm px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             
@@ -12,7 +12,7 @@
                 @csrf
 
                 <input type="hidden" name="id_teknisi" value="4">
-                <input type="hidden" name="id_mahasiswa" value="1">
+                <input type="hidden" name="id_mahasiswa" value="{{ auth()->guard('mahasiswa')->user()->id_mahasiswa }}">
                 <input type="hidden" name="id_komputer" value="1">
 
                 <!-- Input Teknisi -->
@@ -80,7 +80,21 @@
                     </x-primary-button>
                 </div>
             </form>
-
         </div>
     </div>
-</x-app-layout> 
+    @push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if (session('success'))
+            Swal.fire({
+                icon: "success",
+                title: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+    });
+</script>
+@endpush
+
+</x-apps-layout> 

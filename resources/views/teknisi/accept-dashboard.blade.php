@@ -57,7 +57,7 @@
                                     </div>
 
                                     <div class="flex justify-between items-start mb-3 shrink-0">
-                                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}</span>
+                                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">{{ $index + 1 }}</span>
                                         <span class="text-xs" style="font-weight: bold;">{{ $data_request->created_at->diffForHumans() }}</span>
                                     </div>
                                     
