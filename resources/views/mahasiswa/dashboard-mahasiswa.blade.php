@@ -31,9 +31,9 @@
                                 <span class="text-xs font-black text-gray-400 uppercase tracking-widest">#{{ $index + 1 }}</span>
                                 
                                 @if($request->status == 'pending')
-                                    <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Waiting Technician</span>
+                                    <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Waiting Agreement</span>
                                 @elseif($request->status == 'setuju')
-                                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">On Process</span>
+                                    <span class="bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Running</span>
                                 @elseif($request->status == 'selesai')
                                     <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Completed</span>
                                 @else
@@ -42,7 +42,7 @@
                             </div>
 
                             <div class="p-8">
-                                <h3 class="text-violet-600 text-xs font-black uppercase tracking-widest mb-1">{{ $request->software }}</h3>
+                                <h3 class="text-violet-900 text-xs font-black uppercase tracking-widest mb-1">{{ $request->software }}</h3>
                                 <p class="text-xl font-black text-gray-900 mb-4">PC: {{ $request->komputer->nama_komputer ?? 'General Service' }}</p>
                                 <p class="text-lg font-black text-gray-900 mb-4">Dosen TA: {{ $request->dosen_ta ?? 'N/A' }}</p>
 
