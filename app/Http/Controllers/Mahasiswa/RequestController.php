@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class RequestController extends Controller
 {
+    public function viewRequest(){
+        return view('mahasiswa.input-request-mahasiswa');
+    }
     public function sendRequest(Request $request){
         $request->validate([
             'dosen_ta'          => 'required|string',
@@ -21,6 +24,12 @@ class RequestController extends Controller
             'id_mahasiswa'      => 'required|exists:mahasiswa,id_mahasiswa',
             'id_komputer'       => 'required|exists:komputer,id_komputer' 
         ]);
+
+        $activeRequest = ModelsRequest::where('id_mahasiswa', $request->id_mahasiswa)->whereIn('status', ['pending', 'setuju'])->count();
+
+        if($activeRequest >=3){
+            return redirect()->back()->withInput()->with('error', 'Limit, You Already 3 Active Request');
+        }
 
         if($request->hasFile('foto_bukti')){
             $file = $request->file('foto_bukti');
@@ -41,6 +50,18 @@ class RequestController extends Controller
             'id_komputer'           => $request->id_komputer
         ]);
 
-        return redirect()->route('request.mahasiswa')->with('success', 'Request Has Been Sent');
-    }  
+        return redirect()->route('dashboard.mahasiswa')->with('success', 'Request Has Been Sent');
+    } 
+    
+    public function readRequest(){
+        
+        $user = auth()->guard('mahasiswa')->user();
+
+        $readRequest = $user->request()
+                                    ->with('teknisi')
+                                    ->latest()
+                                    ->get();
+
+        return view('mahasiswa.dashboard-mahasiswa', compact('readRequest'));
+    }
 }

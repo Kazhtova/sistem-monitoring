@@ -1,130 +1,149 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Teknisi') }}
-            {{-- <span>
-               {{ auth()->guard('teknisi')->user()->nama_teknisi }}
-            </span> --}}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
+                {{ __('Incoming Requests') }}
+            </h2>
+        </div>
     </x-slot>
 
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <div class="mb-6">
-                        <form action="{{ route('dashboard.teknisi') }}" method="GET" class="flex flex-wrap items-center gap-3 max-w-2xl">
-                            <div class="flex-1 min-w-[200px] md:max-w-md">
-                                <input type="text" name="search" value="{{ request('search') }}" 
-                                    placeholder="Cari dosen atau mahasiswa..." 
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-600 focus:ring-gray-600 text-sm">
-                            </div>
-                            
-                            <select name="sort" onchange="this.form.submit()" 
-                                    class="rounded-md border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-700 text-sm">
-                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
-                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
-                            </select>
-
-                            <button type="submit" class="bg-gray-700 text-white px-5 py-2 rounded-md hover:bg-gray-900 text-sm transition-colors">
-                                Cari
-                            </button>
-                            
-                            @if(request('search') || request('sort'))
-                                <a href="{{ route('dashboard.teknisi') }}" class="text-sm text-gray-500 hover:text-red-600 transition-colors">
-                                    Reset
-                                </a>
-                            @endif
-                        </form>
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="mb-8 flex flex-wrap items-center gap-4">
+                <form action="{{ route('dashboard.accept') }}" method="GET" class="flex flex-1 items-center gap-3 max-w-2xl">
+                    <div class="relative flex-1 md:max-w-md">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </span>
+                        <input type="text" name="search" value="{{ request('search') }}" 
+                               placeholder="Cari Dosen Atau Mahasiswa..." 
+                               class="pl-10 w-full rounded-xl border-gray-200 shadow-sm focus:border-gray-500 focus:ring-gray-500 text-sm transition-all">
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6">
-                        @foreach($readRequest as $index => $data_request)
-                            <div class="aspect-square bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col justify-between mt-2 overflow-hidden">
-                                
-                                <div class="overflow-y-auto pr-1 flex flex-col h-full"> 
-                                    
-                                    <div class="w-full mb-3 bg-gray-100 rounded-md overflow-hidden shrink-0" style="height: 340px;">
-                                        @if($data_request->foto_bukti)
-                                            <img src="{{ asset('storage/' . $data_request->foto_bukti) }}" 
-                                                 alt="Bukti" 
-                                                 class="w-full h-full object-cover cursor-pointer hover:opacity-100 transition-opacity duration-200"
-                                                 onclick="bukaModal('{{ asset('storage/' . $data_request->foto_bukti) }}')">
-                                        @else
-                                            <div class="w-full h-full flex items-center justify-center text-gray-400 text-[10px] font-bold tracking-widest">
-                                                NO IMAGE
-                                            </div>
-                                        @endif
-                                    </div>
+                    
+                    <select name="sort" onchange="this.form.submit()" 
+                            class="rounded-xl border-gray-200 shadow-sm focus:border-gray-600 text-sm font-medium text-gray-600">
+                        <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                    </select>
 
-                                    <div class="flex justify-between items-start mb-3 shrink-0">
-                                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">{{ $index + 1 }}</span>
-                                        <span class="text-xs" style="font-weight: bold;">{{ $data_request->created_at->diffForHumans() }}</span>
-                                    </div>
-                                    
-                                    <p class="text-sm mt-1 shrink-0"><span style="font-family:'Times New Roman', Times, serif; font-size: x-large;">Mahasiswa: </span><span style="font-family:Georgia, 'Times New Roman', Times, serif; font-weight: bold; font-size: large;">{{ $data_request->mahasiswa->nama_mahasiswa }}</span></p>
-                                    <p class="text-sm mt-1 shrink-0"><span style="font-family:'Times New Roman', Times, serif; font-size: x-large;">Dosen: </span><span style="font-family:Georgia, 'Times New Roman', Times, serif; font-weight: bold; font-size: large;">{{ $data_request->dosen_ta }}</span></p>
-                                    <p class="text-gray-900 truncate shrink-0"><span style="font-family:'Times New Roman', Times, serif; font-size: large;">Software: </span><span style="font-size: medium; font-weight: 900;">{{ $data_request->software }}</span></p>
-                                </div>
-                                
-                                <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center shrink-0">
-                                    <div class="text-sm text-gray-800">
-                                        <p style="font-size: larger; font-weight: 800;"><span style="font-weight: 500;">Start: </span>{{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M h:i A') }}</p>
-                                        <p style="font-size: larger; font-weight: 800;"><span style="font-weight: 500;">End: </span>{{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M h:i A') }}</p>
-                                    </div>
-                                    
-                                    <div class="flex items-center gap-2">
-                                        <form action="" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="id_data" value="{{ $data_request->id_request }}">
-                                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out text-xs">
-                                                Reject
-                                            </button>
-                                        </form>
-
-                                        <form action="{{ route('accept.request', $data_request->id_request) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out text-xs">
-                                                Accept
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="mt-4">
-                        {{ $readRequest->links() }}
-                    </div>
+                    <button type="submit" class="bg-gray-700 hover:bg-gray-900 text-white px-6 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                        Filter
+                    </button>
+                    
+                    @if(request('search') || request('sort'))
+                        <a href="{{ route('dashboard.accept') }}" class="text-base text-gray-500 hover:text-gray-900 transition-colors font-black">
+                            Reset
+                        </a>
+                    @endif
+                </form>
+                <div style="margin-left: 174px;">
+                    {{ $readRequest->links() }}
                 </div>
             </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                @foreach($readRequest as $index => $data_request)
+                    <div class="group bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col h-full">
+                        
+                        <div class="relative h-64 w-full bg-gray-50 overflow-hidden">
+                            @if($data_request->foto_bukti)
+                                <img src="{{ asset('storage/' . $data_request->foto_bukti) }}" 
+                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 cursor-pointer"
+                                     onclick="bukaModal(this.src)">
+                            @else
+                                <div class="w-full h-full flex flex-col items-center justify-center text-gray-300">
+                                    <svg class="w-16 h-16 mb-2 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span class="text-xs uppercase tracking-tighter font-bold opacity-40">No Preview Available</span>
+                                </div>
+                            @endif
+                            <div class="absolute top-5 left-5">
+                                <span class="bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black text-white shadow-lg">
+                                    #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-8 flex-1 flex flex-col">
+                            <div class="mb-6">
+                                <h3 class="text-sm uppercase tracking-[0.2em] text-gray-600 font-black mb-2">{{ $data_request->software }}</h3>
+                                <p class="text-2xl font-black text-gray-900 leading-tight mb-2">{{ $data_request->mahasiswa->nama_mahasiswa }}</p>
+                                <p class="text-base text-gray-900 font-semibold italic">Dosen: {{ $data_request->dosen_ta }}</p>
+                            </div>
+
+                            <div class="space-y-4 mb-8 bg-gray-50 p-5 rounded-2xl">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Mulai</span>
+                                    <span class="text-base font-black text-gray-800">{{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M, H:i') }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Selesai</span>
+                                    <span class="text-base font-black text-gray-800">{{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto pt-6 flex gap-4">
+                                <form id="form-reject-{{ $data_request->id_request }}" 
+                                    action="{{ route('cancle.request', $data_request->id_request) }}" 
+                                    method="POST" class="flex-1">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="button" 
+                                            class="w-full py-4 px-4 rounded-2xl text-sm font-black text-red-500 bg-red-50 hover:bg-red-100 transition-all active:scale-95" 
+                                            onclick="confirmDelete('{{ $data_request->id_request }}')">
+                                        CANCEL
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            {{-- <div class="mt-16">
+                {{ $readRequest->links() }}
+            </div> --}}
         </div>
     </div>
 
-    <div id="modalGambar" class="fixed inset-0 z-[999] hidden bg-black bg-opacity-90 flex items-center justify-center p-4 backdrop-blur-sm" onclick="tutupModal()">
-        <button class="absolute top-5 right-5 text-white text-4xl hover:text-red-500 font-bold focus:outline-none transition-colors">
-            &times;
-        </button>
-        <img id="gambarUtuh" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-lg" onclick="event.stopPropagation()">
+    <div id="modalGambar" class="fixed inset-0 z-[999] hidden bg-gray-900/90 backdrop-blur-xl flex items-center justify-center p-8" onclick="tutupModal()">
+        <div class="relative max-w-5xl w-full flex justify-center">
+            <button class="absolute -top-12 right-0 text-white text-5xl font-light hover:text-red-500 transition-colors">&times;</button>
+            <img id="gambarUtuh" class="max-w-full max-h-[85vh] rounded-3xl shadow-2xl object-contain border-8 border-white/5" onclick="event.stopPropagation()">
+        </div>
     </div>
 
     <script>
         function bukaModal(src) {
             const modal = document.getElementById('modalGambar');
             const gambar = document.getElementById('gambarUtuh');
-            
             gambar.src = src;
             modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
         }
 
         function tutupModal() {
             const modal = document.getElementById('modalGambar');
-            const gambar = document.getElementById('gambarUtuh');
-            
             modal.classList.add('hidden');
-            gambar.src = '';
             document.body.style.overflow = 'auto';
         }
+
+        function confirmDelete(id) {
+    Swal.fire({
+        title: "Ingin Membatalkan Request?",
+        text: "Anda membatalkan Request Yang Sedang Berjalan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal"
+    }).then((result) => {
+        // Jika pengguna menekan tombol "Ya"
+        if (result.isConfirmed) {
+            // Jalankan submit form secara manual berdasarkan ID
+            document.getElementById('form-reject-' + id).submit();
+        }
+    });
+}
     </script>
 </x-app-layout>

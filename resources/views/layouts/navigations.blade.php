@@ -11,9 +11,9 @@
                     
                     $mahasiswa = Auth::guard('mahasiswa')->check();
 
-                    $dashboardUrl = $teknisi ? route('dashboard.teknisi') : route('dashboard.mahasiswa');
+                    $dashboardUrl = $teknisi ? route('dashboard.mahasiswa') : route('dashboard.mahasiswa');
 
-                    $routeDashboard = $teknisi ? 'dashboard.teknisi' : 'dashboard.mahasiswa';
+                    $routeDashboard = $teknisi ? 'dashboard.mahasiswa' : 'dashboard.mahasiswa';
 
                     $requestMahasiswaUrl = $mahasiswa ? route('request.mahasiswa') : route('request.mahasiswa');
 
@@ -37,7 +37,7 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$dashboardUrl" :active="request()->routeIs($routeDashboard)">
-                        {{ __('Dashboard') }}
+                        {{ __('Dashboard List') }}
                     </x-nav-link>
                 </div>
                 

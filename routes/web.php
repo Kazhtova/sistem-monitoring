@@ -16,20 +16,17 @@ Route::get('/login', function () {
 
 
 Route::middleware(['restrict:teknisi'])->group(function () {
-    Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.teknisi');
-    Route::patch('/request-list/{id}', [TeknisiRequest::class, 'acceptRequest'])->name('accept.request');
-
-    Route::get('/list-accept', [TeknisiRequest::class, 'listAccept'])->name('accept.teknisi');
+    Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.request');
+    Route::patch('/request-list/accept/{id}', [TeknisiRequest::class, 'acceptRequest'])->name('accept.request');
+    Route::patch('/request-list/reject/{id}', [TeknisiRequest::class, 'rejectRequest'])->name('reject.request');
+    Route::patch('/request/accept/cancle/{id}', [TeknisiRequest::class, 'cancleRequest'])->name('cancle.request');
+    Route::get('/accept-list', [TeknisiRequest::class, 'listAccept'])->name('dashboard.accept');
 });
 
 Route::middleware(['restrict:mahasiswa'])->group(function (){
-    Route::get('/dashboard-mahasiswa', function () {
-        return view('mahasiswa.dashboard-mahasiswa');
-    })->name('dashboard.mahasiswa');
+    Route::get('/dashboard-mahasiswa',  [MahasiswaRequest::class, 'readRequest'])->name('dashboard.mahasiswa');
 
-    Route::get('/request-mahasiswa', function () {
-        return view('mahasiswa.input-request-mahasiswa');
-    })->name('request.mahasiswa');
+    Route::get('/request-mahasiswa', [MahasiswaRequest::class, 'viewRequest'])->name('request.mahasiswa');
 
     Route::post('/request-mahasiswa', [MahasiswaRequest::class, 'sendRequest'])->name('request.post');
 });

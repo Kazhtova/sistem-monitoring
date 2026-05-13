@@ -9,13 +9,13 @@
 
                     $teknisi = Auth::guard('teknisi')->check();
 
-                    $dashboardRequestUrl = $teknisi ? route('dashboard.teknisi') : route('dashboard.mahasiswa');
+                    $dashboardRequestUrl = $teknisi ? route('dashboard.request') : route('dashboard.mahasiswa');
 
-                    $routeRequest = $teknisi ? 'dashboard.teknisi' : 'dashboard.mahasiswa';
+                    $routeRequest = $teknisi ? 'dashboard.request' : 'dashboard.mahasiswa';
 
-                    $requestAcceptUrl = $teknisi ? route('accept.teknisi') : route('accept.teknisi');
+                    $requestAcceptUrl = $teknisi ? route('dashboard.accept') : route('dashboard.accept');
 
-                    $routeAccept = $teknisi ? 'accept.teknisi' : 'accept.teknisi';
+                    $routeAccept = $teknisi ? 'dashboard.accept' : 'dashboard.accept';
 
                     $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
 

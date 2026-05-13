@@ -60,7 +60,7 @@ class AuthenticatedSessionController extends Controller
             Auth::guard('teknisi')->login($teknisi);
             
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard.teknisi', absolute: false));
+            return redirect()->intended(route('dashboard.request', absolute: false));
         }
 
         $request->session()->regenerate();

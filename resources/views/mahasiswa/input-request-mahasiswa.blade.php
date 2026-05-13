@@ -83,18 +83,18 @@
         </div>
     </div>
     @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        @if (session('success'))
-            Swal.fire({
-                icon: "success",
-                title: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        @endif
-    });
-</script>
-@endpush
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('success'))
+                Swal.fire({
+                    icon: "success",
+                    title: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            @endif
+        });
+    </script>
+    @endpush
 
 </x-apps-layout> 

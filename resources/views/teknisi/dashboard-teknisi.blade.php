@@ -2,9 +2,6 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Teknisi') }}
-            {{-- <span>
-               {{ auth()->guard('teknisi')->user()->nama_teknisi }}
-            </span> --}}
         </h2>
     </x-slot>
 
@@ -12,31 +9,40 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <div class="mb-6">
-                        <form action="{{ route('dashboard.teknisi') }}" method="GET" class="flex flex-wrap items-center gap-3 max-w-2xl">
-                            <div class="flex-1 min-w-[200px] md:max-w-md">
-                                <input type="text" name="search" value="{{ request('search') }}" 
+                    
+                    <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        
+                        <form action="{{ route('dashboard.request') }}" method="GET" class="flex flex-1 items-center gap-3 max-w-full">
+                            
+                            <div class="flex-1 min-w-[200px] md:max-w-xl transition-all duration-300">
+                                <input type="text" 
+                                    name="search" value="{{ request('search') }}" 
                                     placeholder="Cari dosen atau mahasiswa..." 
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-600 focus:ring-gray-600 text-sm">
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-600 focus:ring-gray-600 text-sm py-2">
                             </div>
                             
                             <select name="sort" onchange="this.form.submit()" 
-                                    class="rounded-md border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-700 text-sm">
+                                    class="rounded-md border-gray-300 shadow-sm focus:border-gray-600 focus:ring-gray-600 text-sm">
                                 <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                                 <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                             </select>
 
-                            <button type="submit" class="bg-gray-700 text-white px-5 py-2 rounded-md hover:bg-gray-900 text-sm transition-colors">
+                            <button type="submit" class="bg-gray-700 text-white px-6 py-2 rounded-md hover:bg-gray-900 text-sm font-bold transition-colors">
                                 Cari
                             </button>
-                            
+
                             @if(request('search') || request('sort'))
-                                <a href="{{ route('dashboard.teknisi') }}" class="text-sm text-gray-500 hover:text-red-600 transition-colors">
+                                <a href="{{ route('dashboard.request') }}" class="text-base text-gray-500 hover:text-gray-900 transition-colors font-black">
                                     Reset
                                 </a>
                             @endif
                         </form>
+
+                        <div class="flex-shrink-0">
+                            {{ $readRequest->links() }}
+                        </div>
                     </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6">
                         @foreach($readRequest as $index => $data_request)
                             <div class="aspect-square bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col justify-between mt-2 overflow-hidden">
@@ -57,7 +63,7 @@
                                     </div>
 
                                     <div class="flex justify-between items-start mb-3 shrink-0">
-                                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}</span>
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}</span>
                                         <span class="text-xs" style="font-weight: bold;">{{ $data_request->created_at->diffForHumans() }}</span>
                                     </div>
                                     
@@ -73,11 +79,11 @@
                                     </div>
                                     
                                     <div class="flex items-center gap-2">
-                                        <form action="" method="POST">
+                                        <form action="{{ route('reject.request', $data_request->id_request) }}" method="POST">
                                             @csrf
-                                            <input type="hidden" name="id_data" value="{{ $data_request->id_request }}">
+                                            @method('PATCH')
                                             <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out text-xs">
-                                                Reject
+                                                Tolak
                                             </button>
                                         </form>
 
@@ -85,7 +91,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out text-xs">
-                                                Accept
+                                                Setuju
                                             </button>
                                         </form>
                                     </div>
@@ -93,26 +99,45 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="mt-4">
-                        {{ $readRequest->links() }}
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="modalGambar" class="fixed inset-0 z-[999] hidden bg-black bg-opacity-90 flex items-center justify-center p-4 backdrop-blur-sm" onclick="tutupModal()">
-        <button class="absolute top-5 right-5 text-white text-4xl hover:text-red-500 font-bold focus:outline-none transition-colors">
-            &times;
-        </button>
-        <img id="gambarUtuh" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-lg" onclick="event.stopPropagation()">
+    <div id="modalGambar" class="fixed inset-0 z-[999] hidden bg-gray-900/90 backdrop-blur-xl flex items-center justify-center p-8" onclick="tutupModal()">
+        <div class="relative max-w-5xl w-full flex justify-center">
+            <button class="absolute -top-12 right-0 text-white text-5xl font-light hover:text-red-500 transition-colors">&times;</button>
+            <img id="gambarUtuh" class="max-w-full max-h-[85vh] rounded-3xl shadow-2xl object-contain border-8 border-white/5" onclick="event.stopPropagation()">
+        </div>
     </div>
+
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Berhasil',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                confirmButtonColor: '#4f46e5'
+            })
+        </script>
+    @endif
+
+    @if(session('reject'))
+        <script>
+            Swal.fire({
+                title: 'Berhasil',
+                text: "{{ session('reject') }}",
+                icon: 'success',
+                iconColor: '#ef4444',
+                confirmButtonColor: '#4f46e5'
+            })
+        </script>
+    @endif
 
     <script>
         function bukaModal(src) {
             const modal = document.getElementById('modalGambar');
             const gambar = document.getElementById('gambarUtuh');
-            
             gambar.src = src;
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; 
@@ -120,10 +145,7 @@
 
         function tutupModal() {
             const modal = document.getElementById('modalGambar');
-            const gambar = document.getElementById('gambarUtuh');
-            
             modal.classList.add('hidden');
-            gambar.src = '';
             document.body.style.overflow = 'auto';
         }
     </script>

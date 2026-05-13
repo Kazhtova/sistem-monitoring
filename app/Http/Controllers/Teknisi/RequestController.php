@@ -14,11 +14,13 @@ class RequestController extends Controller
     // $readRequest = ModelsRequest::where('id_teknisi', $id_teknisi)
     //                             ->latest()
     //                             ->get();
+    /** @var \App\Models\Teknisi $user */
+    $user = auth()->guard('teknisi')->user();
 
-    $query = auth()->guard('teknisi')->user()
-                             ->request()
-                             ->with('mahasiswa')
-                             ->where('status', '!=', 'setuju');
+    $query = $user
+            ->request()
+            ->with('mahasiswa')
+            ->whereNotIn('status', ['setuju', 'tolak']);
 
     if($request->filled('search')){
         $search = $request->search;
@@ -42,15 +44,34 @@ class RequestController extends Controller
     return view('teknisi.dashboard-teknisi', compact('readRequest'));
     }
 
-    public function listAccept(){
-        $query = auth()->guard('teknisi')->user()
-                            ->request()
-                            ->with('mahasiswa')
-                            ->where('status', '=', 'setuju');
-                        
-        $readRequest = $query->paginate(2)->withQueryString();
+    public function listAccept(Request $request) {
+    /** @var \App\Models\Teknisi $user */
+    $user = auth()->guard('teknisi')->user();
 
-        return view('teknisi.accept-dashboard', compact('readRequest'));
+    $query = $user->request()
+                        ->with('mahasiswa')
+                        ->where('status', '=', 'setuju');
+
+    if($request->filled('search')){
+        $search = $request->search;
+        $query->where(function($q) use ($search){
+            $q->where('dosen_ta', 'like', "%{$search}%")
+            ->orWhereHas('mahasiswa', function($mq) use ($search){
+                $mq->where('nama_mahasiswa', 'like', "%{$search}%");
+            });
+        });
+    }
+
+    $sort = $request->input('sort', 'latest');
+    if($sort === 'oldest'){
+        $query->oldest();
+    }else{
+        $query->latest();
+    }
+
+    $readRequest = $query->paginate(3)->withQueryString();
+
+    return view('teknisi.accept-dashboard', compact('readRequest'));
     }
 
     public function acceptRequest(int $id){
@@ -60,5 +81,23 @@ class RequestController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Request Disetujui');
+    }
+
+    public function rejectRequest(int $id){
+        $request = ModelsRequest::findOrFail($id);
+        $request->update([
+           'status'     => 'tolak' 
+        ]);
+
+        return redirect()->back()->with('reject', 'Request Ditolak');
+    }
+
+    public function cancleRequest(int $id){
+        $request = ModelsRequest::findOrFail($id);
+        $request->update([
+           'status'     => 'selesai', 
+        ]);
+
+        return redirect()->back()->with('success', 'Request Dibatalkan');
     }
 }
