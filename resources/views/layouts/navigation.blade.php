@@ -9,13 +9,13 @@
 
                     $teknisi = Auth::guard('teknisi')->check();
 
-                    $dashboardRequestUrl = $teknisi ? route('dashboard.request') : route('dashboard.mahasiswa');
+                    $dashboardRequestUrl = $teknisi ? route('teknisi.dashboard.request') : route('teknisi.dashboard.request');
 
-                    $routeRequest = $teknisi ? 'dashboard.request' : 'dashboard.mahasiswa';
+                    $routeRequest = $teknisi ? 'teknisi.dashboard.request' : 'teknisi.dashboard.request';
 
-                    $requestAcceptUrl = $teknisi ? route('dashboard.accept') : route('dashboard.accept');
+                    $requestAcceptUrl = $teknisi ? route('teknisi.dashboard.accept') : route('teknisi.dashboard.accept');
 
-                    $routeAccept = $teknisi ? 'dashboard.accept' : 'dashboard.accept';
+                    $routeAccept = $teknisi ? 'teknisi.dashboard.accept' : 'teknisi.dashboard.accept';
 
                     $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
 
@@ -107,7 +107,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

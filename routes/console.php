@@ -7,4 +7,5 @@ use Illuminate\Support\Facades\Schedule;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
-Schedule::command('request:clean-rejected')->everyMinute();
+Schedule::command('request:clean-rejected')->everyFiveMinutes();
+Schedule::command('app:update-expired-request')->everyFourHours();

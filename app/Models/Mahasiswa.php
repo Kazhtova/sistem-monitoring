@@ -17,7 +17,7 @@ class Mahasiswa extends Authenticatable
 
     protected $fillable = ['nrp', 'nama_mahasiswa'];
 
-    public function request(){
+    public function requests(){
         return $this->hasMany(Request::class, 'id_mahasiswa', 'id_mahasiswa');
     }
     

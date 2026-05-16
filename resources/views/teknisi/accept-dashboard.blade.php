@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="mb-8 flex flex-wrap items-center gap-4">
-                <form action="{{ route('dashboard.accept') }}" method="GET" class="flex flex-1 items-center gap-3 max-w-2xl">
+                <form action="{{ route('teknisi.dashboard.accept') }}" method="GET" class="flex flex-1 items-center gap-3 max-w-2xl">
                     <div class="relative flex-1 md:max-w-md">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -30,7 +30,7 @@
                     </button>
                     
                     @if(request('search') || request('sort'))
-                        <a href="{{ route('dashboard.accept') }}" class="text-base text-gray-500 hover:text-gray-900 transition-colors font-black">
+                        <a href="{{ route('teknisi.dashboard.accept') }}" class="text-base text-gray-500 hover:text-gray-900 transition-colors font-black">
                             Reset
                         </a>
                     @endif
@@ -67,6 +67,7 @@
                                 <h3 class="text-sm uppercase tracking-[0.2em] text-gray-600 font-black mb-2">{{ $data_request->software }}</h3>
                                 <p class="text-2xl font-black text-gray-900 leading-tight mb-2">{{ $data_request->mahasiswa->nama_mahasiswa }}</p>
                                 <p class="text-base text-gray-900 font-semibold italic">Dosen: {{ $data_request->dosen_ta }}</p>
+                                <p class="text-base text-gray-900 font-semibold italic">No Telp: {{ $data_request->no_hp }}</p>
                             </div>
 
                             <div class="space-y-4 mb-8 bg-gray-50 p-5 rounded-2xl">
@@ -82,7 +83,7 @@
 
                             <div class="mt-auto pt-6 flex gap-4">
                                 <form id="form-reject-{{ $data_request->id_request }}" 
-                                    action="{{ route('cancle.request', $data_request->id_request) }}" 
+                                    action="{{ route('teknisi.cancle.request', $data_request->id_request) }}" 
                                     method="POST" class="flex-1">
                                     @csrf
                                     @method('PATCH')

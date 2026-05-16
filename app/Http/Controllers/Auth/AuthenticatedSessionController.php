@@ -46,7 +46,7 @@ class AuthenticatedSessionController extends Controller
             
         $request->session()->regenerate();
         
-        return redirect()->intended(route('request.mahasiswa', absolute: false));
+        return redirect()->intended(route('mahasiswa.request.mahasiswa', absolute: false));
     }
 
     /**
@@ -60,7 +60,7 @@ class AuthenticatedSessionController extends Controller
             Auth::guard('teknisi')->login($teknisi);
             
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard.request', absolute: false));
+            return redirect()->intended(route('teknisi.dashboard.request', absolute: false));
         }
 
         $request->session()->regenerate();

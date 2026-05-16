@@ -11,13 +11,13 @@
                     
                     $mahasiswa = Auth::guard('mahasiswa')->check();
 
-                    $dashboardUrl = $teknisi ? route('dashboard.mahasiswa') : route('dashboard.mahasiswa');
+                    $dashboardUrl = $teknisi ? route('mahasiswa.dashboard.mahasiswa') : route('mahasiswa.dashboard.mahasiswa');
 
-                    $routeDashboard = $teknisi ? 'dashboard.mahasiswa' : 'dashboard.mahasiswa';
+                    $routeDashboard = $teknisi ? 'mahasiswa.dashboard.mahasiswa' : 'mahasiswa.dashboard.mahasiswa';
 
-                    $requestMahasiswaUrl = $mahasiswa ? route('request.mahasiswa') : route('request.mahasiswa');
+                    $requestMahasiswaUrl = $mahasiswa ? route('mahasiswa.request.mahasiswa') : route('mahasiswa.request.mahasiswa');
 
-                    $routeRequestMahasiswa = $mahasiswa ? 'request.mahasiswa' : 'request.mahasiswa';
+                    $routeRequestMahasiswa = $mahasiswa ? 'mahasiswa.request.mahasiswa' : 'mahasiswa.request.mahasiswa';
 
                     $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
 
@@ -110,7 +110,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

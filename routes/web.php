@@ -15,7 +15,7 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Route::middleware(['restrict:teknisi'])->group(function () {
+Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name('teknisi.')->group(function () {
     Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.request');
     Route::patch('/request-list/accept/{id}', [TeknisiRequest::class, 'acceptRequest'])->name('accept.request');
     Route::patch('/request-list/reject/{id}', [TeknisiRequest::class, 'rejectRequest'])->name('reject.request');
@@ -23,7 +23,7 @@ Route::middleware(['restrict:teknisi'])->group(function () {
     Route::get('/accept-list', [TeknisiRequest::class, 'listAccept'])->name('dashboard.accept');
 });
 
-Route::middleware(['restrict:mahasiswa'])->group(function (){
+Route::middleware(['auth:mahasiswa', 'restrict:mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function (){
     Route::get('/dashboard-mahasiswa',  [MahasiswaRequest::class, 'readRequest'])->name('dashboard.mahasiswa');
 
     Route::get('/request-mahasiswa', [MahasiswaRequest::class, 'viewRequest'])->name('request.mahasiswa');
@@ -31,11 +31,5 @@ Route::middleware(['restrict:mahasiswa'])->group(function (){
     Route::post('/request-mahasiswa', [MahasiswaRequest::class, 'sendRequest'])->name('request.post');
 });
 
-
-Route::middleware('auth:mahasiswa,teknisi')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 require __DIR__.'/auth.php';

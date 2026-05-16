@@ -20,7 +20,7 @@ class CleanRejectRequests extends Command
      *
      * @var string
      */
-    protected $description = 'Menghapus Request Yang Ditolak Setelah 1 Jam';
+    protected $description = 'Menghapus Request Yang Ditolak';
 
     /**
      * Execute the console command.

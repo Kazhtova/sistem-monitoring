@@ -12,7 +12,11 @@
         <!-- nrp Address -->
         <div class="mt-4">
             <x-input-label for="nrp" :value="__('NRP')" />
-            <x-text-input id="nrp" class="block mt-1 w-full" type="number" name="nrp" :value="old('nrp')" required autocomplete="nrp" />
+            <x-text-input id="nrp" class="block mt-1 w-full" type="text" 
+       name="nrp" 
+       inputmode="numeric" 
+       pattern="[0-9]*" 
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')" :value="old('nrp')" required autocomplete="nrp" />
             <x-input-error :messages="$errors->get('nrp')" class="mt-2" />
         </div>
 

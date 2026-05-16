@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Mahasiswa;
 
+use App\Events\RequestCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class RequestController extends Controller
             $path = $file->storeAs('uploads', $nama_file, 'public'); 
         }
 
-        ModelsRequest::create([
+        $newRequest = ModelsRequest::create([
             'dosen_ta'              => $request->dosen_ta,
             'software'              => $request->software,
             'no_hp'                 => $request->no_hp,
@@ -50,17 +51,19 @@ class RequestController extends Controller
             'id_komputer'           => $request->id_komputer
         ]);
 
-        return redirect()->route('dashboard.mahasiswa')->with('success', 'Request Has Been Sent');
+        broadcast(new RequestCreated($newRequest))->toOthers();
+
+        return redirect()->route('mahasiswa.dashboard.mahasiswa')->with('success', 'Request Has Been Sent');
     } 
     
     public function readRequest(){
-        
+        /** @var \App\Models\Mahasiswa $user */
         $user = auth()->guard('mahasiswa')->user();
 
-        $readRequest = $user->request()
-                                    ->with('teknisi')
-                                    ->latest()
-                                    ->get();
+        $readRequest = $user->requests()
+                                ->with('teknisi')
+                                ->latest()
+                                ->get();
 
         return view('mahasiswa.dashboard-mahasiswa', compact('readRequest'));
     }

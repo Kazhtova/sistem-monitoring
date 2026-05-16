@@ -8,7 +8,7 @@
                 </h2>
             </div>
 
-            <form method="POST" action="{{ route('request.post') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('mahasiswa.request.post') }}" enctype="multipart/form-data">
                 @csrf
 
                 <input type="hidden" name="id_teknisi" value="4">
