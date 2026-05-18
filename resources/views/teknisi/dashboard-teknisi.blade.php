@@ -63,7 +63,7 @@
                         <div class="p-6 flex flex-col flex-grow">
                             <div class="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-900 leading-tight">{{ $data_request->mahasiswa->nama_mahasiswa }}</h3>
+                                    <h3 class="text-lg font-bold text-gray-900 leading-tight">Mahasiswa: {{ $data_request->mahasiswa->nama_mahasiswa }}</h3>
                                     <p class="text-sm text-violet-950 font-medium">Dosen: {{ $data_request->dosen_ta }}</p>
                                 </div>
                                 <span class="text-[10px] uppercase font-bold tracking-wider text-gray-800 bg-gray-50 px-2 py-1 rounded">{{ $data_request->created_at->diffForHumans() }}</span>
@@ -133,7 +133,7 @@
         </script>
     @endif
 
-<script type="module">
+{{-- <script type="module">
     Echo.channel('teknisi-channel')
         .listen('.request.new', (e) => {
             const data = e.requestData;
@@ -168,7 +168,8 @@
             const newCardHtml = `
                 <div class="bg-white rounded-3xl shadow-sm border-2 border-indigo-500 hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden animate-fade-in group">
                     <div class="relative h-64 overflow-hidden bg-gray-100">
-                        <img src="/storage/${data.foto_bukti}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="/storage/${data.foto_bukti}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onclick="bukaModal('/storage/${data.foto_bukti}')">
                         <div class="absolute top-4 left-4 bg-indigo-600 px-3 py-1 rounded-full shadow-sm">
                             <span class="text-xs font-bold text-white tracking-widest">NEW</span>
                         </div>
@@ -223,13 +224,19 @@
                 </div>
             `;
             container.insertAdjacentHTML('afterbegin', newCardHtml);
+
+            const currentCards = container.querySelectorAll('.bg-white.rounded-3xl');
+
+            if(currentCards.length > 2){
+                currentCards[currentCards.length - 1].remove()
+            }
         });
 </script>
 
     <style>
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-    </style>
+    </style> --}}
 
     <script>
         function bukaModal(src) {

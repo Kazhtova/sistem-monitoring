@@ -21,6 +21,8 @@
 
                     $name = $teknisi ? $user->nama_teknisi : $user->nama_mahasiswa;
 
+                    $jumlahPending = $teknisi ? \App\Models\Request::where('status', 'pending')->count() : 0;
+
                     @endphp
                     <a href="{{ $dashboardRequestUrl }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
@@ -30,7 +32,11 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeRequest)">
-                        {{ __('Request List') }}
+                        <span>{{ __('Request List') }}</span>
+                        <span id="nav-counter-mobile" 
+                            class="bg-violet-500 text-white text-[10px] ml-1 font-bold px-2 py-0.5 rounded-full {{ request()->routeIs($routeRequest) || session('has_opened_request_list') || $jumlahPending == 0 ? 'hidden' : '' }}">
+                            {{ $jumlahPending }}
+                        </span>
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -38,11 +44,6 @@
                         {{ __('Accept List') }}
                     </x-nav-link>
                 </div>
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="$dashboardUrl" :active="request()->routeIs($route)">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div> --}}
             </div>
 
             <!-- Settings Dropdown -->

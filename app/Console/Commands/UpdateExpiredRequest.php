@@ -12,21 +12,21 @@ class UpdateExpiredRequest extends Command
      *
      * @var string
      */
-    protected $signature = 'app:update-expired-request';
+    protected $signature = 'request:update-expired-request';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Menghapus Request Yang Sudah Selesai';
+    protected $description = 'Memperbarui Status Request Yang Disetujui Ke Selesai';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        Request::where('status', '!=', 'selesai')
+        Request::where('status', '=', 'setuju')
         ->where('perkiraan_selesai', '<=', now())
         ->update(['status' => 'selesai']);
 
