@@ -32,6 +32,8 @@ class RequestController extends Controller
             return redirect()->back()->withInput()->with('error', 'Limit, You Already 3 Active Request');
         }
 
+        $path = null;
+
         if($request->hasFile('foto_bukti')){
             $file = $request->file('foto_bukti');
             $nama_file = time() . '_' . $file->getClientOriginalName();
@@ -66,5 +68,31 @@ class RequestController extends Controller
                                 ->get();
 
         return view('mahasiswa.dashboard-mahasiswa', compact('readRequest'));
+    }
+
+    public function updateFcmToken(Request $request)
+    {
+        $request->validate([
+            'fcm_token' => 'required|string'
+        ]);
+
+        /** @var \App\Models\Mahasiswa $user */
+        $user = auth()->guard('mahasiswa')->user();
+        
+        if ($user) {
+            $user->update([
+                'fcm_token' => $request->fcm_token
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'FCM Token mahasiswa berhasil diperbarui.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Sesi mahasiswa tidak valid.'
+        ], 401);
     }
 }
