@@ -45,8 +45,13 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('mahasiswa')->login($mahasiswa, $request->boolean('remember'));
             
         $request->session()->regenerate();
-        
-        return redirect()->intended(route('mahasiswa.request.mahasiswa', absolute: false));
+
+        $requestCount = $mahasiswa->requests()->count();
+
+        if($requestCount === 0){
+            return redirect()->route('mahasiswa.request.mahasiswa');
+        }
+        return redirect()->intended(route('mahasiswa.dashboard.mahasiswa', absolute: false));
     }
 
     /**

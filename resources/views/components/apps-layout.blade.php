@@ -34,8 +34,8 @@
             </main>
         </div>
         
-<script src="//cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+{{-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script> --}}
         <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
