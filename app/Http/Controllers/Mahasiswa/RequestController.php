@@ -4,14 +4,30 @@ namespace App\Http\Controllers\Mahasiswa;
 
 use App\Events\RequestCreated;
 use App\Http\Controllers\Controller;
+use App\Models\Komputer;
+use App\Models\Laboratorium;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RequestController extends Controller
 {
-    public function viewRequest(){
-        return view('mahasiswa.input-request-mahasiswa');
+    public function viewRequest(Request $request, $id = null){
+
+        if(empty($id)){
+            $daftarLab = Laboratorium::orderBy('nama_lab', 'asc')->get();
+            return view('mahasiswa.pilih-lab', compact('daftarLab'));
+        }
+
+        $labChoose = Laboratorium::findOrFail($id);
+
+        $komputerUse = ModelsRequest::where('status', 'setuju')->pluck('id_komputer');
+
+        $komputerAvailable = Komputer::whereNotIn('id_komputer', $komputerUse)->where('id_laboratorium', $id)->orderBy('nama_komputer', 'asc')->get();
+    
+        return view('mahasiswa.input-request-mahasiswa', ['komputerTersedia' => $komputerAvailable, 'labId' => $id, 'labTerpilih'   => $labChoose]);
     }
+
     public function sendRequest(Request $request){
         $request->validate([
             'dosen_ta'          => 'required|string',
@@ -23,7 +39,7 @@ class RequestController extends Controller
             'foto_bukti'        => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'id_teknisi'        => 'required|exists:teknisi,id_teknisi',
             'id_mahasiswa'      => 'required|exists:mahasiswa,id_mahasiswa',
-            'id_komputer'       => 'required|exists:komputer,id_komputer' 
+            'id_komputer'       => ['required', 'exists:komputer,id_komputer', Rule::unique('request', 'id_komputer')->where(fn ($query) => $query->where('status', 'setuju'))]
         ]);
 
         $activeRequest = ModelsRequest::where('id_mahasiswa', $request->id_mahasiswa)->whereIn('status', ['pending', 'setuju'])->count();

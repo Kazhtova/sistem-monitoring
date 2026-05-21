@@ -26,7 +26,7 @@ Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name
 Route::middleware(['auth:mahasiswa', 'restrict:mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function (){
     Route::get('/dashboard-mahasiswa',  [MahasiswaRequest::class, 'readRequest'])->name('dashboard.mahasiswa');
 
-    Route::get('/request-mahasiswa', [MahasiswaRequest::class, 'viewRequest'])->name('request.mahasiswa');
+    Route::get('/request-mahasiswa/{id?}', [MahasiswaRequest::class, 'viewRequest'])->name('request.mahasiswa');
 
     Route::post('/request-mahasiswa', [MahasiswaRequest::class, 'sendRequest'])->name('request.post');
 
