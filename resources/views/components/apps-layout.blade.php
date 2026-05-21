@@ -97,5 +97,6 @@
         new Notification(title, { body, icon: '/favicon.ico' });
     });
 </script>
+@stack('scripts')
     </body>
 </html>

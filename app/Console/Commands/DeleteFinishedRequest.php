@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Request;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class DeleteFinishedRequest extends Command
 {
@@ -25,9 +26,29 @@ class DeleteFinishedRequest extends Command
      * Execute the console command.
      */
     public function handle()
-    {
-        Request::where('status', 'selesai')->delete();
-        
+    {   
+
+        $count = 0;
+
+        Request::where('status', 'selesai')->chunkById(100, function($requests) use (&$count) {
+            
+            $idToDelete = [];
+
+            foreach($requests as $request){
+ 
+                if($request->foto_bukti && Storage::disk('public')->exists($request->foto_bukti)){
+                    Storage::disk('public')->delete($request->foto_bukti);
+                }
+
+                $idToDelete[] = $request->getKey();
+            }
+            
+            if(!empty($idToDelete)){
+                Request::whereIn((new Request)->getKeyName(), $idToDelete)->delete();    
+                
+                    $count +=count($idToDelete);
+                }
+        });
         $this->info('Request Berstatus Selesai Berhasil Dihapus');
     }
 }

@@ -4,9 +4,9 @@
             
             <div class="mb-8 text-center">
                 <h2 class="font-extrabold text-2xl text-gray-800 uppercase tracking-widest">
-                    {{ __('Pilih Laboratorium') }}
+                    {{ __('Select Laboratory') }}
                 </h2>
-                <p class="text-sm text-gray-500 mt-2">Silakan pilih laboratorium tempat komputer yang ingin digunakan</p>
+                <p class="text-sm text-gray-500 mt-2">Please select the laboratory where the computer you wish to use is located.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

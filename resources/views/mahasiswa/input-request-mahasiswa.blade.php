@@ -9,7 +9,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                 </div>
-                Kembali ke Pilih Lab
+                Back
             </a>
         </div>
         <div class="w-full sm:max-w-sm px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
@@ -28,18 +28,18 @@
                 <input type="hidden" name="id_laboratorium" value="{{ $labId }}">
 
                 <div class="mb-4">
-                    <x-input-label for="id_komputer" :value="__('Pilih Komputer Lab')" class="text-gray-700 font-semibold mb-2" />    
+                    <x-input-label for="id_komputer" :value="__('Choose Computer Lab')" class="text-gray-700 font-semibold mb-2" />    
                     <div class="relative">
                         <select id="id_komputer" 
                                 name="id_komputer" 
                                 class="block w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
                                 required>
                             
-                            <option value="" disabled selected>-- Pilih Komputer yang Tersedia --</option>
+                            <option value="" disabled selected>-- Select Available Computers --</option>
 
                             @foreach ($komputerTersedia as $komputer)
                                 <option value="{{ $komputer->id_komputer }}" {{ old('id_komputer') == $komputer->id_komputer ? 'selected' : ''}}>
-                                    {{ $komputer->nama_komputer }}
+                                    {{ $komputer->id_komputer }}
                                 </option>
                             @endforeach
                         </select>
@@ -113,6 +113,7 @@
     </div>
     
     @push('scripts')
+    @vite(['resources/js/app.js'])
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             @if (session('success'))
@@ -123,6 +124,31 @@
                     timer: 1500
                 });
             @endif
+
+            let currentLabId = "{{ $labId }}"
+
+            if(typeof window.Echo !== 'undefined'){
+                console.log("✅ [ECHO STATUS] Aktif dan mendengarkan channel: laboratorium." + currentLabId);
+                
+                window.Echo.channel('laboratorium.' + currentLabId)
+                .listen('.ComputerAccepted', (e) => {
+                    
+                    // ALAT PELACAK 2: Cek apakah sinyal dari backend sampai ke browser?
+                    console.log("🔥 [SINYAL REVERB MASUK] Data payload:", e);
+
+                    let selectKomputer = document.getElementById('id_komputer');
+                    let optionRemove = selectKomputer.querySelector(`option[value="${e.id_komputer}"]`);
+
+                    if(optionRemove){
+                        console.log("🗑️ [DOM MANIPULATION] Menghapus komputer ID:", e.id_komputer);
+                        optionRemove.remove();
+                    } else {
+                        console.warn("⚠️ [WARNING] Sinyal masuk, tapi ID komputer tidak ditemukan di dropdown!");
+                    }
+                });
+            } else {
+                console.error("❌ [ECHO ERROR] Library Echo gagal dimuat. Apakah npm run dev mati?");
+            }
         });
     </script>
     @endpush

@@ -18,4 +18,8 @@ class Request extends Model
     public function mahasiswa(){
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa', 'id_mahasiswa');
     }
+
+    public function komputer(){
+        return $this->belongsTo(Komputer::class, 'id_komputer', 'id_komputer');
+    }
 }

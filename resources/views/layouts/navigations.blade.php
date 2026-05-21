@@ -11,17 +11,17 @@
                     
                     $mahasiswa = Auth::guard('mahasiswa')->check();
 
-                    $dashboardUrl = $teknisi ? route('mahasiswa.dashboard.mahasiswa') : route('mahasiswa.dashboard.mahasiswa');
+                    $dashboardUrl = $mahasiswa ? route('mahasiswa.dashboard.mahasiswa') : route('mahasiswa.dashboard.mahasiswa');
 
-                    $routeDashboard = $teknisi ? 'mahasiswa.dashboard.mahasiswa' : 'mahasiswa.dashboard.mahasiswa';
+                    $routeDashboard = $mahasiswa ? 'mahasiswa.dashboard.mahasiswa' : 'mahasiswa.dashboard.mahasiswa';
 
                     $requestMahasiswaUrl = $mahasiswa ? route('mahasiswa.request.mahasiswa') : route('mahasiswa.request.mahasiswa');
 
                     $routeRequestMahasiswa = $mahasiswa ? 'mahasiswa.request.mahasiswa' : 'mahasiswa.request.mahasiswa';
 
-                    $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
+                    $user = $mahasiswa ? Auth::guard('mahasiswa')->user() : Auth::guard('mahasiswa')->user();
 
-                    $name = $teknisi ? $user->nama_teknisi : $user->nama_mahasiswa;
+                    $name = $mahasiswa ? $user->nama_mahasiswa : $user->nama_mahasiswa;
 
                     @endphp
                     <a href="{{ $dashboardUrl }}">

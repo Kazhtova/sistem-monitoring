@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Teknisi;
 
+use App\Events\ComputerView;
 use App\Http\Controllers\Controller;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
-use Kreait\Firebase\Messaging\WebpushConfig;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RequestController extends Controller
@@ -82,12 +82,17 @@ class RequestController extends Controller
 
     public function acceptRequest(int $id) {
         // Mengambil data request beserta relasi mahasiswa menggunakan findOrFail 
-        $request = ModelsRequest::with('mahasiswa')->findOrFail($id); 
+        $request = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id); 
 
-        // Perbaikan status request [cite: 45]
-        $request->update([
-           'status'     => 'setuju' 
-        ]);
+        DB::transaction(function () use ($request) {
+                $request->update([
+            'status'     => 'setuju' 
+            ]);
+        });
+
+        $idLab = $request->komputer->id_laboratorium;
+        
+        ComputerView::dispatch($request->id_komputer, $idLab);
 
         $mahasiswa = $request->mahasiswa; 
 
@@ -133,6 +138,7 @@ class RequestController extends Controller
                 Log::error('FCM Notification Failed: ' . $e->getMessage()); 
             }
         } 
+        
         return redirect()->back()->with('success', 'Request Disetujui'); 
     }
 
@@ -146,7 +152,7 @@ class RequestController extends Controller
     }
 
     public function cancleRequest(int $id){
-        $request = ModelsRequest::findOrFail($id);
+        $request = ModelsRequest::findOrFail($id);  
         $request->update([
            'status'     => 'selesai', 
         ]);
