@@ -30,7 +30,7 @@ class DeleteFinishedRequest extends Command
 
         $count = 0;
 
-        Request::where('status', 'selesai')->chunkById(100, function($requests) use (&$count) {
+        Request::whereIn('status', ['selesai', 'tolak'])->chunkById(100, function($requests) use (&$count) {
             
             $idToDelete = [];
 

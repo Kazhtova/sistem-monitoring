@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teknisi;
 
 use App\Events\ComputerView;
+use App\Events\RequestStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
@@ -94,6 +95,8 @@ class RequestController extends Controller
         
         ComputerView::dispatch($request->id_komputer, $idLab);
 
+        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+
         $mahasiswa = $request->mahasiswa; 
 
         // Validasi keberadaan mahasiswa dan fcm_token di database 
@@ -148,6 +151,8 @@ class RequestController extends Controller
            'status'     => 'tolak' 
         ]);
 
+        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+
         return redirect()->back()->with('reject', 'Request Ditolak');
     }
 
@@ -156,6 +161,8 @@ class RequestController extends Controller
         $request->update([
            'status'     => 'selesai', 
         ]);
+
+        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
 
         return redirect()->back()->with('success', 'Request Dibatalkan');
     }

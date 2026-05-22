@@ -30,17 +30,25 @@
                             <div class="p-6 border-b border-gray-50 flex justify-between items-center">
                                 <span class="text-xs font-black text-gray-400 uppercase tracking-widest">#{{ $index + 1 }}</span>
                                 
-                                @if($request->status == 'pending')
-                                    <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Waiting Agreement</span>
-                                @elseif($request->status == 'setuju')
-                                    <span class="bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Running</span>
-                                @elseif($request->status == 'selesai')
-                                    <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Completed</span>
-                                @else
-                                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">Rejected</span>
-                                @endif
+                                <span id="badge-status-{{ $request->id_request }}"
+                                    class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors duration-300
+                                        {{ $request->status == 'pending' ? 'bg-amber-100 text-amber-700' : '' }}
+                                        {{ $request->status == 'setuju' ? 'bg-violet-100 text-violet-700' : '' }}
+                                        {{ $request->status == 'selesai' ? 'bg-emerald-100 text-emerald-700' : '' }}
+                                        {{ $request->status == 'tolak' ? 'bg-red-100 text-red-700' : '' }}">
+                                
+                                    @if ($request->status == 'pending')
+                                        Waiting Agreement
+                                    @elseif($request->status == 'setuju')
+                                        Running
+                                    @elseif($request->status == 'selesai')
+                                        Completed
+                                    @else
+                                        Rejected
+                                    @endif
+                                
+                                </span>
                             </div>
-
                             <div class="p-8">
                                 <h3 class="text-violet-900 text-xs font-black uppercase tracking-widest mb-1">{{ $request->software }}</h3>
                                 <p class="text-xl font-black text-gray-900 mb-4">PC: {{ $request->komputer->nama_komputer ?? 'General Service' }}</p>
@@ -61,9 +69,6 @@
                             </div>
 
                             <div class="mt-auto px-8 py-6 bg-gray-50 flex items-center gap-3">
-                                {{-- <div class="w-10 h-10 rounded-full bg-indigo-200 flex items-center justify-center font-black text-gray-700 text-xs">
-                                    {{ substr($request->teknisi->nama_teknisi, 0, 2) }}
-                                </div> --}}
                                 <div>
                                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Assigned Technician</p>
                                     <p class="text-sm font-bold text-gray-800">{{ $request->teknisi->nama_teknisi }}</p>
@@ -76,6 +81,7 @@
         </div>
     </div>
     @push('scripts')
+    @vite(['resources/js/app.js'])
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             @if (session('success'))
@@ -86,6 +92,50 @@
                     timer: 1500
                 });
             @endif
+
+            let currentMahasiswaId = "{{ auth()->guard('mahasiswa')->user()->id_mahasiswa }}"
+
+            if(typeof window.Echo !== 'undefined'){
+
+                window.Echo.channel('mahasiswa.' + currentMahasiswaId)
+                .listen('.StatusUpdated', (e) => {
+
+                    let statusBadge = document.getElementById('badge-status-' + e.id_request)
+
+                    if(statusBadge){
+                        let allClasses = [
+                            'bg-amber-100', 'text-amber-700', 
+                            'bg-violet-100', 'text-violet-700', 
+                            'bg-emerald-100', 'text-emerald-700',
+                            'bg-red-100', 'text-red-700'
+                        ];
+
+                        statusBadge.classList.remove(...allClasses)
+
+                        switch (e.status){
+                            case 'pending':
+                                statusBadge.classList.add('bg-amber-100', 'text-amber-700')
+                                statusBadge.innerText = 'WAITING AGREEMENT'
+                                break;
+                            case 'setuju':
+                                statusBadge.classList.add('bg-violet-100', 'text-violet-700')
+                                statusBadge.innerText = 'RUNNING'
+                                break;
+                            case 'selesai':
+                                statusBadge.classList.add('bg-emerald-100', 'text-emerald-700')
+                                statusBadge.innerText = 'COMPLETED'
+                                break;
+                            case 'tolak':
+                                statusBadge.classList.add('bg-red-100', 'text-red-700')
+                                statusBadge.innerText = 'REJECTED'
+                                break;
+                        }
+                    }
+                })
+            } else {
+                console.error("❌ [ECHO ERROR] Library Echo gagal dimuat. Pastikan Vite (npm run dev) sedang berjalan.");
+            }
+
         });
     </script>
     @endpush
