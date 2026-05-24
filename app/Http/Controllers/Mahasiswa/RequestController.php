@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers\Mahasiswa;
 
+use App\Events\FotoView;
 use App\Events\RequestCreated;
+use App\Events\WaktuUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Komputer;
 use App\Models\Laboratorium;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class RequestController extends Controller
 {
+
+    public function viewCard(int $id){
+        $dataRequest = ModelsRequest::findOrFail($id);
+
+        return view('mahasiswa.upload-foto', compact('dataRequest'));
+    }
+
     public function viewRequest(Request $request, $id = null){
 
         if(empty($id)){
@@ -36,7 +46,7 @@ class RequestController extends Controller
             'tanggal_mulai'     => 'required|date',
             'perkiraan_selesai' => 'required|date|after:tanggal_mulai',
             'catatan'           => 'nullable|string',
-            'foto_bukti'        => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_bukti'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'id_teknisi'        => 'required|exists:teknisi,id_teknisi',
             'id_mahasiswa'      => 'required|exists:mahasiswa,id_mahasiswa',
             'id_komputer'       => ['required', 'exists:komputer,id_komputer', Rule::unique('request', 'id_komputer')->where(fn ($query) => $query->where('status', 'setuju'))]
@@ -48,14 +58,6 @@ class RequestController extends Controller
             return redirect()->back()->withInput()->with('error', 'Limit, You Already 3 Active Request');
         }
 
-        $path = null;
-
-        if($request->hasFile('foto_bukti')){
-            $file = $request->file('foto_bukti');
-            $nama_file = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('uploads', $nama_file, 'public'); 
-        }
-
         $newRequest = ModelsRequest::create([
             'dosen_ta'              => $request->dosen_ta,
             'software'              => $request->software,
@@ -63,7 +65,6 @@ class RequestController extends Controller
             'tanggal_mulai'         => $request->tanggal_mulai,
             'perkiraan_selesai'     => $request->perkiraan_selesai,
             'catatan'               => $request->catatan,
-            'foto_bukti'            => $path,
             'id_teknisi'            => $request->id_teknisi,
             'id_mahasiswa'          => $request->id_mahasiswa,
             'id_komputer'           => $request->id_komputer
@@ -72,7 +73,38 @@ class RequestController extends Controller
         broadcast(new RequestCreated($newRequest))->toOthers();
 
         return redirect()->route('mahasiswa.dashboard.mahasiswa')->with('success', 'Request Has Been Sent');
-    } 
+    }
+    
+    public function uploadImage(Request $request, int $id){
+        $request->validate([
+           'foto_bukti'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        $dataRequest = ModelsRequest::findOrFail($id);
+
+         $path = null;
+
+        if($request->hasFile('foto_bukti')){
+            
+            if ($dataRequest->foto_bukti && Storage::disk('public')->exists($dataRequest->foto_bukti)){
+                Storage::disk('public')->delete($dataRequest->foto_bukti);
+            }
+        
+            $file = $request->file('foto_bukti');
+            $nama_file = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('uploads', $nama_file, 'public'); 
+            
+            $dataRequest->update([
+                'foto_bukti'    => $path,
+            ]);
+    
+            broadcast(new FotoView($dataRequest->id_request, $path, $dataRequest->id_mahasiswa))->toOthers();
+    
+            return redirect()->back()->with('success', 'Photo uploaded successfully!');
+            }
+            
+            return redirect()->back();
+    }
     
     public function readRequest(){
         /** @var \App\Models\Mahasiswa $user */
@@ -102,13 +134,31 @@ class RequestController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'FCM Token mahasiswa berhasil diperbarui.'
+                'message' => 'Student FCM Token successfully updated.'
             ]);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Sesi mahasiswa tidak valid.'
+            'message' => 'Invalid student session.'
         ], 401);
+    }
+
+    public function extendTime(Request $request, int $id){
+        $request->validate([
+            'perkiraan_selesai'     => 'required|date|after:now'
+        ]);
+
+        $dataRequest = ModelsRequest::findOrFail($id);
+
+        $dataRequest->update([
+                'perkiraan_selesai'     => $request->perkiraan_selesai
+        ]);
+
+        $formatWaktu = \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i');
+
+        broadcast(new WaktuUpdated($dataRequest->id_request, $formatWaktu))->toOthers();
+
+        return redirect()->back()->with('success', 'Estimated completion time successfully extended.');
     }
 }

@@ -11,7 +11,7 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+   <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             @if($readRequest->isEmpty())
@@ -52,37 +52,121 @@
                             <div class="p-8">
                                 <h3 class="text-violet-900 text-xs font-black uppercase tracking-widest mb-1">{{ $request->software }}</h3>
                                 <p class="text-xl font-black text-gray-900 mb-4">PC: {{ $request->komputer->nama_komputer ?? 'General Service' }}</p>
-                                <p class="text-lg font-black text-gray-900 mb-4">Dosen TA: {{ $request->dosen_ta ?? 'N/A' }}</p>
+                                <p class="text-lg font-black text-gray-900 mb-4">Lecture: {{ $request->dosen_ta ?? 'N/A' }}</p>
 
-                                <div class="space-y-3">
-                                    <div class="flex items-center text-sm">
-                                        <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                        <span class="text-gray-500">Mulai: </span>
-                                        <span class="ml-auto font-bold text-gray-700">{{ \Carbon\Carbon::parse($request->tanggal_mulai)->format('d M, H:i') }}</span>
+                                <div class="grid grid-cols-[1fr_auto_auto] gap-y-3 gap-x-1.5 items-center text-sm w-full mt-2">
+    
+                                    <div class="flex items-center text-gray-500">
+                                        <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <span class="whitespace-nowrap">Start:</span>
                                     </div>
-                                    <div class="flex items-center text-sm">
-                                        <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        <span class="text-gray-500">Target Selesai: </span>
-                                        <span class="ml-auto font-bold text-gray-700">{{ \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i') }}</span>
+                                    
+                                    <div class="font-bold text-gray-700 tabular-nums whitespace-nowrap">{{ \Carbon\Carbon::parse($request->tanggal_mulai)->format('d M, H:i') }}</div>
+                                    
+                                    <div class="w-8 h-10 flex-shrink-0"></div>
+
+                                    <div class="flex items-center text-gray-500">
+                                        <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span class="whitespace-nowrap">Target Completed:</span>
                                     </div>
+                                    
+                                    <div id="waktu-selesai-{{ $request->id_request }}" class="font-bold text-gray-700 tabular-nums whitespace-nowrap origin-left transition-all duration-300">{{ \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i') }}</div>
+                                    
+                                    <button type="button" onclick="bukaModalWaktu('{{ $request->id_request }}', '{{ $request->perkiraan_selesai }}')" class="w-8 h-10 flex-shrink-0 flex items-center justify-center text-gray-400 hover:text-violet-600 hover:bg-violet-100 rounded-lg transition-all duration-300 shadow-sm hover:shadow border border-transparent hover:border-violet-100 ml-1.5" title="Update Waktu Selesai">
+                                        <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                    </button>
+
                                 </div>
                             </div>
 
-                            <div class="mt-auto px-8 py-6 bg-gray-50 flex items-center gap-3">
-                                <div>
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Assigned Technician</p>
-                                    <p class="text-sm font-bold text-gray-800">{{ $request->teknisi->nama_teknisi }}</p>
-                                </div>
+                            <div class="mt-auto px-8 py-6 bg-gray-50 flex justify-between items-center gap-3">
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Assigned Technician</p>
+                                <p class="text-sm font-bold text-gray-800">{{ $request->teknisi->nama_teknisi }}</p>
                             </div>
+
+                            <div id="upload-container-{{ $request->id_request }}" class="{{ $request->status !== 'setuju' ? 'invisible' : '' }}">
+                                <a href="{{ route('mahasiswa.foto.card', ['id' => $request->id_request]) }}" 
+                                class="inline-flex items-center justify-center bg-violet-100 hover:bg-violet-200 text-violet-800 p-4 rounded-full shadow-md transition-all duration-300 hover:scale-110" 
+                                title="Pindah ke Halaman Upload">    
+                                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
                         </div>
                     @endforeach
                 </div>
             @endif
         </div>
     </div>
+    
+    <div id="modalWaktu" class="fixed inset-0 z-[999] hidden bg-gray-900/90 backdrop-blur-xl flex items-center justify-center p-4" onclick="tutupModalWaktu()">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 relative overflow-hidden" onclick="event.stopPropagation()">
+            
+            <button type="button" onclick="tutupModalWaktu()" class="absolute top-5 right-5 text-gray-300 hover:text-red-500 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="mb-6">
+                <div class="w-12 h-12 bg-violet-100 text-violet-600 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-xl font-black text-gray-900">Update Time</h3>
+                <p class="text-sm font-medium text-gray-500 mt-1">adjust the time.</p>
+            </div>
+            
+            <form id="formUpdateWaktu" method="POST">
+                @csrf
+                @method('PATCH')
+                <div class="mb-8">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Perkiraan Selesai (Baru)</label>
+                    <input type="datetime-local" 
+                        name="perkiraan_selesai" 
+                        id="inputWaktuSelesai" 
+                        required 
+                        class="w-full rounded-xl border-gray-200 shadow-sm focus:border-violet-500 focus:ring-violet-500 text-sm font-bold text-gray-800 transition-all p-3 bg-gray-50">
+                </div>
+                
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="tutupModalWaktu()" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-xl transition-colors">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-violet-200 transition-all hover:-translate-y-0.5">Simpan Waktu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     @push('scripts')
     @vite(['resources/js/app.js'])
     <script>
+
+        // Membuka Modal Waktu
+        function bukaModalWaktu(idRequest, waktuSaatIni) {
+            const modal = document.getElementById('modalWaktu');
+            const form = document.getElementById('formUpdateWaktu');
+            const inputWaktu = document.getElementById('inputWaktuSelesai');
+            
+            // Nanti '/teknisi/update-waktu/' ini kita sesuaikan dengan rute Backend-mu
+            form.action = `/mahasiswa/update-time-mahasiswa/${idRequest}`; 
+            
+            // Masukkan waktu saat ini ke dalam input (format datetime-local: YYYY-MM-DDThh:mm)
+            if(waktuSaatIni) {
+                inputWaktu.value = waktuSaatIni.replace(' ', 'T');
+            }
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Kunci scroll layar
+        }
+
+        // Menutup Modal Waktu
+        function tutupModalWaktu() {
+            const modal = document.getElementById('modalWaktu');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Buka kunci scroll layar
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             @if (session('success'))
                 Swal.fire({
@@ -102,6 +186,20 @@
 
                     let statusBadge = document.getElementById('badge-status-' + e.id_request)
 
+                    let uploadContainer = document.getElementById('upload-container-' + e.id_request)
+
+                    let waktuSelesaiTarget = document.getElementById('waktu-selesai-' + e.id_request)
+
+                    if(waktuSelesaiTarget && e.perkiraan_selesai){
+                        waktuSelesaiTarget.innerText = e.perkiraan_selesai;
+                        
+                        // (Opsional) Beri efek berkedip ungu sesaat agar Mahasiswa sadar waktunya diubah
+                        waktuSelesaiTarget.classList.add('text-violet-600', 'scale-110');
+                        setTimeout(() => {
+                            waktuSelesaiTarget.classList.remove('text-violet-600', 'scale-110');
+                        }, 1000);
+                    }
+
                     if(statusBadge){
                         let allClasses = [
                             'bg-amber-100', 'text-amber-700', 
@@ -116,18 +214,22 @@
                             case 'pending':
                                 statusBadge.classList.add('bg-amber-100', 'text-amber-700')
                                 statusBadge.innerText = 'WAITING AGREEMENT'
+                                if(uploadContainer) uploadContainer.classList.add('invisible')
                                 break;
                             case 'setuju':
                                 statusBadge.classList.add('bg-violet-100', 'text-violet-700')
                                 statusBadge.innerText = 'RUNNING'
+                                if(uploadContainer) uploadContainer.classList.remove('invisible')
                                 break;
                             case 'selesai':
                                 statusBadge.classList.add('bg-emerald-100', 'text-emerald-700')
                                 statusBadge.innerText = 'COMPLETED'
+                                if(uploadContainer) uploadContainer.classList.add('invisible')
                                 break;
                             case 'tolak':
                                 statusBadge.classList.add('bg-red-100', 'text-red-700')
                                 statusBadge.innerText = 'REJECTED'
+                                if(uploadContainer) uploadContainer.classList.add('invisible')
                                 break;
                         }
                     }

@@ -49,19 +49,19 @@
 
                 <div class="mb-2">
                     <x-input-label for="dosen_ta" :value="__('Lecture')" />
-                    <x-text-input id="dosen_ta" class="block mt-1 w-full text-sm" type="text" name="dosen_ta" :value="old('dosen_ta')" required autofocus />
+                    <x-text-input id="dosen_ta" class="block mt-1 w-full text-sm" type="text" name="dosen_ta" :value="old('dosen_ta')" required autofocus placeholder="Example: Mr Budi"/>
                     <x-input-error :messages="$errors->get('dosen_ta')" class="mt-1" />
                 </div>
 
                 <div class="mb-2">
                     <x-input-label for="software" :value="__('Software')" />
-                    <x-text-input id="software" class="block mt-1 w-full text-sm" type="text" name="software" :value="old('software')" required autofocus />
+                    <x-text-input id="software" class="block mt-1 w-full text-sm" type="text" name="software" :value="old('software')" required autofocus placeholder="Example: Jupiter, MitLab"/>
                     <x-input-error :messages="$errors->get('software')" class="mt-1" />
                 </div>
 
                 <div class="mb-2">
                     <x-input-label for="no_hp" :value="__('No HP')" />
-                    <x-text-input id="no_hp" class="block mt-1 w-full text-sm" type="number" name="no_hp" :value="old('no_hp')" required autofocus />
+                    <x-text-input id="no_hp" class="block mt-1 w-full text-sm" type="number" name="no_hp" :value="old('no_hp')" required autofocus placeholder="Example: 0812345678"/>
                     <x-input-error :messages="$errors->get('no_hp')" class="mt-1" />
                 </div>
 
@@ -83,7 +83,7 @@
                     <x-input-error :messages="$errors->get('catatan')" class="mt-1" />
                 </div>
 
-                <x-input-label for="foto_bukti" :value="__('Upload Photo')" class="mb-2 text-gray-700 font-semibold" />
+                {{-- <x-input-label for="foto_bukti" :value="__('Upload Photo')" class="mb-2 text-gray-700 font-semibold" />
                 <div class="relative">
                     <input id="foto_bukti" 
                         type="file" 
@@ -101,7 +101,7 @@
                         required />
                 </div>
                 <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG. Maks 2MB.</p>
-                <x-input-error :messages="$errors->get('foto_bukti')" class="mt-2" />
+                <x-input-error :messages="$errors->get('foto_bukti')" class="mt-2" /> --}}
 
                 <div class="flex items-center justify-end mt-4">
                     <x-primary-button>

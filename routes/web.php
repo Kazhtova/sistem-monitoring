@@ -28,6 +28,12 @@ Route::middleware(['auth:mahasiswa', 'restrict:mahasiswa'])->prefix('mahasiswa')
 
     Route::get('/request-mahasiswa/{id?}', [MahasiswaRequest::class, 'viewRequest'])->name('request.mahasiswa');
 
+    Route::get('/upload-mahasiswa/{id}', [MahasiswaRequest::class, 'viewCard'])->name('foto.card');
+
+    Route::patch('/upload-foto-mahasiswa/{id}', [MahasiswaRequest::class, 'uploadImage'])->name('foto.post');
+
+    Route::patch('/update-time-mahasiswa/{id}', [MahasiswaRequest::class, 'extendTime'])->name('time.extend');
+
     Route::post('/request-mahasiswa', [MahasiswaRequest::class, 'sendRequest'])->name('request.post');
 
     Route::post('/update-fcm-token', [MahasiswaRequest::class, 'updateFcmToken'])->name('update.fcm');

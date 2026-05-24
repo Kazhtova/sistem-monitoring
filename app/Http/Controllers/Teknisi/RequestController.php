@@ -27,7 +27,7 @@ class RequestController extends Controller
     $query = $user
             ->request()
             ->with('mahasiswa')
-            ->whereNotIn('status', ['setuju', 'tolak']);
+            ->whereNotIn('status', ['setuju', 'tolak', 'selesai']);
 
     if($request->filled('search')){
         $search = $request->search;
@@ -147,9 +147,11 @@ class RequestController extends Controller
 
     public function rejectRequest(int $id){
         $request = ModelsRequest::findOrFail($id);
-        $request->update([
-           'status'     => 'tolak' 
-        ]);
+        DB::transaction(function () use ($request) {
+            $request->update([
+            'status'     => 'tolak' 
+            ]);
+        });
 
         RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
 

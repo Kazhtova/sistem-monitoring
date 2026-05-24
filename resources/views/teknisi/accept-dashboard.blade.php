@@ -7,7 +7,6 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
             <div class="mb-8 flex flex-wrap items-center gap-4">
                 <form action="{{ route('teknisi.dashboard.accept') }}" method="GET" class="flex flex-1 items-center gap-3 max-w-2xl">
                     <div class="relative flex-1 md:max-w-md">
@@ -44,15 +43,17 @@
                 @foreach($readRequest as $index => $data_request)
                     <div class="group bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col h-full">
                         
-                        <div class="relative h-64 w-full bg-gray-50 overflow-hidden">
+                        <div class="relative h-64 w-full bg-gray-50 overflow-hidden" id="foto-container-{{ $data_request->id_request }}">
                             @if($data_request->foto_bukti)
-                                <img src="{{ asset('storage/' . $data_request->foto_bukti) }}" 
+                                <img id="img-{{ $data_request->id_request }}" 
+                                     src="{{ asset('storage/' . $data_request->foto_bukti) }}" 
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 cursor-pointer"
                                      onclick="bukaModal(this.src)">
                             @else
-                                <div class="w-full h-full flex flex-col items-center justify-center text-gray-300">
+                                <div id="placeholder-{{ $data_request->id_request }}" 
+                                     class="w-full h-full flex flex-col items-center justify-center text-gray-300">
                                     <svg class="w-16 h-16 mb-2 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <span class="text-xs uppercase tracking-tighter font-bold opacity-40">No Preview Available</span>
+                                    <span class="text-xs uppercase tracking-tighter font-bold opacity-40">No Photos Available</span>
                                 </div>
                             @endif
                             <div class="absolute top-5 left-5">
@@ -71,14 +72,22 @@
                             </div>
 
                             <div class="space-y-4 mb-8 bg-gray-50 p-5 rounded-2xl">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Mulai</span>
-                                    <span class="text-base font-black text-gray-800">{{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M, H:i') }}</span>
+    
+                                <div class="flex items-center justify-between items-center gap-2 text-sm w-full">
+                                    <div class="text-gray-400 font-bold uppercase tracking-widest text-sm w-20">Mulai</div>
+                                    <div class="text-base font-black text-gray-800 tabular-nums text-right">
+                                        {{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M, H:i') }}
+                                    </div>
                                 </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Selesai</span>
-                                    <span class="text-base font-black text-gray-800">{{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}</span>
+
+                                <div class="flex items-center justify-between items-center gap-2 text-sm w-full">
+                                    <div class="text-gray-400 font-bold uppercase tracking-widest text-sm w-20">Selesai</div>
+                                    <div id="waktu-selesai-teknisi-{{ $data_request->id_request }}" 
+                                        class="text-base font-black text-gray-800 tabular-nums transition-all duration-300 text-right">
+                                        {{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}
+                                    </div>
                                 </div>
+
                             </div>
 
                             <div class="mt-auto pt-6 flex gap-4">
@@ -98,9 +107,6 @@
                     </div>
                 @endforeach
             </div>
-            {{-- <div class="mt-16">
-                {{ $readRequest->links() }}
-            </div> --}}
         </div>
     </div>
 
@@ -144,5 +150,54 @@
         }
     });
 }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        window.Echo.channel('foto-channel')
+        .listen('.FotoView', (e) => {
+            const container = document.getElementById('foto-container-' + e.id_request)
+
+            if(container){
+                const newImageUrl = '/storage/' + e.path
+
+                let existingImg = document.getElementById('img-' + e.id_request)
+                let placeholder = document.getElementById('placeholder-' + e.id_request)
+
+                if(existingImg){
+                    existingImg.src = newImageUrl
+                } else{ 
+                    if(placeholder){
+                        placeholder.remove()
+                    }
+
+                    const newImg = document.createElement('img')
+                    newImg.id = 'img-' + e.id_request
+                    newImg.src = newImageUrl
+                    newImg.className = 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 cursor-pointer'
+
+                    newImg.onclick = function (){
+                        bukaModal(this.src)
+                    }
+
+                    container.insertBefore(newImg, container.firstChild)
+                }
+            }
+        })
+
+        window.Echo.channel('teknisi-channel')
+        .listen('.WaktuUpdated', (e) => {
+            let waktuTarget = document.getElementById('waktu-selesai-teknisi-' + e.id_request)
+
+            if(waktuTarget) {
+                waktuTarget.innerText = e.waktu_baru
+                
+                waktuTarget.classList.add('text-violet-600')
+    
+                setTimeout(() => {
+                    waktuTarget.classList.remove('text-violet-600')
+                }, 1000)
+            }
+
+        })
+    })
     </script>
 </x-app-layout>

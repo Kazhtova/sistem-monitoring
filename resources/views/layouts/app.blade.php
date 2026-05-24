@@ -99,52 +99,63 @@
 
                     if (container) {
                         const newCardHtml = `
-                            <div class="bg-white rounded-3xl shadow-sm border-2 border-indigo-500 hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden animate-fade-in group">
-                                <div class="relative h-64 overflow-hidden bg-gray-100">
-                                    <img src="/storage/${data.foto_bukti}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onclick="bukaModal('/storage/${data.foto_bukti}')">
-                                    <div class="absolute top-4 left-4 bg-indigo-600 px-3 py-1 rounded-full shadow-sm">
-                                        <span class="text-xs font-bold text-white tracking-widest">NEW</span>
+                            <div class="bg-white rounded-3xl shadow-sm border-2 border-indigo-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in group">
+                                    <div class="p-6 flex flex-col flex-grow">
+                                        
+                                        <div class="flex justify-between items-center mb-5 pb-4 border-b border-gray-50">
+                                            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                                NEW
+                                            </span>
+                                            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-800 bg-gray-50 px-2 py-1 rounded">
+                                                Baru Saja
+                                            </span>
+                                        </div>
+
+                                        <div class="mb-5">
+                                            <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">Mahasiswa: ${data.mahasiswa?.nama_mahasiswa || 'Mahasiswa'}</h3>
+                                            <p class="text-sm text-violet-950 font-medium">Dosen: ${data.dosen_ta}</p>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-4 mb-6">
+                                            <div class="bg-gray-50 p-3 rounded-2xl">
+                                                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">Software</p>
+                                                <p class="text-sm font-bold text-gray-800 truncate">${data.software}</p>
+                                            </div>
+                                            <div class="bg-gray-50 p-3 rounded-2xl">
+                                                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">No Telp</p>
+                                                <p class="text-sm font-bold text-gray-800">${data.no_hp}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-y-2 border-l-2 border-indigo-100 pl-4 mb-8">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                                <p class="text-sm text-gray-600"><span class="font-bold">Start:</span> ${formatTgl(data.tanggal_mulai)}</p>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                                <p class="text-sm text-gray-600"><span class="font-bold">End:</span> ${formatTgl(data.perkiraan_selesai)}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-auto flex gap-3">
+                                            <form action="${rejectUrl}" method="POST" class="flex-1">
+                                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                                <input type="hidden" name="_method" value="PATCH">
+                                                <button type="submit" class="w-full bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-bold py-2.5 rounded-xl transition duration-200 text-sm">
+                                                    Tolak
+                                                </button>
+                                            </form>
+                                            <form action="${acceptUrl}" method="POST" class="flex-1">
+                                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                                <input type="hidden" name="_method" value="PATCH">
+                                                <button type="submit" class="w-full bg-violet-700 hover:bg-violet-900 text-white font-bold py-2.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-100 text-sm">
+                                                    Setujui
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="p-6 flex flex-col flex-grow">
-                                    <div class="mb-4">
-                                        <h3 class="text-lg font-bold text-gray-900">Mahasiswa: ${data.mahasiswa?.nama_mahasiswa || 'Mahasiswa'}</h3>
-                                        <p class="text-sm text-violet-950 font-medium">Dosen: ${data.dosen_ta}</p>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4 mb-6">
-                                        <div class="bg-gray-50 p-3 rounded-2xl">
-                                            <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">Software</p>
-                                            <p class="text-sm font-bold text-gray-800">${data.software}</p>
-                                        </div>
-                                        <div class="bg-gray-50 p-3 rounded-2xl">
-                                            <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">No Telp</p>
-                                            <p class="text-sm font-bold text-gray-800">${data.no_hp}</p>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-2 border-l-2 border-indigo-100 pl-4 mb-6">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                            <p class="text-sm text-gray-600"><span class="font-bold">Start:</span> ${formatTgl(data.tanggal_mulai)}</p>
-                                        </div>
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-red-500"></span>
-                                            <p class="text-sm text-gray-600"><span class="font-bold">End:</span> ${formatTgl(data.perkiraan_selesai)}</p>
-                                        </div>
-                                    </div>
-                                    <div class="mt-auto flex gap-3">
-                                        <form action="${rejectUrl}" method="POST" class="flex-1">
-                                            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                                            <input type="hidden" name="_method" value="PATCH">
-                                            <button type="submit" class="w-full bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-bold py-2.5 rounded-xl transition duration-200 text-sm">Tolak</button>
-                                        </form>
-                                        <form action="${acceptUrl}" method="POST" class="flex-1">
-                                            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                                            <input type="hidden" name="_method" value="PATCH">
-                                            <button type="submit" class="w-full bg-violet-700 hover:bg-violet-900 text-white font-bold py-2.5 rounded-xl transition duration-200 shadow-lg text-sm">Setujui</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                         `;
                         container.insertAdjacentHTML('afterbegin', newCardHtml);
 
