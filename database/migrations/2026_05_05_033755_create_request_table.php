@@ -18,9 +18,9 @@ return new class extends Migration
             $table->bigInteger('no_hp');
             $table->dateTime('tanggal_mulai');
             $table->dateTime('perkiraan_selesai');
-            $table->string('foto_bukti');
             $table->enum('enum', ['pending', 'setuju', 'tidak', 'selesai'])->default('pending');
             $table->text('catatan');
+            $table->string('foto_bukti')->nullable();
             $table->unsignedBigInteger('id_mahasiswa');
             $table->unsignedBigInteger('id_komputer');
             $table->foreign('id_mahasiswa')->references('id_mahasiswa')->on('mahasiswa')->cascadeOnDelete();
