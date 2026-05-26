@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Komputer;
 use App\Models\Laboratorium;
 use App\Models\Request as ModelsRequest;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -70,6 +71,17 @@ class RequestController extends Controller
             'id_komputer'           => $request->id_komputer
         ]);
 
+        ActivityLogger::log(
+        action: 'CREATE_REQUEST',
+        subject: $newRequest, // Menyimpan objek request baru sebagai subjek polimorfis
+        description: "Mahasiswa membuat request perbaikan baru untuk PC: {$newRequest->id_komputer} (Software: {$newRequest->software})",
+        properties: [
+            'id_komputer' => $newRequest->id_komputer,
+            'software'    => $newRequest->software,
+            'dosen_ta'    => $newRequest->dosen_ta
+            ]
+        );
+
         broadcast(new RequestCreated($newRequest))->toOthers();
 
         return redirect()->route('mahasiswa.dashboard.mahasiswa')->with('success', 'Request Has Been Sent');
@@ -81,6 +93,8 @@ class RequestController extends Controller
         ]);
 
         $dataRequest = ModelsRequest::findOrFail($id);
+
+        $fotoLama = $dataRequest->foto_bukti;
 
          $path = null;
 
@@ -97,6 +111,16 @@ class RequestController extends Controller
             $dataRequest->update([
                 'foto_bukti'    => $path,
             ]);
+
+            ActivityLogger::log(
+            action: 'UPLOAD_PHOTO',
+            subject: $dataRequest,
+            description: "Mahasiswa mengunggah foto bukti baru untuk request PC: {$dataRequest->komputer->nama_komputer}",
+            properties: [
+                'foto_lama' => $fotoLama,
+                'foto_baru' => $path
+            ]
+        );
     
             broadcast(new FotoView($dataRequest->id_request, $path, $dataRequest->id_mahasiswa))->toOthers();
     
@@ -151,9 +175,21 @@ class RequestController extends Controller
 
         $dataRequest = ModelsRequest::findOrFail($id);
 
+        $waktuLama = $dataRequest->perkiraan_selesai;
+
         $dataRequest->update([
                 'perkiraan_selesai'     => $request->perkiraan_selesai
         ]);
+
+        ActivityLogger::log(
+        action: 'EXTEND_TIME',
+        subject: $dataRequest,
+        description: "Mahasiswa mengubah perkiraan selesai pada PC: {$dataRequest->komputer->nama_komputer}",
+        properties: [
+            'waktu_lama' => $waktuLama,
+            'waktu_baru' => $request->perkiraan_selesai
+        ]
+    );
 
         $formatWaktu = \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i');
 

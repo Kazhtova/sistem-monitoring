@@ -72,7 +72,7 @@
                                     
                                     <div id="waktu-selesai-{{ $request->id_request }}" class="font-bold text-gray-700 tabular-nums whitespace-nowrap origin-left transition-all duration-300">{{ \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i') }}</div>
                                     
-                                    <button type="button" onclick="bukaModalWaktu('{{ $request->id_request }}', '{{ $request->perkiraan_selesai }}')" class="w-8 h-10 flex-shrink-0 flex items-center justify-center text-gray-400 hover:text-violet-600 hover:bg-violet-100 rounded-lg transition-all duration-300 shadow-sm hover:shadow border border-transparent hover:border-violet-100 ml-1.5" title="Update Waktu Selesai">
+                                    <button type="button" onclick="bukaModalWaktu('{{ $request->id_request }}', '{{ $request->perkiraan_selesai }}')" class="w-8 h-10 flex-shrink-0 flex items-center justify-center text-gray-400 hover:text-violet-600 hover:bg-violet-100 rounded-lg transition-all duration-300 shadow-sm hover:shadow border border-transparent hover:border-violet-100 ml-1.5" title="Update Estimate Complete">
                                         <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </button>
 
@@ -122,7 +122,7 @@
                 @csrf
                 @method('PATCH')
                 <div class="mb-8">
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Perkiraan Selesai (Baru)</label>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Estimate Complete (New)</label>
                     <input type="datetime-local" 
                         name="perkiraan_selesai" 
                         id="inputWaktuSelesai" 

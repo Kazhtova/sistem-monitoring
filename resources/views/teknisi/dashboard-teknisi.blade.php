@@ -55,7 +55,7 @@
                             </div>
 
                             <div class="mb-5">
-                                <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">Mahasiswa: {{ $data_request->mahasiswa->nama_mahasiswa }}</h3>
+                                <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">Student: {{ $data_request->mahasiswa->nama_mahasiswa }}</h3>
                                 <p class="text-sm text-violet-950 font-medium">Dosen: {{ $data_request->dosen_ta }}</p>
                             </div>
 
@@ -73,11 +73,16 @@
                             <div class="space-y-2 border-l-2 border-indigo-100 pl-4 mb-8">
                                 <div class="flex items-center gap-2">
                                     <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                    <p class="text-sm text-gray-600"><span class="font-bold">Start:</span> {{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M, H:i') }}</p>
+                                    <p class="text-sm text-gray-700 font-bold"><span class="font-bold">Start:</span> {{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M, H:i') }}</p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="w-2 h-2 rounded-full bg-red-500"></span>
-                                    <p class="text-sm text-gray-600"><span class="font-bold">End:</span> {{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}</p>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-bold">End:</span> 
+                                        <span id="waktu-selesai-teknisi-{{ $data_request->id_request }}" class="font-bold text-gray-700 tabular-nums transition-all duration-300">
+                                            {{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
 
@@ -116,6 +121,26 @@
             Swal.fire({ title: 'Berhasil', text: "{{ session('reject') }}", icon: 'success', iconColor: '#ef4444', confirmButtonColor: '#4f46e5' })
         </script>
     @endif
+
+    @vite(['resources/js/app.js'])
+    <script type="module">
+        let currentTeknisiId = "{{ auth()->guard('teknisi')->id() }}";
+
+        // type="module" menjamin window.Echo sudah siap digunakan di sini
+        window.Echo.channel('teknisi-channel')
+        .listen('.WaktuUpdated', (e) => {
+            let waktuTarget = document.getElementById('waktu-selesai-teknisi-' + e.id_request);
+
+            if(waktuTarget){
+                waktuTarget.innerText = e.waktu_baru;
+                waktuTarget.classList.add('text-violet-600');
+
+                setTimeout(() => {
+                    waktuTarget.classList.remove('text-violet-600');
+                }, 1000);
+            }
+        });
+    </script>
 
     {{-- <script type="module">
         Echo.channel('teknisi-channel')

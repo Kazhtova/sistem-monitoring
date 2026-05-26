@@ -6,10 +6,11 @@ use App\Events\ComputerView;
 use App\Events\RequestStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Request as ModelsRequest;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
-use Kreait\Firebase\Messaging\CloudMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Kreait\Firebase\Messaging\CloudMessage;
 
 class RequestController extends Controller
 {
@@ -141,9 +142,20 @@ class RequestController extends Controller
                 Log::error('FCM Notification Failed: ' . $e->getMessage()); 
             }
         } 
-        
-        return redirect()->back()->with('success', 'Request Disetujui'); 
-    }
+
+        ActivityLogger::log(
+        action: 'ACCEPT_REQUEST',
+        subject: $request,
+        description: "Teknisi menyetujui request perbaikan dari Mahasiswa: {$request->mahasiswa->nama_mahasiswa} (PC: {$request->id_komputer})",
+        properties: [
+            'id_komputer' => $request->id_komputer,
+            'software'    => $request->software,
+            'status_baru' => 'setuju'
+            ]
+        );
+            
+            return redirect()->back()->with('success', 'Request Disetujui'); 
+        }
 
     public function rejectRequest(int $id){
         $request = ModelsRequest::findOrFail($id);
@@ -155,6 +167,15 @@ class RequestController extends Controller
 
         RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
 
+        ActivityLogger::log(
+        action: 'REJECT_REQUEST',
+        subject: $request,
+        description: "Teknisi menolak request perbaikan PC {$request->id_komputer}.",
+        properties: [
+            'status_baru'      => 'tolak'
+            ]
+        );
+
         return redirect()->back()->with('reject', 'Request Ditolak');
     }
 
@@ -165,6 +186,16 @@ class RequestController extends Controller
         ]);
 
         RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+
+        ActivityLogger::log(
+        action: 'COMPLETE_REQUEST',
+        subject: $request,
+        description: "Teknisi menandai perbaikan Software {$request->software} pada PC {$request->id_komputer} telah SELESAI.",
+        properties: [
+            'id_komputer' => $request->id_komputer,
+            'status_baru' => 'selesai'
+            ]
+        );
 
         return redirect()->back()->with('success', 'Request Dibatalkan');
     }

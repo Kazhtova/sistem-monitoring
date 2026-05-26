@@ -17,6 +17,10 @@
 
                     $routeAccept = $teknisi ? 'teknisi.dashboard.accept' : 'teknisi.dashboard.accept';
 
+                    $routeActivity = $teknisi ? 'teknisi.dashboard.activity' : 'teknisi.dashboard.activity';
+
+                    $activityDashboardUrl = $teknisi ? route('teknisi.dashboard.activity') : route('teknisi.dashboard.activity');
+
                     $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
 
                     $name = $teknisi ? $user->nama_teknisi : $user->nama_mahasiswa;
@@ -42,6 +46,11 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$requestAcceptUrl" :active="request()->routeIs($routeAccept)">
                         {{ __('Accept List') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="$activityDashboardUrl" :active="request()->routeIs($routeActivity)">
+                        {{ __('Dashboard Activity') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -95,12 +104,24 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeAccept)">
-                {{ __('Dashboard') }}
+            
+            <x-responsive-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeRequest)">
+                {{ __('Request List') }}
+                <span class="bg-violet-500 text-white text-[10px] ml-1 font-bold px-2 py-0.5 rounded-full inline-block {{ request()->routeIs($routeRequest) || session('has_opened_request_list') || $jumlahPending == 0 ? 'hidden' : '' }}">
+                    {{ $jumlahPending }}
+                </span>
             </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="$requestAcceptUrl" :active="request()->routeIs($routeAccept)">
+                {{ __('Accept List') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="$activityDashboardUrl" :active="request()->routeIs($routeActivity)">
+                {{ __('Dashboard Activity') }}
+            </x-responsive-nav-link>
+
         </div>
 
-        <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ $name }}</div>
@@ -112,7 +133,6 @@
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
-                <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
