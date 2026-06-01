@@ -92,7 +92,7 @@
 
                             <div class="mt-auto pt-6 flex gap-4">
                                 <form id="form-reject-{{ $data_request->id_request }}" 
-                                    action="{{ route('teknisi.cancle.request', $data_request->id_request) }}" 
+                                    action="{{ route('teknisi.cancel.request', $data_request->id_request) }}" 
                                     method="POST" class="flex-1">
                                     @csrf
                                     @method('PATCH')

@@ -179,7 +179,7 @@ class RequestController extends Controller
         return redirect()->back()->with('reject', 'Request Ditolak');
     }
 
-    public function cancleRequest(int $id){
+    public function cancelRequest(int $id){
         $request = ModelsRequest::findOrFail($id);  
         $request->update([
            'status'     => 'selesai', 

@@ -21,7 +21,6 @@
                         </div>
 
                         <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">{{ $lab->nama_lab }}</h3>
-                        {{-- <p class="text-xs text-gray-400 mt-2 leading-relaxed">Klik untuk mulai melaporkan kendala perangkat atau software.</p> --}}
                     </a>
                 @endforeach
             </div>
