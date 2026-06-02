@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teknisi;
 use App\Events\ComputerView;
 use App\Events\RequestStatusUpdated;
 use App\Http\Controllers\Controller;
+use App\Jobs\KirimNotifikasiFcm;
 use App\Models\Request as ModelsRequest;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
@@ -97,51 +98,8 @@ class RequestController extends Controller
         ComputerView::dispatch($request->id_komputer, $idLab);
 
         RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
-
-        $mahasiswa = $request->mahasiswa; 
-
-        // Validasi keberadaan mahasiswa dan fcm_token di database 
-        if ($mahasiswa && $mahasiswa->fcm_token) { 
-            try {
-                $messaging = app('firebase.messaging'); 
-
-                // Bangun pesan menggunakan fromArray universal yang divalidasi Google FCM v1 [cite: 50]
-                $message = CloudMessage::fromArray([
-                    'token'        => $mahasiswa->fcm_token, // Menargetkan token mahasiswa [cite: 50]
-                    'notification' => [
-                        'title' => 'Request Disetujui! 🎉', 
-                        'body'  => "Request Software '{$request->software}' telah disetujui oleh teknisi.", 
-                    ],
-                    'webpush' => [ 
-                        'notification' => [ 
-                            'title'        => 'Request Disetujui! 🎉', 
-                            'body'         => "Request Software '{$request->software}' telah disetujui oleh teknisi.", 
-                            'icon'         => '/favicon.ico', 
-                            'click_action' => '/mahasiswa/dashboard-mahasiswa', 
-                        ],
-                        'headers' => [ 
-                            'Urgency' => 'high', // Prioritas tinggi untuk menembus Doze Mode Android 
-                        ]
-                    ],
-                    'data' => [
-                        'id_request' => (string) $request->id_request, // Memastikan id_request berupa string 
-                        'type'       => 'request_accepted', 
-                        'title'      => 'Request Disetujui! 🎉', 
-                        'body'       => "Request Software '{$request->software}' telah disetujui oleh teknisi.",
-                    ],
-                ]);
-
-                // Eksekusi pengiriman data [cite: 57]
-                $messaging->send($message); 
-                
-                // PERBAIKAN: Menggunakan nama kolom id_mahasiswa yang benar [cite: 58]
-                Log::info("FCM Notification Successfully Sent to Student ID: {$mahasiswa->id_mahasiswa}"); 
-                
-            } catch (\Exception $e) { 
-                // Pencatatan log error kritis jika komunikasi gateway luar terputus [cite: 58]
-                Log::error('FCM Notification Failed: ' . $e->getMessage()); 
-            }
-        } 
+        
+        KirimNotifikasiFcm::dispatch($request->mahasiswa, $request->software, $request->id_request);
 
         ActivityLogger::log(
         action: 'ACCEPT_REQUEST',

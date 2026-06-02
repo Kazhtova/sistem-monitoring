@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Models\Request;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast; // WAJIB ADA
 use Illuminate\Foundation\Events\Dispatchable;
@@ -32,7 +33,7 @@ class RequestCreated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('teknisi-channel'),
+            new PrivateChannel('teknisi.' . $this->requestData->id_teknisi),
         ];
     }
 

@@ -45,19 +45,13 @@
 
         // 1. JIKA pengguna sedang berada di halaman Request List
         if (container) {
-            // Tandai di memori browser bahwa pengguna SUDAH melihat request baru
             localStorage.setItem('has_opened_request_list', 'true');
-            
-            // Langsung bersihkan angka lencana secara paksa
             if (badgeDesktop) { badgeDesktop.innerText = '0'; badgeDesktop.classList.add('hidden'); }
             if (badgeMobile) { badgeMobile.innerText = '0'; badgeMobile.classList.add('hidden'); }
         } 
-        // 2. JIKA pengguna berada di halaman lain (seperti Accept List)
+        // 2. JIKA pengguna berada di halaman lain
         else {
-            // Cek apakah memori browser mencatat pengguna SUDAH PERNAH melihat halaman Request List sebelumnya
             const hasOpened = localStorage.getItem('has_opened_request_list');
-            
-            // Jika sudah pernah melihat, langsung paksa sembunyikan kounter bawaan dari database
             if (hasOpened === 'true') {
                 if (badgeDesktop) { badgeDesktop.innerText = '0'; badgeDesktop.classList.add('hidden'); }
                 if (badgeMobile) { badgeMobile.innerText = '0'; badgeMobile.classList.add('hidden'); }
@@ -65,8 +59,14 @@
         }
         // ==================================================
 
-        if (window.Echo) {
-            window.Echo.channel('teknisi-channel')
+        // 🌟 AMBIL ID TEKNISI DARI AUTH UNTUK PRIVATE CHANNEL
+        let currentTeknisiId = "{{ auth()->guard('teknisi')->id() }}";
+
+        // Pastikan Echo tersedia dan pengguna benar-benar teknisi yang login
+        if (window.Echo && currentTeknisiId) {
+            
+            // 🌟 REVISI: GUNAKAN PRIVATE CHANNEL
+            window.Echo.private('teknisi.' + currentTeknisiId)
                 .listen('.request.new', (e) => {
                     const data = e.requestData;
                     const id = data.id_request; 
@@ -93,8 +93,6 @@
                         return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).replace('.', ':');
                     };
 
-                    // PENTING: Jika ada data baru masuk lagi secara real-time via WebSocket,
-                    // hapus tanda memori lama agar counter bisa mendeteksi data baru tersebut di halaman lain
                     localStorage.removeItem('has_opened_request_list');
 
                     if (container) {
