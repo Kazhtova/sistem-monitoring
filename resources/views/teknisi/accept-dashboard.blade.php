@@ -67,6 +67,7 @@
                             <div class="mb-6">
                                 <h3 class="text-sm uppercase tracking-[0.2em] text-gray-600 font-black mb-2">{{ $data_request->software }}</h3>
                                 <p class="text-2xl font-black text-gray-900 leading-tight mb-2">Student: {{ $data_request->mahasiswa->nama_mahasiswa }}</p>
+                                <p class="text-lg text-gray-900 font-semibold italic mb-1">PC: Komputer {{ $data_request->komputer->id_komputer }}</p>
                                 <p class="text-base text-gray-900 font-semibold italic mb-1">Dosen: {{ $data_request->dosen_ta }}</p>
                                 <p class="text-base text-gray-950 font-black italic">No Telp: {{ $data_request->no_hp }}</p>
                             </div>

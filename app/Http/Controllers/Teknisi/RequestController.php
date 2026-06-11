@@ -87,11 +87,7 @@ class RequestController extends Controller
         // Mengambil data request beserta relasi mahasiswa menggunakan findOrFail 
         $request = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id); 
 
-        DB::transaction(function () use ($request) {
-                $request->update([
-            'status'     => 'setuju' 
-            ]);
-        });
+        $request->update(['status' => 'setuju']);
 
         $idLab = $request->komputer->id_laboratorium;
         
@@ -99,7 +95,7 @@ class RequestController extends Controller
 
         RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
         
-        KirimNotifikasiFcm::dispatch($request->mahasiswa, $request->software, $request->id_request);
+        KirimNotifikasiFcm::dispatch($request->mahasiswa, $request->software, $request->id_request, $request->komputer->nama_komputer);
 
         ActivityLogger::log(
         action: 'ACCEPT_REQUEST',
@@ -115,46 +111,52 @@ class RequestController extends Controller
             return redirect()->back()->with('success', 'Request Disetujui'); 
         }
 
-    public function rejectRequest(int $id){
-        $request = ModelsRequest::findOrFail($id);
-        DB::transaction(function () use ($request) {
-            $request->update([
-            'status'     => 'tolak' 
-            ]);
-        });
+    public function rejectRequest(int $id)
+{
+    $request = ModelsRequest::with('mahasiswa')->findOrFail($id);
 
-        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+    $request->update([
+        'status' => 'tolak' 
+    ]);
 
+    RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+
+    dispatch(function () use ($request) {
         ActivityLogger::log(
-        action: 'REJECT_REQUEST',
-        subject: $request,
-        description: "Teknisi menolak request perbaikan PC {$request->id_komputer}.",
-        properties: [
-            'status_baru'      => 'tolak'
+            action: 'REJECT_REQUEST',
+            subject: $request,
+            description: "Teknisi menolak request perbaikan PC {$request->id_komputer}.",
+            properties: [
+                'status_baru' => 'tolak'
             ]
         );
+    })->afterResponse(); 
 
-        return redirect()->back()->with('reject', 'Request Ditolak');
-    }
+    return redirect()->back()->with('reject', 'Request Ditolak');
+}
 
-    public function cancelRequest(int $id){
+    public function cancleRequest(int $id)
+    {
         $request = ModelsRequest::findOrFail($id);  
+        
         $request->update([
-           'status'     => 'selesai', 
+        'status' => 'selesai', 
         ]);
 
         RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
 
-        ActivityLogger::log(
-        action: 'COMPLETE_REQUEST',
-        subject: $request,
-        description: "Teknisi menandai perbaikan Software {$request->software} pada PC {$request->id_komputer} telah SELESAI.",
-        properties: [
-            'id_komputer' => $request->id_komputer,
-            'status_baru' => 'selesai'
-            ]
-        );
+        dispatch(function () use ($request) {
+            ActivityLogger::log(
+                action: 'COMPLETE_REQUEST',
+                subject: $request,
+                description: "Teknisi menandai perbaikan Software {$request->software} pada PC {$request->id_komputer} telah SELESAI.",
+                properties: [
+                    'id_komputer' => $request->id_komputer,
+                    'status_baru' => 'selesai'
+                ]
+            );
+        })->afterResponse(); 
 
-        return redirect()->back()->with('success', 'Request Dibatalkan');
+        return redirect()->back()->with('success', 'Perbaikan Telah Selesai Ditangani');
     }
 }

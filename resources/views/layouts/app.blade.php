@@ -112,6 +112,7 @@
                                         <div class="mb-5">
                                             <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">Student: ${data.mahasiswa?.nama_mahasiswa || 'Mahasiswa'}</h3>
                                             <p class="text-sm text-violet-950 font-medium">Dosen: ${data.dosen_ta}</p>
+                                            <h4 class="text-lg font-bold text-gray-900 leading-tight mt-1">PC: Komputer ${data.id_komputer}</h4>
                                         </div>
 
                                         <div class="grid grid-cols-2 gap-4 mb-6">

@@ -21,11 +21,13 @@ class KirimNotifikasiFcm implements ShouldQueue
     protected mixed $mahasiswa;
     protected string $software;
     protected int $id_request;
-    public function __construct(mixed $mahasiswa, string $software, int $id_request)
+    protected string $nama_komputer;
+    public function __construct(mixed $mahasiswa, string $software, int $id_request, string $nama_komputer)
     {
         $this->mahasiswa = $mahasiswa;
         $this->software = $software;
         $this->id_request = $id_request;
+        $this->nama_komputer = $nama_komputer;
     }
 
     /**
@@ -41,13 +43,13 @@ class KirimNotifikasiFcm implements ShouldQueue
                 $message = CloudMessage::fromArray([
                     'token'        => $this->mahasiswa->fcm_token, 
                     'notification' => [
-                        'title' => 'Request Disetujui! 🎉', 
-                        'body'  => "Request Software '{$this->software}' telah disetujui oleh teknisi.", 
+                        'title' => 'Request Disetujui!', 
+                        'body'  => "Request Software '{$this->software}' Dengan '{$this->nama_komputer}' Telah Disetujui.", 
                     ],
                     'webpush' => [ 
                         'notification' => [ 
-                            'title'        => 'Request Disetujui! 🎉', 
-                            'body'         => "Request Software '{$this->software}' telah disetujui oleh teknisi.", 
+                            'title'        => 'Request Disetujui!', 
+                            'body'         => "Request Software '{$this->software}' Dengan '{$this->nama_komputer}' Telah Disetujui.", 
                             'icon'         => '/favicon.ico', 
                             'click_action' => '/mahasiswa/dashboard-mahasiswa', 
                         ],
@@ -58,8 +60,8 @@ class KirimNotifikasiFcm implements ShouldQueue
                     'data' => [
                         'id_request' => (string) $this->id_request, 
                         'type'       => 'request_accepted', 
-                        'title'      => 'Request Disetujui! 🎉', 
-                        'body'       => "Request Software '{$this->software}' telah disetujui oleh teknisi.",
+                        'title'      => 'Request Disetujui!', 
+                        'body'       => "Request Software '{$this->software}' telah disetujui .",
                     ],
                 ]);
 

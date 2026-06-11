@@ -14,7 +14,7 @@ export default defineConfig({
         strictPort: true,
         hmr: {
         // host: '192.168.1.9', //HOME
-        host: '10.12.209.214', //ITS
+        host: '10.12.208.240', //ITS
         },
         cors: true,
     }
