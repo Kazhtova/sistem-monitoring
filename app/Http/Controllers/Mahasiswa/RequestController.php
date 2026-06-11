@@ -71,16 +71,18 @@ class RequestController extends Controller
             'id_komputer'           => $request->id_komputer
         ]);
 
-        ActivityLogger::log(
-        action: 'CREATE_REQUEST',
-        subject: $newRequest, // Menyimpan objek request baru sebagai subjek polimorfis
-        description: "Mahasiswa membuat request perbaikan baru untuk PC: {$newRequest->id_komputer} (Software: {$newRequest->software})",
-        properties: [
-            'id_komputer' => $newRequest->id_komputer,
-            'software'    => $newRequest->software,
-            'dosen_ta'    => $newRequest->dosen_ta
-            ]
-        );
+        dispatch(function () use ($newRequest) {
+            ActivityLogger::log(
+                action: 'CREATE_REQUEST',
+                subject: $newRequest,
+                description: "Mahasiswa membuat request perbaikan baru untuk PC: {$newRequest->id_komputer} (Software: {$newRequest->software})",
+                properties: [
+                    'id_komputer' => $newRequest->id_komputer,
+                    'software'    => $newRequest->software,
+                    'dosen_ta'    => $newRequest->dosen_ta
+                ]
+            );
+        })->afterResponse();
 
         broadcast(new RequestCreated($newRequest))->toOthers();
 
@@ -92,8 +94,7 @@ class RequestController extends Controller
            'foto_bukti'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $dataRequest = ModelsRequest::findOrFail($id);
-
+        $dataRequest = ModelsRequest::with('komputer')->findOrFail($id);
         $fotoLama = $dataRequest->foto_bukti;
 
          $path = null;
@@ -112,22 +113,24 @@ class RequestController extends Controller
                 'foto_bukti'    => $path,
             ]);
 
-            ActivityLogger::log(
-            action: 'UPLOAD_PHOTO',
-            subject: $dataRequest,
-            description: "Mahasiswa mengunggah foto bukti baru untuk request PC: {$dataRequest->komputer->nama_komputer}",
-            properties: [
-                'foto_lama' => $fotoLama,
-                'foto_baru' => $path
-            ]
-        );
+            dispatch(function () use ($dataRequest, $fotoLama, $path) {
+                ActivityLogger::log(
+                    action: 'UPLOAD_PHOTO',
+                    subject: $dataRequest,
+                    description: "Mahasiswa mengunggah foto bukti baru untuk request PC: {$dataRequest->komputer->nama_komputer}",
+                    properties: [
+                        'foto_lama' => $fotoLama,
+                        'foto_baru' => $path
+                    ]
+                );
+            })->afterResponse();
     
             broadcast(new FotoView($dataRequest->id_request, $path, $dataRequest->id_mahasiswa))->toOthers();
     
             return redirect()->back()->with('success', 'Photo uploaded successfully!');
-            }
+        }
             
-            return redirect()->back();
+        return redirect()->back();
     }
     
     public function readRequest(){
