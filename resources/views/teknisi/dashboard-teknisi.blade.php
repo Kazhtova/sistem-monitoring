@@ -111,23 +111,22 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <script>
-            Swal.fire({ title: 'Berhasil', text: "{{ session('success') }}", icon: 'success', confirmButtonColor: '#4f46e5' })
-        </script>
-    @endif
+        @if(session('success'))
+            <script>
+                Swal.fire({ title: 'Berhasil', text: "{{ session('success') }}", icon: 'success', confirmButtonColor: '#4f46e5' })
+            </script>
+        @endif
 
-    @if(session('reject'))
-        <script>
-            Swal.fire({ title: 'Berhasil', text: "{{ session('reject') }}", icon: 'success', iconColor: '#ef4444', confirmButtonColor: '#4f46e5' })
-        </script>
-    @endif
+        @if(session('reject'))
+            <script>
+                Swal.fire({ title: 'Berhasil', text: "{{ session('reject') }}", icon: 'success', iconColor: '#ef4444', confirmButtonColor: '#4f46e5' })
+            </script>
+        @endif
 
     @vite(['resources/js/app.js'])
     <script type="module">
         let currentTeknisiId = "{{ auth()->guard('teknisi')->id() }}";
 
-        // type="module" menjamin window.Echo sudah siap digunakan di sini
         window.Echo.channel('teknisi-channel')
         .listen('.WaktuUpdated', (e) => {
             let waktuTarget = document.getElementById('waktu-selesai-teknisi-' + e.id_request);

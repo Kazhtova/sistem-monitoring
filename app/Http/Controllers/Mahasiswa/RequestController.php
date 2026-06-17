@@ -184,15 +184,17 @@ class RequestController extends Controller
                 'perkiraan_selesai'     => $request->perkiraan_selesai
         ]);
 
-        ActivityLogger::log(
-        action: 'EXTEND_TIME',
-        subject: $dataRequest,
-        description: "Mahasiswa mengubah perkiraan selesai pada PC: {$dataRequest->komputer->nama_komputer}",
-        properties: [
-            'waktu_lama' => $waktuLama,
-            'waktu_baru' => $request->perkiraan_selesai
-        ]
-    );
+        dispatch(function () use ($dataRequest, $waktuLama, $request) {
+            ActivityLogger::log(
+                action: 'EXTEND_TIME',
+                subject: $dataRequest,
+                description: "Mahasiswa mengubah perkiraan selesai pada PC: {$dataRequest->komputer->nama_komputer}",
+                properties: [
+                    'waktu_lama' => $waktuLama,
+                    'waktu_baru' => $request->perkiraan_selesai
+                ]
+            );
+        })->afterResponse();
 
         $formatWaktu = \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i');
 

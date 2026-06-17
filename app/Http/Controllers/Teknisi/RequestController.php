@@ -16,11 +16,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 class RequestController extends Controller
 {
     public function listRequest(Request $request){
-    //     $id_teknisi = auth()->guard('teknisi')->user()->id_teknisi;
-    
-    // $readRequest = ModelsRequest::where('id_teknisi', $id_teknisi)
-    //                             ->latest()
-    //                             ->get();
+
     /** @var \App\Models\Teknisi $user */
     $user = auth()->guard('teknisi')->user();
 
@@ -83,33 +79,35 @@ class RequestController extends Controller
     return view('teknisi.accept-dashboard', compact('readRequest'));
     }
 
-    public function acceptRequest(int $id) {
-        // Mengambil data request beserta relasi mahasiswa menggunakan findOrFail 
+        public function acceptRequest(int $id) {
         $request = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id); 
 
         $request->update(['status' => 'setuju']);
 
         $idLab = $request->komputer->id_laboratorium;
         
-        ComputerView::dispatch($request->id_komputer, $idLab);
-
-        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
         
+        dispatch(function () use ($request, $idLab) {
+            
         KirimNotifikasiFcm::dispatch($request->mahasiswa, $request->software, $request->id_request, $request->komputer->nama_komputer);
+        ComputerView::dispatch($request->id_komputer, $idLab);
+        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
 
         ActivityLogger::log(
-        action: 'ACCEPT_REQUEST',
-        subject: $request,
-        description: "Teknisi menyetujui request perbaikan dari Mahasiswa: {$request->mahasiswa->nama_mahasiswa} (PC: {$request->id_komputer})",
-        properties: [
-            'id_komputer' => $request->id_komputer,
-            'software'    => $request->software,
-            'status_baru' => 'setuju'
+            action: 'ACCEPT_REQUEST',
+            subject: $request,
+            description: "Teknisi menyetujui request perbaikan dari Mahasiswa: {$request->mahasiswa->nama_mahasiswa} (PC: {$request->id_komputer})",
+            properties: [
+                'id_komputer' => $request->id_komputer,
+                'software'    => $request->software,
+                'status_baru' => 'setuju'
             ]
         );
-            
-            return redirect()->back()->with('success', 'Request Disetujui'); 
-        }
+
+    })->afterResponse(); 
+        
+    return redirect()->back()->with('success', 'Request Disetujui'); 
+}
 
     public function rejectRequest(int $id)
 {
@@ -135,28 +133,30 @@ class RequestController extends Controller
     return redirect()->back()->with('reject', 'Request Ditolak');
 }
 
-    public function cancleRequest(int $id)
+    public function cancelRequest(int $id)
     {
-        $request = ModelsRequest::findOrFail($id);  
-        
-        $request->update([
+    $request = ModelsRequest::findOrFail($id);  
+    
+    $request->update([
         'status' => 'selesai', 
-        ]);
+    ]);
 
+    dispatch(function () use ($request) {
+        
         RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
 
-        dispatch(function () use ($request) {
-            ActivityLogger::log(
-                action: 'COMPLETE_REQUEST',
-                subject: $request,
-                description: "Teknisi menandai perbaikan Software {$request->software} pada PC {$request->id_komputer} telah SELESAI.",
-                properties: [
-                    'id_komputer' => $request->id_komputer,
-                    'status_baru' => 'selesai'
-                ]
-            );
-        })->afterResponse(); 
+        ActivityLogger::log(
+            action: 'COMPLETE_REQUEST',
+            subject: $request,
+            description: "Teknisi menandai perbaikan Software {$request->software} pada PC {$request->id_komputer} telah SELESAI.",
+            properties: [
+                'id_komputer' => $request->id_komputer,
+                'status_baru' => 'selesai'
+            ]
+        );
+        
+    })->afterResponse(); 
 
-        return redirect()->back()->with('success', 'Perbaikan Telah Selesai Ditangani');
+    return redirect()->back()->with('success', 'Perbaikan Telah Selesai Ditangani');
     }
 }
