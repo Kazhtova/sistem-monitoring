@@ -38,18 +38,15 @@
         <script type="module">
     document.addEventListener('DOMContentLoaded', function () {
         
-        // === PERBAIKAN SINKRONISASI GLOBAL (LULUS UJI) ===
         const container = document.getElementById('request-container');
         const badgeDesktop = document.getElementById('nav-counter');
         const badgeMobile = document.getElementById('nav-counter-mobile');
 
-        // 1. JIKA pengguna sedang berada di halaman Request List
         if (container) {
             localStorage.setItem('has_opened_request_list', 'true');
             if (badgeDesktop) { badgeDesktop.innerText = '0'; badgeDesktop.classList.add('hidden'); }
             if (badgeMobile) { badgeMobile.innerText = '0'; badgeMobile.classList.add('hidden'); }
         } 
-        // 2. JIKA pengguna berada di halaman lain
         else {
             const hasOpened = localStorage.getItem('has_opened_request_list');
             if (hasOpened === 'true') {
@@ -57,15 +54,11 @@
                 if (badgeMobile) { badgeMobile.innerText = '0'; badgeMobile.classList.add('hidden'); }
             }
         }
-        // ==================================================
 
-        // 🌟 AMBIL ID TEKNISI DARI AUTH UNTUK PRIVATE CHANNEL
         let currentTeknisiId = "{{ auth()->guard('teknisi')->id() }}";
 
-        // Pastikan Echo tersedia dan pengguna benar-benar teknisi yang login
         if (window.Echo && currentTeknisiId) {
             
-            // 🌟 REVISI: GUNAKAN PRIVATE CHANNEL
             window.Echo.private('teknisi.' + currentTeknisiId)
                 .listen('.request.new', (e) => {
                     const data = e.requestData;
@@ -163,7 +156,6 @@
                             currentCards[currentCards.length - 1].remove();
                         }
                     } else {
-                        // Jika berada di halaman lain, naikkan angkanya secara real-time
                         const hasOpened = localStorage.getItem('has_opened_request_list');
                         if (hasOpened !== 'true') {
                             if (badgeDesktop) {

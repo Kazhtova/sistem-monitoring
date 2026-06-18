@@ -142,29 +142,25 @@
     @vite(['resources/js/app.js'])
     <script>
 
-        // Membuka Modal Waktu
         function bukaModalWaktu(idRequest, waktuSaatIni) {
             const modal = document.getElementById('modalWaktu');
             const form = document.getElementById('formUpdateWaktu');
             const inputWaktu = document.getElementById('inputWaktuSelesai');
             
-            // Nanti '/teknisi/update-waktu/' ini kita sesuaikan dengan rute Backend-mu
             form.action = `/mahasiswa/update-time-mahasiswa/${idRequest}`; 
             
-            // Masukkan waktu saat ini ke dalam input (format datetime-local: YYYY-MM-DDThh:mm)
             if(waktuSaatIni) {
                 inputWaktu.value = waktuSaatIni.replace(' ', 'T');
             }
             
             modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Kunci scroll layar
+            document.body.style.overflow = 'hidden'; 
         }
 
-        // Menutup Modal Waktu
         function tutupModalWaktu() {
             const modal = document.getElementById('modalWaktu');
             modal.classList.add('hidden');
-            document.body.style.overflow = 'auto'; // Buka kunci scroll layar
+            document.body.style.overflow = 'auto';
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -193,7 +189,6 @@
                     if(waktuSelesaiTarget && e.perkiraan_selesai){
                         waktuSelesaiTarget.innerText = e.perkiraan_selesai;
                         
-                        // (Opsional) Beri efek berkedip ungu sesaat agar Mahasiswa sadar waktunya diubah
                         waktuSelesaiTarget.classList.add('text-violet-600', 'scale-110');
                         setTimeout(() => {
                             waktuSelesaiTarget.classList.remove('text-violet-600', 'scale-110');
