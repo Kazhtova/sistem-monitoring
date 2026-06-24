@@ -32,7 +32,7 @@ class RequestController extends Controller
 
         $labChoose = Laboratorium::findOrFail($id);
 
-        $komputerUse = ModelsRequest::where('status', 'setuju')->pluck('id_komputer');
+        $komputerUse = ModelsRequest::whereIn('status', ['pending', 'setuju'])->pluck('id_komputer');
 
         $komputerAvailable = Komputer::whereNotIn('id_komputer', $komputerUse)->where('id_laboratorium', $id)->orderBy('nama_komputer', 'asc')->get();
     
