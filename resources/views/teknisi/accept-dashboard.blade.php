@@ -5,109 +5,142 @@
         </h2>
     </x-slot>
 
-    <div class="py-8">
+<div class="py-8 bg-gray-50/50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8 flex flex-wrap items-center gap-4">
-                <form action="{{ route('teknisi.dashboard.accept') }}" method="GET" class="flex flex-1 items-center gap-3 max-w-2xl">
-                    <div class="relative flex-1 md:max-w-md">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+            
+            {{-- 🌟 1. HEADER & FILTER SECTION (Responsive Fix) --}}
+            <div class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                <form action="{{ route('teknisi.dashboard.accept') }}" method="GET" class="flex flex-wrap md:flex-nowrap w-full lg:w-auto flex-1 items-center gap-3">
+                    <div class="relative w-full md:w-80">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
-                               placeholder="Cari Dosen Atau Mahasiswa..." 
-                               class="pl-10 w-full rounded-xl border-gray-200 shadow-sm focus:border-gray-500 focus:ring-gray-500 text-sm transition-all">
+                               placeholder="Cari Dosen atau Mahasiswa..." 
+                               class="pl-11 w-full rounded-xl border-gray-200 bg-gray-50/50 shadow-sm focus:bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-all duration-300">
                     </div>
                     
                     <select name="sort" onchange="this.form.submit()" 
-                            class="rounded-xl border-gray-200 shadow-sm focus:border-gray-600 text-sm font-medium text-gray-600">
+                            class="rounded-xl border-gray-200 bg-gray-50/50 shadow-sm focus:bg-white focus:border-indigo-500 sm:text-sm font-medium text-gray-600 transition-all cursor-pointer">
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                         <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     </select>
 
-                    <button type="submit" class="bg-gray-700 hover:bg-gray-900 text-white px-6 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm">
+                    <button type="submit" class="bg-gray-900 hover:bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 shadow-sm active:scale-95">
                         Filter
                     </button>
                     
                     @if(request('search') || request('sort'))
-                        <a href="{{ route('teknisi.dashboard.accept') }}" class="text-base text-gray-500 hover:text-gray-900 transition-colors font-black">
+                        <a href="{{ route('teknisi.dashboard.accept') }}" class="text-sm text-gray-400 hover:text-red-500 font-semibold transition-colors flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                             Reset
                         </a>
                     @endif
                 </form>
-                <div style="margin-left: 174px;">
+
+                {{-- Pagination Pagination Flex-End (Anti Hardcode margin) --}}
+                <div class="w-full lg:w-auto flex justify-end">
                     {{ $readRequest->links() }}
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {{-- 🌟 2. GRID CARDS SECTION --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 @foreach($readRequest as $index => $data_request)
-                    <div class="group bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col h-full">
+                    <div class="group bg-white rounded-[24px] shadow-sm border border-gray-200/60 hover:shadow-xl hover:border-gray-300/60 transition-all duration-300 flex flex-col h-full overflow-hidden">
                         
-                        <div class="relative h-64 w-full bg-gray-50 overflow-hidden" id="foto-container-{{ $data_request->id_request }}">
+                        {{-- Image Header (Dibuat lebih ringkas: h-52) --}}
+                        <div class="relative h-52 w-full bg-gray-100 overflow-hidden" id="foto-container-{{ $data_request->id_request }}">
                             @if($data_request->foto_bukti)
                                 <img id="img-{{ $data_request->id_request }}" 
                                      src="{{ asset('storage/' . $data_request->foto_bukti) }}" 
-                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 cursor-pointer"
+                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 cursor-pointer"
                                      onclick="bukaModal(this.src)">
                             @else
                                 <div id="placeholder-{{ $data_request->id_request }}" 
-                                     class="w-full h-full flex flex-col items-center justify-center text-gray-300">
-                                    <svg class="w-16 h-16 mb-2 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <span class="text-xs uppercase tracking-tighter font-bold opacity-40">No Photos Available</span>
+                                     class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-50">
+                                    <svg class="w-12 h-12 mb-2 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span class="text-[10px] uppercase tracking-widest font-bold opacity-50">Belum Ada Foto</span>
                                 </div>
                             @endif
-                            <div class="absolute top-5 left-5">
-                                <span class="bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black text-white shadow-lg">
-                                    #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
+
+                            {{-- Glassmorphism Badge --}}
+                            <div class="absolute top-4 left-4">
+                                <span class="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-gray-800 shadow-sm border border-white/20">
+                                    {{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
+                                </span>
+                            </div>
+                            
+                            {{-- Software Badge Floating --}}
+                            <div class="absolute bottom-4 right-4">
+                                <span class="bg-violet-900 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-bold tracking-wide shadow-sm">
+                                    {{ $data_request->software }}
                                 </span>
                             </div>
                         </div>
 
-                        <div class="p-8 flex-1 flex flex-col">
-                            <div class="mb-6">
-                                <h3 class="text-sm uppercase tracking-[0.2em] text-gray-600 font-black mb-2">{{ $data_request->software }}</h3>
-                                <p class="text-2xl font-black text-gray-900 leading-tight mb-2">Student: {{ $data_request->mahasiswa->nama_mahasiswa }}</p>
-                                <p class="text-lg text-gray-900 font-semibold italic mb-1">PC: Komputer {{ $data_request->komputer->id_komputer }}</p>
-                                <p class="text-base text-gray-900 font-semibold italic mb-1">Dosen: {{ $data_request->dosen_ta }}</p>
-                                <p class="text-base text-gray-950 font-black italic">No Telp: {{ $data_request->no_hp }}</p>
+                        {{-- Card Body --}}
+                        <div class="p-6 flex-1 flex flex-col">
+                            
+                            {{-- Main Info --}}
+                            <div class="mb-5">
+                                <h3 class="text-xl font-bold text-gray-900 leading-tight mb-1 truncate" title="{{ $data_request->mahasiswa->nama_mahasiswa }}">
+                                    {{ $data_request->mahasiswa->nama_mahasiswa }}
+                                </h3>
+                                <p class="text-sm font-medium text-gray-500">Mahasiswa</p>
                             </div>
 
-                            <div class="space-y-4 mb-8 bg-gray-50 p-5 rounded-2xl">
-    
-                                <div class="flex items-center justify-between items-center gap-2 text-sm w-full">
-                                    <div class="text-gray-400 font-bold uppercase tracking-widest text-sm w-20">Mulai</div>
-                                    <div class="text-base font-black text-gray-800 tabular-nums text-right">
+                            {{-- Details Grid with Icons (Lebih mudah dipindai mata) --}}
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm">
+                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    <span class="text-gray-600">PC: <span class="font-bold text-gray-900">{{ $data_request->komputer->id_komputer }}</span></span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span class="text-gray-600">Dosen: <span class="font-bold text-gray-900 truncate max-w-[150px] inline-block align-bottom">{{ $data_request->dosen_ta }}</span></span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                    <span class="font-bold text-gray-900">{{ $data_request->no_hp }}</span>
+                                </div>
+                            </div>
+
+                            {{-- Timeline Status Box --}}
+                            <div class="mt-auto bg-slate-50 rounded-xl p-4 border border-slate-100 mb-5">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mulai</span>
+                                    <span class="text-sm font-bold text-slate-800">
                                         {{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M, H:i') }}
-                                    </div>
+                                    </span>
                                 </div>
-
-                                <div class="flex items-center justify-between items-center gap-2 text-sm w-full">
-                                    <div class="text-gray-400 font-bold uppercase tracking-widest text-sm w-20">Selesai</div>
-                                    <div id="waktu-selesai-teknisi-{{ $data_request->id_request }}" 
-                                        class="text-base font-black text-gray-800 tabular-nums transition-all duration-300 text-right">
+                                <div class="w-full h-px bg-slate-200/60 my-2"></div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Estimasi Selesai</span>
+                                    <span id="waktu-selesai-teknisi-{{ $data_request->id_request }}" 
+                                          class="text-sm font-black text-slate-800 transition-colors duration-300">
                                         {{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}
-                                    </div>
+                                    </span>
                                 </div>
-
                             </div>
 
-                            <div class="mt-auto pt-6 flex gap-4">
-                                <form id="form-reject-{{ $data_request->id_request }}" 
-                                    action="{{ route('teknisi.cancel.request', $data_request->id_request) }}" 
-                                    method="POST" class="flex-1">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="button" 
-                                            class="w-full py-4 px-4 rounded-2xl text-sm font-black text-red-500 bg-red-50 hover:bg-red-100 transition-all active:scale-95" 
-                                            onclick="confirmDelete('{{ $data_request->id_request }}')">
-                                        CANCEL
-                                    </button>
-                                </form>
-                            </div>
+                            {{-- Action Button --}}
+                            <form id="form-reject-{{ $data_request->id_request }}" action="{{ route('teknisi.cancel.request', $data_request->id_request) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="button" 
+                                        class="w-full py-3 px-4 rounded-xl text-sm font-bold text-red-600 bg-red-50 hover:bg-red-600 hover:text-white transition-all duration-300 flex justify-center items-center gap-2 active:scale-95" 
+                                        onclick="confirmDelete('{{ $data_request->id_request }}')">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    BATALKAN REQUEST
+                                </button>
+                            </form>
+                            
                         </div>
                     </div>
                 @endforeach
             </div>
+            
         </div>
     </div>
 

@@ -35,7 +35,7 @@
             </main>
         </div>
 
-        <script type="module">
+    <script type="module">
     document.addEventListener('DOMContentLoaded', function () {
         
         const container = document.getElementById('request-container');
