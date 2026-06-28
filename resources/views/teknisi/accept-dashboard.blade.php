@@ -73,7 +73,7 @@
                             
                             {{-- Software Badge Floating --}}
                             <div class="absolute bottom-4 right-4">
-                                <span class="bg-violet-900 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-bold tracking-wide shadow-sm">
+                                <span class="inline-flex items-center px-3 py-1.5 text-xs font-semibold tracking-wide text-white bg-slate-900/75 backdrop-blur-md border border-white/15 rounded-xl shadow-sm">
                                     {{ $data_request->software }}
                                 </span>
                             </div>
