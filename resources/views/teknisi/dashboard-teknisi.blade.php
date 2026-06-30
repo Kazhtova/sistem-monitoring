@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Teknisi') }}
+        <h2 class="font-bold text-xl text-slate-800 leading-tight tracking-wide">
+            {{ __('Teknisi - Request List') }}
         </h2>
     </x-slot>
 

@@ -19,8 +19,8 @@
                     <div class="mb-4 flex justify-center">
                         <svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-400">Belum ada request aktif</h3>
-                    <p class="text-gray-400 text-sm mt-1">Silakan buat permintaan layanan baru jika diperlukan.</p>
+                    <h3 class="text-lg font-bold text-gray-400">There are no active requests yet.</h3>
+                    <p class="text-gray-400 text-sm mt-1">Please submit a new service request if necessary.</p>
                 </div>
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
