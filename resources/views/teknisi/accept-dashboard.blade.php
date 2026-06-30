@@ -17,11 +17,11 @@
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Cari Dosen atau Mahasiswa..." 
-                               class="pl-11 w-full rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-all duration-300">
+                               class="pl-11 w-full rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm transition-all duration-300">
                     </div>
                     
                     <select name="sort" onchange="this.form.submit()" 
-                            class="rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-medium text-slate-600 transition-all cursor-pointer">
+                            class="rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm font-medium text-slate-600 transition-all cursor-pointer">
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                         <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     </select>
@@ -48,7 +48,7 @@
             {{-- 🌟 2. GRID CARDS SECTION --}}
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 @foreach($readRequest as $index => $data_request)
-                    <div class="group bg-white rounded-[24px] shadow-sm border border-slate-200/60 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 flex flex-col h-full overflow-hidden">
+                    <div class="group bg-white rounded-[24px] shadow-sm border border-slate-200/60 hover:shadow-xl hover:border-slate-200 transition-all duration-300 flex flex-col h-full overflow-hidden">
                         
                         {{-- Image Header (Dengan kunci overflow-hidden absolut) --}}
                         <div class="relative h-52 w-full bg-slate-100 overflow-hidden" id="foto-container-{{ $data_request->id_request }}">
@@ -91,26 +91,26 @@
                                 <h3 class="text-lg font-black text-slate-900 leading-tight mb-1 truncate" title="{{ $data_request->mahasiswa->nama_mahasiswa }}">
                                     {{ $data_request->mahasiswa->nama_mahasiswa }}
                                 </h3>
-                                <p class="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Mahasiswa</p>
+                                <p class="text-[11px] font-bold uppercase tracking-widest text-slate-600">Mahasiswa</p>
                             </div>
 
                             {{-- Details Grid with Soft Icons --}}
                             <div class="space-y-3 mb-6">
                                 <div class="flex items-center text-sm group/item">
-                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-indigo-100">
-                                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-slate-100">
+                                        <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                     </div>
-                                    <span class="text-slate-600">PC: <span class="font-bold text-slate-900">{{ $data_request->komputer->id_komputer }}</span></span>
+                                    <span class="text-slate-900">PC: <span class="font-bold text-slate-900">{{ $data_request->komputer->id_komputer }}</span></span>
                                 </div>
                                 <div class="flex items-center text-sm group/item">
-                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-indigo-100">
-                                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-slate-100">
+                                        <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                     </div>
-                                    <span class="text-slate-600">Dosen: <span class="font-bold text-slate-900 truncate max-w-[130px] inline-block align-bottom">{{ $data_request->dosen_ta }}</span></span>
+                                    <span class="text-slate-900">Dosen: <span class="font-bold text-slate-900 truncate max-w-[130px] inline-block align-bottom">{{ $data_request->dosen_ta }}</span></span>
                                 </div>
                                 <div class="flex items-center text-sm group/item">
-                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-indigo-100">
-                                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                    <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-slate-100">
+                                        <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                                     </div>
                                     <span class="font-bold text-slate-900">{{ $data_request->no_hp }}</span>
                                 </div>
@@ -128,7 +128,7 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Estimasi Selesai</span>
                                     <span id="waktu-selesai-teknisi-{{ $data_request->id_request }}" 
-                                          class="text-sm font-black text-indigo-600 transition-colors duration-300">
+                                          class="text-sm font-black text-slate-900 transition-colors duration-300">
                                         {{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}
                                     </span>
                                 </div>
@@ -188,7 +188,7 @@
                 text: "Anda membatalkan Request Yang Sedang Berjalan!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#4f46e5", // Warna Indigo (sesuai tema)
+                confirmButtonColor: "#4f46e5", // Warna slate (sesuai tema)
                 cancelButtonColor: "#ef4444", // Warna Merah
                 confirmButtonText: "Ya, Batalkan",
                 cancelButtonText: "Kembali"

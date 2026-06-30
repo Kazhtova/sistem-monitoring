@@ -18,12 +18,12 @@
                     </div>
                     <input type="text" name="search" value="{{ request('search') }}" 
                         placeholder="Cari dosen atau mahasiswa..." 
-                        class="pl-11 w-full rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition-all duration-300">
+                        class="pl-11 w-full rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-slate-500 focus:ring-slate-500 text-sm py-2.5 transition-all duration-300">
                 </div>
                 
                 {{-- Dropdown Filter --}}
                 <select name="sort" onchange="this.form.submit()" 
-                    class="rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 font-medium text-slate-600 transition-all cursor-pointer">
+                    class="rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-slate-500 focus:ring-slate-500 text-sm py-2.5 font-medium text-slate-600 transition-all cursor-pointer">
                     <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                     <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                 </select>
