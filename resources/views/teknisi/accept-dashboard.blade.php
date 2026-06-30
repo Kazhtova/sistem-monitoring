@@ -27,7 +27,7 @@
                     </select>
 
                     <button type="submit" class="bg-gray-900 hover:bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 shadow-sm active:scale-95">
-                        Filter
+                        Cari
                     </button>
                     
                     @if(request('search') || request('sort'))
@@ -73,8 +73,10 @@
                             
                             {{-- Software Badge Floating --}}
                             <div class="absolute bottom-4 right-4">
-                                <span class="inline-flex items-center px-3 py-1.5 text-xs font-black tracking-widest text-slate-50 uppercase bg-black/60 backdrop-blur-lg border border-white/20 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] cursor-default transition-colors duration-300 hover:bg-black/80 hover:border-white/40 whitespace-nowrap">
-                                    {{ $data_request->software }}
+                                <span class="inline-flex items-center px-3 py-1.5 text-xs font-black max-w-[355px] tracking-widest text-slate-50 uppercase bg-black/60 backdrop-blur-lg border border-white/20 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] cursor-default transition-colors duration-300 hover:bg-black/80 hover:border-white/40 whitespace-nowrap">
+                                    <span class="truncate whitespace-nowrap w-full text-right">
+                                        {{ $data_request->software }}
+                                    </span>
                                 </span>
                             </div>
                         </div>
