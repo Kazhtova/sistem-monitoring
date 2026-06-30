@@ -68,7 +68,7 @@
 
                             {{-- Number Badge --}}
                             <div class="absolute top-4 left-4 z-10">
-                                <span class="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-black text-slate-800 shadow-sm border border-white/40">
+                                <span class="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-[11px] font-black text-slate-800 shadow-sm border border-white/40">
                                     #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
                                 </span>
                             </div>
@@ -117,16 +117,16 @@
                             </div>
 
                             {{-- Timeline Status Box --}}
-                            <div class="mt-auto bg-slate-50/70 rounded-2xl p-4 border border-slate-100 mb-5">
+                            <div class="mt-auto bg-slate-50/70 rounded-2xl p-4 border border-slate-200/40 mb-5">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mulai</span>
+                                    <span class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Mulai</span>
                                     <span class="text-sm font-bold text-slate-800">
                                         {{ \Carbon\Carbon::parse($data_request->tanggal_mulai)->format('d M, H:i') }}
                                     </span>
                                 </div>
                                 <div class="w-full h-px bg-slate-200/60 my-2"></div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Estimasi Selesai</span>
+                                    <span class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Estimasi Selesai</span>
                                     <span id="waktu-selesai-teknisi-{{ $data_request->id_request }}" 
                                           class="text-sm font-black text-indigo-600 transition-colors duration-300">
                                         {{ \Carbon\Carbon::parse($data_request->perkiraan_selesai)->format('d M, H:i') }}
@@ -134,7 +134,7 @@
                                 </div>
                             </div>
 
-                            {{-- Action Buttons (Split Layout UX) --}}
+                            {{-- Action Buttons (Split Layxout UX) --}}
                             <div class="flex gap-3">
                                 {{-- 1. Tambahkan class="w-full" pada tag form --}}
                                 <form id="form-reject-{{ $data_request->id_request }}" action="{{ route('teknisi.cancel.request', $data_request->id_request) }}" method="POST" class="w-full">
