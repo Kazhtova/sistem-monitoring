@@ -17,16 +17,16 @@
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Cari Dosen atau Mahasiswa..." 
-                               class="pl-11 w-full rounded-xl border-gray-200 bg-gray-50/50 shadow-sm focus:bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-all duration-300">
+                               class="pl-11 w-full rounded-xl border-gray-200 bg-gray-50/50 shadow-sm focus:bg-white focus:border-gray-500 focus:ring-gray-500 sm:text-sm transition-all duration-300">
                     </div>
                     
                     <select name="sort" onchange="this.form.submit()" 
-                            class="rounded-xl border-gray-200 bg-gray-50/50 shadow-sm focus:bg-white focus:border-indigo-500 sm:text-sm font-medium text-gray-600 transition-all cursor-pointer">
+                            class="rounded-xl border-gray-200 bg-gray-50/50 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm font-medium text-gray-600 transition-all cursor-pointer">
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                         <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     </select>
 
-                    <button type="submit" class="bg-gray-900 hover:bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 shadow-sm active:scale-95">
+                    <button type="submit" class="bg-gray-400 hover:bg-gray-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 shadow-sm active:scale-95">
                         Cari
                     </button>
                     
