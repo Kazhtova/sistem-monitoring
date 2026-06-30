@@ -75,7 +75,7 @@
                             
                             {{-- Software Badge Floating (Anti-Bocor) --}}
                             <div class="absolute bottom-4 right-4 z-10 max-w-[85%]">
-                                <span class="inline-flex items-center px-3 py-1.5 text-[11px] font-black tracking-widest text-white uppercase bg-slate-900/75 backdrop-blur-md border border-white/20 rounded-xl shadow-lg cursor-default transition-all duration-300 hover:bg-slate-900 hover:border-white/40" title="{{ $data_request->software }}">
+                                <span class="inline-flex items-center px-3 py-1 text-[11px] font-black tracking-widest text-white uppercase bg-slate-900/75 backdrop-blur-sm border border-white/20 rounded-full shadow-sm cursor-default transition-all duration-300 hover:bg-slate-900 hover:border-white/40" title="{{ $data_request->software }}">
                                     <span class="truncate whitespace-nowrap w-full text-right">
                                         {{ $data_request->software }}
                                     </span>
