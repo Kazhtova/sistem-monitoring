@@ -68,7 +68,7 @@
 
                             {{-- Number Badge --}}
                             <div class="absolute top-4 left-4 z-10">
-                                <span class="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-[11px] font-black text-slate-800 shadow-sm border border-white/40">
+                                <span class="bg-white/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] font-black text-slate-800 shadow-sm border border-white/40">
                                     #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
                                 </span>
                             </div>
@@ -83,7 +83,7 @@
                             </div> --}}
                             <div class="absolute bottom-4 right-4 z-10">
                                 <span
-                                    class="inline-flex max-w-[354px] items-center px-3 py-1 text-[11px] font-black tracking-widest text-white uppercase bg-slate-900/75 backdrop-blur-sm border border-white/20 rounded-full shadow-sm cursor-default transition-all duration-300 hover:bg-slate-900 hover:border-white/40"
+                                    class="inline-flex max-w-[354px] items-center px-3 py-1 text-[10px] font-black tracking-widest text-white uppercase bg-slate-900/75 backdrop-blur-sm border border-white/20 rounded-full shadow-sm cursor-default transition-all duration-300 hover:bg-slate-900 hover:border-white/40"
                                     title="{{ $data_request->software }}">
                                     <span class="block overflow-hidden text-ellipsis whitespace-nowrap">
                                         {{ $data_request->software }}
@@ -97,7 +97,7 @@
                             
                             {{-- Main Info --}}
                             <div class="mb-5">
-                                <h3 class="text-lg font-black text-slate-900 leading-tight mb-1 truncate" title="{{ $data_request->mahasiswa->nama_mahasiswa }}">
+                                <h3 class="text-xl font-black text-slate-900 leading-tight mb-1 truncate" title="{{ $data_request->mahasiswa->nama_mahasiswa }}">
                                     {{ $data_request->mahasiswa->nama_mahasiswa }}
                                 </h3>
                                 <p class="text-[11px] font-bold uppercase tracking-widest text-slate-600">Mahasiswa</p>
@@ -105,19 +105,19 @@
 
                             {{-- Details Grid with Soft Icons --}}
                             <div class="space-y-3 mb-6">
-                                <div class="flex items-center text-sm group/item">
+                                <div class="flex items-center text-base group/item">
                                     <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-slate-100">
                                         <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                     </div>
                                     <span class="text-slate-900">PC: <span class="font-bold text-slate-900">{{ $data_request->komputer->id_komputer }}</span></span>
                                 </div>
-                                <div class="flex items-center text-sm group/item">
+                                <div class="flex items-center text-base group/item">
                                     <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-slate-100">
                                         <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                     </div>
                                     <span class="text-slate-900">Dosen: <span class="font-bold text-slate-900 truncate max-w-[130px] inline-block align-bottom">{{ $data_request->dosen_ta }}</span></span>
                                 </div>
-                                <div class="flex items-center text-sm group/item">
+                                <div class="flex items-center text-base group/item">
                                     <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-slate-100">
                                         <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                                     </div>
@@ -244,10 +244,9 @@
                 if(waktuTarget) {
                     waktuTarget.innerText = e.waktu_baru
                     // Efek kedip saat data berubah
-                    waktuTarget.classList.add('text-violet-600', 'scale-110')
-                    
+                    waktuTarget.classList.add('text-violet-600')
                     setTimeout(() => {
-                        waktuTarget.classList.remove('text-violet-600', 'scale-110')
+                        waktuTarget.classList.remove('text-violet-600')
                     }, 1000)
                 }
             })
