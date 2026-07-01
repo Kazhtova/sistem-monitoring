@@ -38,7 +38,7 @@
                     <x-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeRequest)">
                         <span>{{ __('Request List') }}</span>
                         <span id="nav-counter-mobile" 
-                            class="bg-violet-500 text-white text-[10px] ml-1 font-bold px-2 py-0.5 rounded-full {{ request()->routeIs($routeRequest) || session('has_opened_request_list') || $jumlahPending == 0 ? 'hidden' : '' }}">
+                            class="bg-slate-500 text-white text-[10px] ml-1 font-bold px-2 py-0.5 rounded-full {{ request()->routeIs($routeRequest) || session('has_opened_request_list') || $jumlahPending == 0 ? 'hidden' : '' }}">
                             {{ $jumlahPending }}
                         </span>
                     </x-nav-link>
@@ -104,7 +104,7 @@
             
             <x-responsive-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeRequest)">
                 {{ __('Request List') }}
-                <span class="bg-violet-500 text-white text-[10px] ml-1 font-bold px-2 py-0.5 rounded-full inline-block {{ request()->routeIs($routeRequest) || session('has_opened_request_list') || $jumlahPending == 0 ? 'hidden' : '' }}">
+                <span class="bg-slate-500 text-white text-[10px] ml-1 font-bold px-2 py-0.5 rounded-full inline-block {{ request()->routeIs($routeRequest) || session('has_opened_request_list') || $jumlahPending == 0 ? 'hidden' : '' }}">
                     {{ $jumlahPending }}
                 </span>
             </x-responsive-nav-link>
