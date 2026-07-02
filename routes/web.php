@@ -45,6 +45,8 @@ Route::middleware(['auth:mahasiswa', 'restrict:mahasiswa'])->prefix('mahasiswa')
     Route::post('/request-mahasiswa', [MahasiswaRequest::class, 'sendRequest'])->name('request.post');
 
     Route::post('/update-fcm-token', [MahasiswaRequest::class, 'updateFcmToken'])->name('update.fcm');
+
+    Route::get('/profile/{mahasiswa}', [MahasiswaRequest::class, 'showProfile'])->name('show.profile');
 });
 
 

@@ -65,7 +65,7 @@
 
                             <div class="mb-5">
                                 <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">Student: {{ $data_request->mahasiswa->nama_mahasiswa }}</h3>
-                                <p class="text-sm text-violet-950 font-medium">Dosen: {{ $data_request->dosen_ta }}</p>
+                                <p class="text-sm text-slate-950 font-medium">Dosen: {{ $data_request->dosen_ta }}</p>
                                 <h4 class="text-lg font-bold text-gray-900 leading-tight mt-1">PC: Komputer {{ $data_request->komputer->id_komputer }}</h4>
                             </div>
 
@@ -107,7 +107,7 @@
                                 <form action="{{ route('teknisi.accept.request', $data_request->id_request) }}" method="POST" class="flex-1">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="w-full bg-violet-700 hover:bg-violet-900 text-white font-bold py-2.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-100 text-sm">
+                                    <button type="submit" class="w-full bg-slate-700 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-100 text-sm">
                                         Setujui
                                     </button>
                                 </form>

@@ -8,6 +8,7 @@ use App\Events\WaktuUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Komputer;
 use App\Models\Laboratorium;
+use App\Models\Mahasiswa;
 use App\Models\Request as ModelsRequest;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
@@ -37,6 +38,19 @@ class RequestController extends Controller
         $komputerAvailable = Komputer::whereNotIn('id_komputer', $komputerUse)->where('id_laboratorium', $id)->orderBy('nama_komputer', 'asc')->get();
     
         return view('mahasiswa.input-request-mahasiswa', ['komputerTersedia' => $komputerAvailable, 'labId' => $id, 'labTerpilih'   => $labChoose]);
+    }
+
+    public function showProfile(Mahasiswa $mahasiswa)
+    {
+        /** @var \App\Models\Mahasiswa $user */
+        $user = auth()->guard('mahasiswa')->user();
+
+        $readRequest = $user->requests()
+                                ->with('teknisi')
+                                ->latest()
+                                ->get();
+
+        return view('profile.profile', compact('mahasiswa', 'readRequest'));
     }
 
     public function sendRequest(Request $request){

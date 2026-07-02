@@ -90,11 +90,11 @@
 
                     if (container) {
                         const newCardHtml = `
-                            <div class="bg-white rounded-3xl shadow-sm border-2 border-indigo-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in group">
+                            <div class="bg-white rounded-3xl shadow-sm border-2 border-slate-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in group">
                                     <div class="p-6 flex flex-col flex-grow">
                                         
                                         <div class="flex justify-between items-center mb-5 pb-4 border-b border-gray-50">
-                                            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                            <span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
                                                 NEW
                                             </span>
                                             <span class="text-[10px] uppercase font-bold tracking-wider text-gray-800 bg-gray-50 px-2 py-1 rounded">
@@ -104,7 +104,7 @@
 
                                         <div class="mb-5">
                                             <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">Student: ${data.mahasiswa?.nama_mahasiswa || 'Mahasiswa'}</h3>
-                                            <p class="text-sm text-violet-950 font-medium">Dosen: ${data.dosen_ta}</p>
+                                            <p class="text-sm text-slate-950 font-medium">Dosen: ${data.dosen_ta}</p>
                                             <h4 class="text-lg font-bold text-gray-900 leading-tight mt-1">PC: Komputer ${data.id_komputer}</h4>
                                         </div>
 
@@ -141,7 +141,7 @@
                                             <form action="${acceptUrl}" method="POST" class="flex-1">
                                                 <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
                                                 <input type="hidden" name="_method" value="PATCH">
-                                                <button type="submit" class="w-full bg-violet-700 hover:bg-violet-900 text-white font-bold py-2.5 rounded-xl transition duration-200 shadow-lg shadow-indigo-100 text-sm">
+                                                <button type="submit" class="w-full bg-slate-700 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl transition duration-200 shadow-lg shadow-slate-100 text-sm">
                                                     Setujui
                                                 </button>
                                             </form>

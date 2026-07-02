@@ -49,9 +49,9 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link>
+                        <x-responsive-nav-link :href="route('mahasiswa.show.profile', ['mahasiswa' => auth()->user()])">
                             {{ __('Profile') }}
-                        </x-dropdown-link>
+                        </x-responsive-nav-link>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
