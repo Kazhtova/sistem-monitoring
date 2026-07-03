@@ -1,4 +1,11 @@
 <x-apps-layout>
+        <x-slot name="header">
+        <div class="flex items-center gap-4">
+            <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
+                Choose a lab
+            </h2>
+        </div>
+    </x-slot>
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             

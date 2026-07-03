@@ -13,6 +13,9 @@
                         $requestMahasiswaUrl = $mahasiswa ? route('mahasiswa.request.mahasiswa') : route('mahasiswa.request.mahasiswa');
                         $routeRequestMahasiswa = $mahasiswa ? 'mahasiswa.request.mahasiswa' : 'mahasiswa.request.mahasiswa';
 
+                        $routeDashboardPc = $mahasiswa ? 'mahasiswa.dashboard.pc_list' : 'mahasiswa.dashboard.pc_list';
+                        $pcListUrl = $mahasiswa ? route('mahasiswa.dashboard.pc_list') : route('mahasiswa.dashboard.pc_list');
+
                         $user = $mahasiswa ? Auth::guard('mahasiswa')->user() : Auth::guard('mahasiswa')->user();
                         $name = $mahasiswa ? $user->nama_mahasiswa : $user->nama_mahasiswa;
                     @endphp
@@ -30,6 +33,11 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$dashboardUrl" :active="request()->routeIs($routeDashboard)">
                         {{ __('Dashboard List') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="$pcListUrl" :active="request()->routeIs($routeDashboardPc)">
+                        {{ __('PC List') }}
                     </x-nav-link>
                 </div>
             </div>
