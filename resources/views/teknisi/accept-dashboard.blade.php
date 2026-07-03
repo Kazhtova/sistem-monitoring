@@ -8,7 +8,6 @@
     <div class="py-8 bg-slate-50/50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {{-- 🌟 1. HEADER & FILTER SECTION (Enterprise Search Bar) --}}
             <div class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                 <form action="{{ route('teknisi.dashboard.accept') }}" method="GET" class="flex flex-wrap md:flex-nowrap w-full lg:w-auto flex-1 items-center gap-3">
                     <div class="relative w-full md:w-80">
@@ -26,7 +25,6 @@
                         <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     </select>
 
-                    {{-- UX Fix: Tombol Utama Tidak Boleh Abu-abu Pudar --}}
                     <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 shadow-sm active:scale-95">
                         Cari
                     </button>
@@ -39,18 +37,15 @@
                     @endif
                 </form>
 
-                {{-- Pagination Flex-End --}}
                 <div class="w-full lg:w-auto flex justify-end">
                     {{ $readRequest->links() }}
                 </div>
             </div>
 
-            {{-- 🌟 2. GRID CARDS SECTION --}}
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 @foreach($readRequest as $index => $data_request)
                     <div class="group bg-white rounded-[24px] shadow-sm border border-slate-200/60 hover:shadow-xl hover:border-slate-200 transition-all duration-300 flex flex-col h-full overflow-hidden">
                         
-                        {{-- Image Header (Dengan kunci overflow-hidden absolut) --}}
                         <div class="relative h-52 w-full bg-slate-100 overflow-hidden" id="foto-container-{{ $data_request->id_request }}">
                             @if($data_request->foto_bukti)
                                 <img id="img-{{ $data_request->id_request }}" 
@@ -66,21 +61,13 @@
                                 </div>
                             @endif
 
-                            {{-- Number Badge --}}
                             <div class="absolute top-4 left-4 z-10">
                                 <span class="bg-white/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] font-black text-slate-800 shadow-sm border border-white/40">
                                     #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
                                 </span>
                             </div>
                             
-                            {{-- Software Badge Floating (Anti-Bocor) --}}
-                            {{-- <div class="absolute bottom-4 right-4 z-10 max-w-[85%]">
-                                <span class="inline-flex items-center px-3 py-1 text-[11px] font-black tracking-widest text-white uppercase bg-slate-900/75 backdrop-blur-sm border border-white/20 rounded-full shadow-sm cursor-default transition-all duration-300 hover:bg-slate-900 hover:border-white/40" title="{{ $data_request->software }}">
-                                    <span class="truncate whitespace-nowrap w-full text-right">
-                                        {{ $data_request->software }}
-                                    </span>
-                                </span>
-                            </div> --}}
+                                
                             <div class="absolute bottom-4 right-4 z-10">
                                 <span
                                     class="inline-flex max-w-[354px] items-center px-3 py-1 text-[10px] font-black tracking-widest text-white uppercase bg-slate-900/75 backdrop-blur-sm border border-white/20 rounded-full shadow-sm cursor-default transition-all duration-300 hover:bg-slate-900 hover:border-white/40"
@@ -92,10 +79,8 @@
                             </div>
                         </div>
 
-                        {{-- Card Body --}}
                         <div class="p-6 flex-1 flex flex-col">
                             
-                            {{-- Main Info --}}
                             <div class="mb-5">
                                 <h3 class="text-xl font-black text-slate-900 leading-tight mb-1 truncate" title="{{ $data_request->mahasiswa->nama_mahasiswa }}">
                                     {{ $data_request->mahasiswa->nama_mahasiswa }}
@@ -103,7 +88,6 @@
                                 <p class="text-[11px] font-bold uppercase tracking-widest text-slate-600">Mahasiswa</p>
                             </div>
 
-                            {{-- Details Grid with Soft Icons --}}
                             <div class="space-y-3 mb-6">
                                 <div class="flex items-center text-base group/item">
                                     <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center mr-3 transition-colors group-hover/item:bg-slate-100">
@@ -125,7 +109,6 @@
                                 </div>
                             </div>
 
-                            {{-- Timeline Status Box --}}
                             <div class="mt-auto bg-slate-50/70 rounded-2xl p-4 border border-slate-200/40 mb-5">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Mulai</span>
@@ -143,14 +126,11 @@
                                 </div>
                             </div>
 
-                            {{-- Action Buttons (Split Layxout UX) --}}
                             <div class="flex gap-3">
-                                {{-- 1. Tambahkan class="w-full" pada tag form --}}
                                 <form id="form-reject-{{ $data_request->id_request }}" action="{{ route('teknisi.cancel.request', $data_request->id_request) }}" method="POST" class="w-full">
                                     @csrf
                                     @method('PATCH')
                                     
-                                    {{-- 2. Ganti px-24 menjadi px-4 agar responsif --}}
                                     <button type="button" 
                                             class="w-full py-3 px-4 rounded-xl text-sm font-bold text-red-600 bg-red-50 hover:bg-red-600 hover:text-white transition-all duration-300 flex justify-center items-center gap-2 active:scale-95" 
                                             onclick="confirmDelete('{{ $data_request->id_request }}')">
@@ -167,7 +147,6 @@
         </div>
     </div>
 
-    {{-- MODAL GAMBAR --}}
     <div id="modalGambar" class="fixed inset-0 z-[999] hidden bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-8 transition-opacity duration-300" onclick="tutupModal()">
         <div class="relative max-w-5xl w-full flex justify-center">
             <button class="absolute -top-12 right-0 text-white/70 text-5xl font-light hover:text-red-500 hover:rotate-90 transition-all duration-300">&times;</button>
@@ -175,7 +154,6 @@
         </div>
     </div>
 
-    {{-- SCRIPT JAVASCRIPT --}}
     <script>
         function bukaModal(src) {
             const modal = document.getElementById('modalGambar');
@@ -197,8 +175,8 @@
                 text: "Anda membatalkan Request Yang Sedang Berjalan!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#4f46e5", // Warna slate (sesuai tema)
-                cancelButtonColor: "#ef4444", // Warna Merah
+                confirmButtonColor: "#4f46e5", 
+                cancelButtonColor: "#ef4444", 
                 confirmButtonText: "Ya, Batalkan",
                 cancelButtonText: "Kembali"
             }).then((result) => {

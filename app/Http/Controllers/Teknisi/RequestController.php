@@ -6,6 +6,7 @@ use App\Events\ComputerView;
 use App\Events\RequestStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Jobs\KirimNotifikasiFcm;
+use App\Models\Komputer;
 use App\Models\Request as ModelsRequest;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
@@ -159,4 +160,16 @@ class RequestController extends Controller
 
     return redirect()->back()->with('success', 'Perbaikan Telah Selesai Ditangani');
     }
+
+    public function listPc()
+{
+    // Mengambil komputer yang punya lab, dan lab tersebut punya teknisi
+    $user = auth()->guard('teknisi')->user();
+
+    $pc = Komputer::whereHas('laboratorium', function($query) use ($user){
+        $query->where('id_teknisi', $user->id_teknisi);
+    })->with(['laboratorium.teknisi', 'requests'])->paginate(15);
+
+    return view('teknisi.list-pc', compact('pc'));
+}
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Laboratorium extends Model
 {
@@ -14,5 +15,8 @@ class Laboratorium extends Model
     
     protected $fillable = ['nama_lab', 'jumlah_komputer', 'id_teknisi'];
 
-    
+    public function teknisi(): BelongsTo
+    {
+        return $this->belongsTo(Teknisi::class, 'id_teknisi');
+    }
 }

@@ -28,6 +28,8 @@ Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name
     Route::patch('/request-list/reject/{id}', [TeknisiRequest::class, 'rejectRequest'])->name('reject.request');
     
     Route::patch('/request/accept/cancle/{id}', [TeknisiRequest::class, 'cancelRequest'])->name('cancel.request');
+
+    Route::get('/dashboard-list-pc', [TeknisiRequest::class, 'listPc'])->name('dashboard.pc_list');
     
 });
 

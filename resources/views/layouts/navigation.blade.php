@@ -21,6 +21,10 @@
 
                     $activityDashboardUrl = $teknisi ? route('teknisi.dashboard.activity') : route('teknisi.dashboard.activity');
 
+                    $routeDashboardPc = $teknisi ? 'teknisi.dashboard.pc_list' : 'teknisi.dashboard.pc_list';
+
+                    $pcListUrl = $teknisi ? route('teknisi.dashboard.pc_list') : route('teknisi.dashboard.pc_list');
+
                     $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
 
                     $name = $teknisi ? $user->nama_teknisi : $user->nama_mahasiswa;
@@ -51,6 +55,11 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$activityDashboardUrl" :active="request()->routeIs($routeActivity)">
                         {{ __('Dashboard Activity') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="$pcListUrl" :active="request()->routeIs($routeDashboardPc)">
+                        {{ __('Dashboard PC') }}
                     </x-nav-link>
                 </div>
             </div>

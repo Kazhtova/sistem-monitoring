@@ -3,6 +3,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Komputer extends Model
 {
@@ -12,4 +14,12 @@ class Komputer extends Model
     protected $primaryKey = 'id_komputer';
     protected $fillable = ['nama_komputer', 'id_laboratorium'];
 
+    public function laboratorium(): BelongsTo{
+        return $this->belongsTo(Laboratorium::class, 'id_laboratorium');
+    }
+
+    public function requests(): HasMany
+    {
+        return $this->hasMany(Request::class, 'id_komputer');
+    }
 }
