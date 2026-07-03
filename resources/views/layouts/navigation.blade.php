@@ -53,15 +53,16 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="$pcListUrl" :active="request()->routeIs($routeDashboardPc)">
+                        {{ __('PC List') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$activityDashboardUrl" :active="request()->routeIs($routeActivity)">
                         {{ __('Dashboard Activity') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="$pcListUrl" :active="request()->routeIs($routeDashboardPc)">
-                        {{ __('Dashboard PC') }}
-                    </x-nav-link>
-                </div>
+                
             </div>
 
             <!-- Settings Dropdown -->
