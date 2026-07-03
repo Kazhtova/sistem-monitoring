@@ -123,6 +123,10 @@
                 {{ __('Accept List') }}
             </x-responsive-nav-link>
 
+            <x-responsive-nav-link :href="$pcListUrl" :active="request()->routeIs($routeDashboardPc)">
+                {{ __('PC List') }}
+            </x-responsive-nav-link>
+
             <x-responsive-nav-link :href="$activityDashboardUrl" :active="request()->routeIs($routeActivity)">
                 {{ __('Dashboard Activity') }}
             </x-responsive-nav-link>
