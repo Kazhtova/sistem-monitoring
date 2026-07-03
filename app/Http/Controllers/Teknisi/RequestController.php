@@ -7,6 +7,7 @@ use App\Events\RequestStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Jobs\KirimNotifikasiFcm;
 use App\Models\Komputer;
+use App\Models\Laboratorium;
 use App\Models\Request as ModelsRequest;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
@@ -111,7 +112,7 @@ class RequestController extends Controller
 }
 
     public function rejectRequest(int $id)
-{
+{   
     $request = ModelsRequest::with('mahasiswa')->findOrFail($id);
 
     $request->update([
@@ -132,7 +133,7 @@ class RequestController extends Controller
     })->afterResponse(); 
 
     return redirect()->back()->with('reject', 'Request Ditolak');
-}
+    }
 
     public function cancelRequest(int $id)
     {
@@ -161,15 +162,54 @@ class RequestController extends Controller
     return redirect()->back()->with('success', 'Perbaikan Telah Selesai Ditangani');
     }
 
-    public function listPc()
+public function listPc(Request $request)
 {
-    // Mengambil komputer yang punya lab, dan lab tersebut punya teknisi
     $user = auth()->guard('teknisi')->user();
 
-    $pc = Komputer::whereHas('laboratorium', function($query) use ($user){
-        $query->where('id_teknisi', $user->id_teknisi);
-    })->with(['laboratorium.teknisi', 'requests'])->paginate(15);
+    // 1. Tangkap semua input dari Form GET
+    $search = $request->input('search');
+    $filterLab = $request->input('lab');
+    $filterStatus = $request->input('status');
 
-    return view('teknisi.list-pc', compact('pc'));
+    // 2. Buat Base Query
+    $query = Komputer::whereHas('laboratorium', function($q) use ($user) {
+        $q->where('id_teknisi', $user->id_teknisi);
+    })->with(['laboratorium.teknisi', 'requests']);
+
+    // 3. Filter berdasarkan Nama Komputer (Search)
+    if ($search) {
+        $query->where('nama_komputer', 'like', '%' . $search . '%');
+    }
+
+    // 4. Filter berdasarkan Laboratorium
+    if ($filterLab) {
+        $query->where('id_laboratorium', $filterLab);
+    }
+
+    // 5. Filter Dinamis berdasarkan Status (Logika Relasi)
+    if ($filterStatus === 'in_use') {
+        // Cari PC yang punya request aktif bernilai 'setuju'
+        $query->whereHas('requests', function($q) {
+            $q->whereIn('status', ['setuju', 'pending']);
+        });
+    } elseif ($filterStatus === 'after_use') {
+        // Cari PC yang punya request bernilai 'pending'
+        $query->whereHas('requests', function($q) {
+            $q->whereIn('status', ['tolak', 'selesai']);
+        });
+    } elseif ($filterStatus === 'ready') {
+        // Cari PC yang TIDAK punya request 'setuju' maupun 'pending'
+        $query->whereDoesntHave('requests', function($q) {
+            $q->whereIn('status', ['setuju', 'pending']);
+        });
+    }
+
+    // 6. Eksekusi Pagination & Pertahankan URL Parameter
+    $pc = $query->paginate(15)->appends($request->query());
+
+    // 7. Ambil data Lab milik teknisi ini untuk ditampilkan di Dropdown Filter
+    $labs = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
+
+    return view('teknisi.list-pc', compact('pc', 'labs'));
 }
 }
