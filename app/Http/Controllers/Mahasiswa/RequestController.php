@@ -220,41 +220,32 @@ class RequestController extends Controller
     public function listPc(Request $request)
 {
 
-    // 1. Tangkap semua input dari Form GET
     $search = $request->input('search');
     $filterLab = $request->input('lab');
     $filterStatus = $request->input('status');
 
-    // 2. Buat Base Query
     $query = Komputer::whereHas('laboratorium')->with(['laboratorium.teknisi', 'requests']);
 
-    // 3. Filter berdasarkan Nama Komputer (Search)
     if ($search) {
         $query->where('nama_komputer', 'like', '%' . $search . '%');
     }
 
-    // 4. Filter berdasarkan Laboratorium
     if ($filterLab) {
         $query->where('id_laboratorium', $filterLab);
     }
 
-    // 5. Filter Dinamis berdasarkan Status (Logika Relasi)
     if ($filterStatus === 'in_use') {
-        // Cari PC yang punya request aktif bernilai 'setuju'
         $query->whereHas('requests', function($q) {
             $q->whereIn('status', ['setuju', 'pending']);
         });
     } elseif ($filterStatus === 'ready') {
-        // Cari PC yang TIDAK punya request 'setuju' maupun 'pending'
         $query->whereDoesntHave('requests', function($q) {
             $q->whereIn('status', ['setuju', 'pending']);
         });
     }
 
-    // 6. Eksekusi Pagination & Pertahankan URL Parameter
     $pc = $query->paginate(15)->appends($request->query());
 
-    // 7. Ambil data Lab milik teknisi ini untuk ditampilkan di Dropdown Filter
     $labs = Laboratorium::get();
 
     return view('mahasiswa.list-pc', compact('pc', 'labs'));
