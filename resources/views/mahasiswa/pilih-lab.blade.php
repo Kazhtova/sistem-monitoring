@@ -1,10 +1,10 @@
 <x-apps-layout>
-        <x-slot name="header">
-            <div class="flex justify-between items-center">
-                <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
-                    {{ __('Choose - Lab') }}
-                </h2>
-            </div>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
+                {{ __('Choose - Lab') }}
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">

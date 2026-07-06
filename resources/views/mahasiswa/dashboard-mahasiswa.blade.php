@@ -4,7 +4,7 @@
             <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
                 {{ __('My Requests') }}
             </h2>
-            <div class="bg-slate-200 px-4 py-2 rounded-xl border border-slate-300">
+            <div class="bg-slate-200 px-4 py-1 rounded-xl border border-slate-300">
                 <span class="text-xs font-black text-slate-950 uppercase tracking-widest">Active Queue: </span>
                 <span class="text-sm font-black text-slate-900">{{ $readRequest->count() }}/3</span>
             </div>
