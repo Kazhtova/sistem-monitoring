@@ -12,7 +12,7 @@
     <div class="py-8 bg-slate-50/50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+            <div class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                 <form action="{{ route('teknisi.dashboard.accept') }}" method="GET" class="flex flex-wrap md:flex-nowrap w-full lg:w-auto flex-1 items-center gap-3">
                     <div class="relative w-full md:w-80">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
@@ -20,11 +20,11 @@
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Cari Dosen atau Mahasiswa..." 
-                               class="pl-11 w-full rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm transition-all duration-300">
+                               class="pl-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 shadow-sm outline-none focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm transition-all duration-300">
                     </div>
                     
                     <select name="sort" onchange="this.form.submit()" 
-                            class="rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm font-medium text-slate-600 transition-all cursor-pointer">
+                            class="rounded-xl border-slate-200 text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                         <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     </select>
