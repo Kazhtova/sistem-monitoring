@@ -13,8 +13,8 @@ export default defineConfig({
         port: 5173,
         strictPort: true,
         hmr: {
-        host: '192.168.1.4', //HOME
-        // host: '10.12.209.194', //ITS
+        // host: '192.168.1.4', //HOME
+        host: '10.12.209.36', //ITS
         },
         cors: true,
     }

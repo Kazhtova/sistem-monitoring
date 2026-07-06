@@ -1,8 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-bold text-xl text-slate-800 leading-tight tracking-wide">
-            {{ __('Teknisi - Request List') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-black text-2xl text-gray-900 tracking-tight">
+                    {{ __('Request List') }}
+                </h2>
+            </div>
+        </div>
     </x-slot>
 
    <div class="py-4 bg-slate-50/50 min-h-screen">
