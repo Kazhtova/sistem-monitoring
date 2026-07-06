@@ -8,7 +8,7 @@
     </x-slot>
 
     {{-- WADAH UTAMA: Memiliki min-h-screen untuk latar belakang penuh --}}
-    <div class="py-8 bg-slate-50/50 min-h-screen">
+    <div class="py-8 ">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {{-- 1. AREA FILTER --}}
