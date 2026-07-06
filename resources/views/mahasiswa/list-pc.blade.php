@@ -26,7 +26,7 @@
                     </div>
 
                     {{-- 2. Menu Pilihan Filter Laboratorium --}}
-                    <select name="lab" class="px-7 ps-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-600 outline-none focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 transition-all">
+                    <select name="lab" onchange="this.form.submit()" class="px-7 ps-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-600 outline-none focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 transition-all">
                         <option value="">All Labs</option>
                         @foreach($labs as $lab)
                             <option value="{{ $lab->id_laboratorium }}" {{ request('lab') == $lab->id_laboratorium ? 'selected' : '' }}>
@@ -36,14 +36,14 @@
                     </select>
 
                     {{-- 3. Menu Pilihan Filter Status --}}
-                    <select name="status" class="px-7 ps-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-600 outline-none focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 transition-all">
+                    <select name="status" onchange="this.form.submit()" class="px-7 ps-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-600 outline-none focus:outline-none focus:ring-2 focus:ring-slate-700 focus:border-slate-700 transition-all">
                         <option value="">All Status</option>
                         <option value="ready" {{ request('status') == 'ready' ? 'selected' : '' }}>Ready</option>
                         <option value="in_use" {{ request('status') == 'in_use' ? 'selected' : '' }}>In Use</option>
                     </select>
 
                     {{-- 4. Tombol Eksekusi Filter --}}
-                    <button type="submit" class="px-4 py-2 border border-slate-200 rounded-xl text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-sm text-sm font-semibold">
+                    <button type="submit" class="px-6 py-2 border border-slate-200 rounded-xl text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-sm text-sm font-semibold">
                         Filter
                     </button>
 
