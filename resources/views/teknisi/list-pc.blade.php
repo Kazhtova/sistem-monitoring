@@ -66,10 +66,10 @@
                     <table class="min-w-full divide-y divide-gray-100">
                         <thead class="bg-gray-50">
                            <tr>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 capitalize tracking-wider">Komputer</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 capitalize tracking-wider">Teknisi</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 capitalize tracking-wider">Lab</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 capitalize tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-4 text-left text-base font-semibold text-gray-500 capitalize tracking-wider">Komputer</th>
+                            <th scope="col" class="px-6 py-4 text-left text-base font-semibold text-gray-500 capitalize tracking-wider">Teknisi</th>
+                            <th scope="col" class="px-6 py-4 text-left text-base font-semibold text-gray-500 capitalize tracking-wider">Lab</th>
+                            <th scope="col" class="px-6 py-4 text-left text-base font-semibold text-gray-500 capitalize tracking-wider">Status</th>
                             </tr>
                         </thead>
                             <tbody id="pc-table-body" class="bg-white divide-y divide-gray-50">
