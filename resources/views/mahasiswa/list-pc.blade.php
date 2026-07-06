@@ -1,11 +1,9 @@
 <x-apps-layout>
     <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <h2 class="font-black text-2xl text-gray-900 tracking-tight">
-                    {{ __('List - PC') }}
-                </h2>
-            </div>
+        <div class="flex justify-between items-center">
+            <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
+                {{ __('List - PC') }}
+            </h2>
         </div>
     </x-slot>
 
