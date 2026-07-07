@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Mahasiswa\RequestController as MahasiswaRequest;
 use App\Http\Controllers\Teknisi\RequestController as TeknisiRequest;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Teknisi\ActivityController;
 use Illuminate\Support\Facades\Route;
 
