@@ -18,7 +18,7 @@
                 <div class="w-full md:w-5/12 bg-gray-50 p-8 border-r border-gray-100 flex flex-col">
                     
                     <div>
-                        <h3 class="text-violet-900 text-xs font-black uppercase tracking-widest mb-2">Detail Request</h3>
+                        <h3 class="text-slate-950 text-xs font-black uppercase tracking-widest mb-2">Detail Request</h3>
                         <p class="text-2xl font-black text-gray-900 mb-1">PC: {{ $dataRequest->komputer->nama_komputer ?? 'General Service' }}</p>
                         <p class="text-sm font-bold text-gray-500 mb-6">{{ $dataRequest->software }}</p>
                         
@@ -29,7 +29,7 @@
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Current Status</p>
-                                <span class="inline-block mt-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-violet-100 text-violet-700">
+                                <span class="inline-block mt-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-200 text-slate-950">
                                     {{ $dataRequest->status == 'setuju' ? 'RUNNING' : strtoupper($dataRequest->status) }}
                                 </span>
                             </div>
@@ -71,12 +71,12 @@
                         <div class="flex-grow flex flex-col justify-center">
                             <label class="block text-sm font-black text-gray-700 mb-4">Select or Drag Photos Here</label>
                             
-                            <div class="relative w-full h-72 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50/50 flex flex-col items-center justify-center overflow-hidden transition-all duration-300 hover:bg-violet-50 hover:border-violet-400 group cursor-pointer" id="dropzone">
+                            <div class="relative w-full h-72 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50/50 flex flex-col items-center justify-center overflow-hidden transition-all duration-300 hover:bg-slate-200 hover:border-slate-600 group cursor-pointer" id="dropzone">
                                 
                                 <img id="new-preview-image" src="" class="hidden absolute inset-0 w-full h-full object-contain bg-white z-10" alt="Preview Baru">
 
                                 <div id="dropzone-placeholder" class="flex flex-col items-center justify-center p-6 text-center z-0">
-                                    <div class="p-4 bg-white rounded-full shadow-sm mb-4 text-violet-500 group-hover:scale-110 group-hover:text-violet-700 transition-all duration-300">
+                                    <div class="p-4 bg-white rounded-full shadow-sm mb-4 text-slate-600 group-hover:scale-110 group-hover:text-slate-800 transition-all duration-300">
                                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                                         </svg>
@@ -93,7 +93,7 @@
                             <a href="{{ url()->current() }}" class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-xl transition-colors">
                                 Cancel
                             </a>
-                            <button type="submit" class="px-8 py-3 bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-violet-200 transition-all hover:-translate-y-0.5 flex items-center gap-2">
+                            <button type="submit" class="px-8 py-3 bg-slate-600 hover:bg-slate-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-slate-200 transition-all hover:-translate-y-0.5 flex items-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 Uploads Photo
                             </button>
