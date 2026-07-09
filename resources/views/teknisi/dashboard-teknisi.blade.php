@@ -50,7 +50,6 @@
             <div class="flex-shrink-0 w-full md:w-auto flex justify-end">
                 {{ $readRequest->links() }}
             </div>
-            
         </div>
 
             <div id="request-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8">
@@ -60,8 +59,7 @@
                         <div class="p-6 flex flex-col flex-grow">
                             <div class="flex justify-between items-center mb-5 pb-4 border-b border-gray-50">
                                 <span class="text-xs font-black text-gray-400 uppercase tracking-widest">
-                                    {{-- #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }} --}}
-                                    {{ $data_request->status }}
+                                    #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
                                 </span>
                                 <span class="text-[10px] uppercase font-bold tracking-wider text-gray-800 bg-gray-50 px-2 py-1 rounded">
                                     {{ $data_request->created_at->diffForHumans() }}

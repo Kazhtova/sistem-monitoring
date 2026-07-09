@@ -66,8 +66,8 @@
                             @endif
 
                             <div class="absolute top-4 left-4 z-10">
-                                <span class="bg-white/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] font-black text-slate-800 shadow-sm border border-white/40">
-                                    #{{ ($readRequest->currentPage() - 1) * $readRequest->perPage() + $loop->iteration }}
+                                <span class="bg-white/80 backdrop-blur px-3 py-1.5 rounded-full text-[12px] font-black text-slate-900 shadow-sm border border-white/40">
+                                    {{ $data_request->status == 'setuju' ? 'RUNNING' : Str::upper($data_request->status)  }}
                                 </span>
                             </div>
                             

@@ -15,7 +15,7 @@ class Teknisi extends Authenticatable
     protected $primaryKey = 'id_teknisi';
     protected $fillable = ['nama_teknisi'];
 
-    public function request(){
+    public function requests(){
         return $this->hasMany(Request::class, 'id_teknisi', 'id_teknisi');
     }
 }

@@ -55,9 +55,9 @@ class RequestController extends Controller
     /** @var \App\Models\Teknisi $user */
     $user = auth()->guard('teknisi')->user();
 
-    $query = $user->request()
+    $query = $user->requests()
                         ->with('mahasiswa')
-                        ->where('status', '=', 'setuju');
+                        ->whereIn('status', ['setuju', 'tolak', 'selesai']);
 
     if($request->filled('search')){
         $search = $request->search;
