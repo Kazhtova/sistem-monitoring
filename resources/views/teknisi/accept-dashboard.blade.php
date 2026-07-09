@@ -139,7 +139,7 @@
                                             class="w-full py-3 px-4 rounded-xl text-sm font-bold text-red-600 bg-red-50 hover:bg-red-600 hover:text-white transition-all duration-300 flex justify-center items-center gap-2 active:scale-95" 
                                             onclick="confirmDelete('{{ $data_request->id_request }}')">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        BATALKAN REQUEST
+                                        SELESAIKAN REQUEST
                                     </button>
                                 </form>
                             </div>
@@ -175,13 +175,13 @@
 
         function confirmDelete(id) {
             Swal.fire({
-                title: "Ingin Membatalkan Request?",
-                text: "Anda membatalkan Request Yang Sedang Berjalan!",
+                title: "Ingin Menyelesaikan Request?",
+                text: "Anda menyelesaikan Request Yang Sedang Berjalan!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#4f46e5", 
                 cancelButtonColor: "#ef4444", 
-                confirmButtonText: "Ya, Batalkan",
+                confirmButtonText: "Ya, Selesaikan",
                 cancelButtonText: "Kembali"
             }).then((result) => {
                 if (result.isConfirmed) {
