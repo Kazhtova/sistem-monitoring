@@ -162,44 +162,51 @@ class RequestController extends Controller
     return redirect()->back()->with('success', 'Perbaikan Telah Selesai Ditangani');
     }
 
-public function listPc(Request $request)
-{
-    $user = auth()->guard('teknisi')->user();
+    public function listPc(Request $request)
+    {
+        $user = auth()->guard('teknisi')->user();
 
-    $search = $request->input('search');
-    $filterLab = $request->input('lab');
-    $filterStatus = $request->input('status');
+        $search = $request->input('search');
+        $filterLab = $request->input('lab');
+        $filterStatus = $request->input('status');
 
-    $query = Komputer::whereHas('laboratorium', function($q) use ($user) {
-        $q->where('id_teknisi', $user->id_teknisi);
-    })->with(['laboratorium.teknisi', 'requests']);
+        $query = Komputer::whereHas('laboratorium', function($q) use ($user) {
+            $q->where('id_teknisi', $user->id_teknisi);
+        })->with(['laboratorium.teknisi', 'requests']);
 
-    if ($search) {
-        $query->where('nama_komputer', 'like', '%' . $search . '%');
+        if ($search) {
+            $query->where('nama_komputer', 'like', '%' . $search . '%');
+        }
+
+        if ($filterLab) {
+            $query->where('id_laboratorium', $filterLab);
+        }
+
+        if ($filterStatus === 'in_use') {
+            $query->whereHas('requests', function($q) {
+                $q->whereIn('status', ['setuju', 'pending']);
+            });
+        } elseif ($filterStatus === 'after_use') {
+            $query->whereHas('requests', function($q) {
+                $q->whereIn('status', ['tolak', 'selesai']);
+            });
+        } elseif ($filterStatus === 'ready') {
+            $query->whereDoesntHave('requests', function($q) {
+                $q->whereIn('status', ['setuju', 'pending']);
+            });
+        }
+
+        $pc = $query->paginate(15)->appends($request->query());
+
+        $labs = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
+
+        return view('teknisi.list-pc', compact('pc', 'labs'));
     }
 
-    if ($filterLab) {
-        $query->where('id_laboratorium', $filterLab);
+    public function viewPendingDetails(int $id){
+        
+        $request = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id);
+
+        return view('teknisi.pending-details', compact('request'));
     }
-
-    if ($filterStatus === 'in_use') {
-        $query->whereHas('requests', function($q) {
-            $q->whereIn('status', ['setuju', 'pending']);
-        });
-    } elseif ($filterStatus === 'after_use') {
-        $query->whereHas('requests', function($q) {
-            $q->whereIn('status', ['tolak', 'selesai']);
-        });
-    } elseif ($filterStatus === 'ready') {
-        $query->whereDoesntHave('requests', function($q) {
-            $q->whereIn('status', ['setuju', 'pending']);
-        });
-    }
-
-    $pc = $query->paginate(15)->appends($request->query());
-
-    $labs = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
-
-    return view('teknisi.list-pc', compact('pc', 'labs'));
-}
 }

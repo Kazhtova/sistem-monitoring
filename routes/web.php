@@ -16,6 +16,8 @@ Route::get('/login', function () {
 
 Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name('teknisi.')->group(function () {
     Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.request');
+
+    Route::get('/request/list/{id}', [TeknisiRequest::class, 'viewPendingDetails'])->name('pending.details');
     
     Route::get('/dashboard-activity', [ActivityController::class, 'activityLogs'])->name('dashboard.activity');
     

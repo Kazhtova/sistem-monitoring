@@ -20,7 +20,7 @@
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Cari Dosen atau Mahasiswa..." 
-                               class="pl-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 shadow-sm outline-none focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm transition-all duration-300">
+                               class="pl-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 shadow-sm outline-none focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm transition-all duration-300">
                     </div>
                     
                     <select name="sort" onchange="this.form.submit()" 
@@ -42,7 +42,7 @@
                 </form>
 
                 <div class="w-full lg:w-auto flex justify-end">
-                    {{ $readRequest->links() }}
+                    {{-- {{ $readRequest->links() }} --}}
                 </div>
             </div>
 

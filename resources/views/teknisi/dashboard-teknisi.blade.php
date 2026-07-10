@@ -15,7 +15,7 @@
             
             <form action="{{ route('teknisi.dashboard.request') }}" method="GET" class="flex flex-1 flex-wrap items-center gap-4">
                 
-                <div class="relative flex-1 min-w-[280px] md:max-w-md">
+                <div class="relative w-full md:w-80">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
@@ -106,9 +106,10 @@
                                                 </button>
                                             </form>
 
-                                            <button type="button" class="px-4 py-1.5 text-xs font-semibold text-violet-600 bg-transparent border border-violet-200 rounded-md hover:bg-violet-100 hover:border-violet-300 transition-colors duration-200">
+                                            <a href="{{ route('teknisi.pending.details', $data_request->id_request) }}" 
+                                            class="inline-block px-4 py-1.5 text-xs font-semibold text-violet-600 bg-transparent border border-violet-200 rounded-md hover:bg-violet-100 hover:border-violet-300 transition-colors duration-200 text-center">
                                                 Details
-                                            </button>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
