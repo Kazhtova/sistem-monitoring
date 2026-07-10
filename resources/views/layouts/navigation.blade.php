@@ -40,7 +40,7 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$dashboardRequestUrl" :active="request()->routeIs($routeRequest)">
-                        <span>{{ __('Request List') }}</span>
+                        <span>{{ __('Pending List') }}</span>
                         <span id="nav-counter-mobile" 
                             class="bg-slate-500 text-white text-[10px] ml-1 font-bold px-2 py-0.5 rounded-full {{ request()->routeIs($routeRequest) || session('has_opened_request_list') || $jumlahPending == 0 ? 'hidden' : '' }}">
                             {{ $jumlahPending }}
@@ -49,7 +49,7 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="$requestAcceptUrl" :active="request()->routeIs($routeAccept)">
-                        {{ __('Accept List') }}
+                        {{ __('Request List') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">

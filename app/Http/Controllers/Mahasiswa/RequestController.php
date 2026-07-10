@@ -35,7 +35,14 @@ class RequestController extends Controller
 
         $komputerUse = ModelsRequest::whereIn('status', ['pending', 'setuju'])->pluck('id_komputer');
 
-        $komputerAvailable = Komputer::whereNotIn('id_komputer', $komputerUse)->where('id_laboratorium', $id)->orderBy('nama_komputer', 'asc')->get();
+        $komputerAvailable = Komputer::whereNotIn('id_komputer', $komputerUse)
+        ->where('id_laboratorium', $id)->orderByRaw('LENGTH(nama_komputer) ASC')
+        ->orderBy('nama_komputer', 'asc')->get()->map(function ($item) {
+        $item->nama_komputer = preg_replace_callback('/\d+/', function ($matches) {
+            return str_pad($matches[0], 2, '0', STR_PAD_LEFT);
+        }, $item->nama_komputer);
+        return $item;
+    });;
     
         return view('mahasiswa.input-request-mahasiswa', ['komputerTersedia' => $komputerAvailable, 'labId' => $id, 'labTerpilih'   => $labChoose]);
     }
@@ -63,6 +70,7 @@ class RequestController extends Controller
             'catatan'           => 'nullable|string',
             'foto_bukti'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'id_teknisi'        => 'required|exists:teknisi,id_teknisi',
+            'id_laboratorium'   => 'required|exists:laboratorium,id_laboratorium',
             'id_mahasiswa'      => 'required|exists:mahasiswa,id_mahasiswa',
             'id_komputer'       => ['required', 'exists:komputer,id_komputer', Rule::unique('request', 'id_komputer')->where(fn ($query) => $query->where('status', 'setuju'))]
         ]);
@@ -81,6 +89,7 @@ class RequestController extends Controller
             'perkiraan_selesai'     => $request->perkiraan_selesai,
             'catatan'               => $request->catatan,
             'id_teknisi'            => $request->id_teknisi,
+            'id_laboratorium'       => $request->id_laboratorium,
             'id_mahasiswa'          => $request->id_mahasiswa,
             'id_komputer'           => $request->id_komputer
         ]);
@@ -152,7 +161,7 @@ class RequestController extends Controller
         $user = auth()->guard('mahasiswa')->user();
 
         $readRequest = $user->requests()
-                                ->with('teknisi')
+                                ->with(['teknisi', 'laboratorium'])
                                 ->latest()
                                 ->get();
 

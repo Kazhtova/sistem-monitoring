@@ -38,7 +38,6 @@
 
     <script type="module">
     document.addEventListener('DOMContentLoaded', function () {
-        
         const container = document.getElementById('request-container');
         const badgeDesktop = document.getElementById('nav-counter');
         const badgeMobile = document.getElementById('nav-counter-mobile');
@@ -47,8 +46,7 @@
             localStorage.setItem('has_opened_request_list', 'true');
             if (badgeDesktop) { badgeDesktop.innerText = '0'; badgeDesktop.classList.add('hidden'); }
             if (badgeMobile) { badgeMobile.innerText = '0'; badgeMobile.classList.add('hidden'); }
-        } 
-        else {
+        } else {
             const hasOpened = localStorage.getItem('has_opened_request_list');
             if (hasOpened === 'true') {
                 if (badgeDesktop) { badgeDesktop.innerText = '0'; badgeDesktop.classList.add('hidden'); }
@@ -59,11 +57,10 @@
         let currentTeknisiId = "{{ auth()->guard('teknisi')->id() }}";
 
         if (window.Echo && currentTeknisiId) {
-            
             window.Echo.private('teknisi.' + currentTeknisiId)
                 .listen('.request.new', (e) => {
                     const data = e.requestData;
-                    const id = data.id_request; 
+                    const id = data.id_request;
 
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
@@ -80,97 +77,56 @@
 
                     const acceptUrl = `/teknisi/request-list/accept/${id}`; 
                     const rejectUrl = `/teknisi/request-list/reject/${id}`;
-                    
-                    const formatTgl = (dateString) => {
-                        if(!dateString) return '-';
-                        const d = new Date(dateString);
-                        return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).replace('.', ':');
-                    };
 
-                    localStorage.removeItem('has_opened_request_list');
+                    let tbody = document.getElementById('request-table-body');
+                    let emptyRow = document.getElementById('empty-state-row');
 
-                    if (container) {
-                        const newCardHtml = `
-                            <div class="bg-white rounded-3xl shadow-sm border-2 border-slate-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in group">
-                                    <div class="p-6 flex flex-col flex-grow">
-                                        
-                                        <div class="flex justify-between items-center mb-5 pb-4 border-b border-gray-50">
-                                            <span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                                NEW
-                                            </span>
-                                            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-800 bg-gray-50 px-2 py-1 rounded">
-                                                Baru Saja
-                                            </span>
-                                        </div>
+                    if (tbody) {
+                        if (emptyRow) emptyRow.remove();
 
-                                        <div class="mb-5">
-                                            <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">Student: ${data.mahasiswa?.nama_mahasiswa || 'Mahasiswa'}</h3>
-                                            <p class="text-sm text-slate-950 font-medium">Dosen: ${data.dosen_ta}</p>
-                                            <h4 class="text-lg font-bold text-gray-900 leading-tight mt-1">PC: Komputer ${data.id_komputer}</h4>
-                                        </div>
-
-                                        <div class="grid grid-cols-2 gap-4 mb-6">
-                                            <div class="bg-gray-50 p-3 rounded-2xl">
-                                                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">Software</p>
-                                                <p class="text-sm font-bold text-gray-800 truncate">${data.software}</p>
-                                            </div>
-                                            <div class="bg-gray-50 p-3 rounded-2xl">
-                                                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">No Telp</p>
-                                                <p class="text-sm font-bold text-gray-800">${data.no_hp}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="space-y-2 border-l-2 border-indigo-100 pl-4 mb-8">
-                                            <div class="flex items-center gap-2">
-                                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                                <p class="text-sm text-gray-600"><span class="font-bold">Start:</span> ${formatTgl(data.tanggal_mulai)}</p>
-                                            </div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="w-2 h-2 rounded-full bg-red-500"></span>
-                                                <p class="text-sm text-gray-600"><span class="font-bold">End:</span> ${formatTgl(data.perkiraan_selesai)}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="mt-auto flex gap-3">
-                                            <form action="${rejectUrl}" method="POST" class="flex-1">
-                                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                                                <input type="hidden" name="_method" value="PATCH">
-                                                <button type="submit" class="w-full bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-bold py-2.5 rounded-xl transition duration-200 text-sm">
-                                                    Tolak
-                                                </button>
-                                            </form>
-                                            <form action="${acceptUrl}" method="POST" class="flex-1">
-                                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                                                <input type="hidden" name="_method" value="PATCH">
-                                                <button type="submit" class="w-full bg-slate-700 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl transition duration-200 shadow-lg shadow-slate-100 text-sm">
-                                                    Setujui
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
+                        let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                        let tr = document.createElement('tr');
+                        tr.className = "hover:bg-gray-50/50 transition-colors duration-150 animate-pulse";
+                        tr.innerHTML = `
+                            <td class="py-4 px-6 text-sm font-medium text-gray-400">New</td>
+                            <td class="py-4 px-6">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-gray-900">${data.mahasiswa?.nama_mahasiswa || 'N/A'}</span>
                                 </div>
+                            </td>
+                            <td class="py-4 px-6 text-sm font-medium text-gray-600">${data.komputer?.nama_komputer || 'N/A'}</td>
+                            <td class="py-4 px-6 text-sm font-medium text-gray-600">${data.laboratorium?.nama_lab || 'N/A'}</td>
+                            <td class="py-4 px-6">
+                                <div class="flex items-center justify-center gap-2">
+                                    <form action="${rejectUrl}" method="POST" class="m-0">
+                                        <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                        <input type="hidden" name="_method" value="PATCH">
+                                        <button type="submit" class="px-4 py-1.5 text-xs font-semibold text-red-600 bg-transparent border border-red-300 rounded-md hover:bg-red-100 hover:border-red-400 transition-colors duration-200">Tolak</button>
+                                    </form>
+                                    <form action="${acceptUrl}" method="POST" class="m-0">
+                                        <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                        <input type="hidden" name="_method" value="PATCH">
+                                        <button type="submit" class="px-4 py-1.5 text-xs font-semibold text-white bg-slate-700 border border-transparent rounded-md hover:bg-slate-900 transition-colors duration-200 shadow-sm">Setujui</button>
+                                    </form>
+                                    <button type="button" class="px-4 py-1.5 text-xs font-semibold text-violet-600 bg-transparent border border-violet-200 rounded-md hover:bg-violet-100 hover:border-violet-300 transition-colors duration-200">Details</button>
+                                </div>
+                            </td>
                         `;
-                        container.insertAdjacentHTML('afterbegin', newCardHtml);
-
-                        const currentCards = container.querySelectorAll('.bg-white.rounded-3xl');
-                        if (currentCards.length > 2) {
-                            currentCards[currentCards.length - 1].remove();
+                        tbody.prepend(tr);
+                        setTimeout(() => tr.classList.remove('animate-pulse'), 2500);
+                    } 
+                    else {
+                        localStorage.setItem('has_opened_request_list', 'false');
+                        
+                        if (badgeDesktop) {
+                            let currentCount = parseInt(badgeDesktop.innerText) || 0;
+                            badgeDesktop.innerText = currentCount + 1;
+                            badgeDesktop.classList.remove('hidden');
                         }
-                    } else {
-                        const hasOpened = localStorage.getItem('has_opened_request_list');
-                        if (hasOpened !== 'true') {
-                            if (badgeDesktop) {
-                                let count = parseInt(badgeDesktop.innerText) || 0;
-                                count += 1;
-                                badgeDesktop.innerText = count;
-                                badgeDesktop.classList.remove('hidden');
-                            }
-                            if (badgeMobile) {
-                                let count = parseInt(badgeMobile.innerText) || 0;
-                                count += 1;
-                                badgeMobile.innerText = count;
-                                badgeMobile.classList.remove('hidden');
-                            }
+                        if (badgeMobile) {
+                            let currentCount = parseInt(badgeMobile.innerText) || 0;
+                            badgeMobile.innerText = currentCount + 1;
+                            badgeMobile.classList.remove('hidden');
                         }
                     }
                 });

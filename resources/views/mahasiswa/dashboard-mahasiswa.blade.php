@@ -50,8 +50,9 @@
                                 </span>
                             </div>
                             <div class="p-8">
-                                <h3 class="text-slate-900 text-xs font-black uppercase tracking-widest mb-1">{{ $request->software }}</h3>
+                                <h3 class="text-slate-900 text-xs font-black uppercase tracking-widest mb-1">Software: {{ $request->software }}</h3>
                                 <p class="text-xl font-black text-gray-900 mb-4">PC: {{ $request->komputer->nama_komputer ?? 'General Service' }}</p>
+                                <p class="text-xl font-black text-gray-900 mb-4">Lab: {{ $request->laboratorium->nama_lab ?? 'General Service' }}</p>
                                 <p class="text-lg font-black text-gray-900 mb-4">Lecture: {{ $request->dosen_ta ?? 'N/A' }}</p>
 
                                 <div class="grid grid-cols-[1fr_auto_auto] gap-y-3 gap-x-1.5 items-center text-sm w-full mt-2">
@@ -72,7 +73,11 @@
                                     
                                     <div id="waktu-selesai-{{ $request->id_request }}" class="font-bold text-gray-700 tabular-nums whitespace-nowrap origin-left transition-all duration-300">{{ \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i') }}</div>
                                     
-                                    <button type="button" onclick="bukaModalWaktu('{{ $request->id_request }}', '{{ $request->perkiraan_selesai }}')" class="w-8 h-10 flex-shrink-0 flex items-center justify-center text-gray-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all duration-300 shadow-sm hover:shadow border border-transparent hover:border-slate-100 ml-1.5" title="Update Estimate Complete">
+                                    <button type="button" 
+                                            id="btn-update-waktu-{{ $request->id_request }}"
+                                            onclick="bukaModalWaktu('{{ $request->id_request }}', '{{ $request->perkiraan_selesai }}')" 
+                                            class="w-8 h-10 flex-shrink-0 flex items-center justify-center text-gray-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all duration-300 shadow-sm hover:shadow border border-transparent hover:border-slate-100 ml-1.5 {{ in_array($request->status, ['setuju', 'selesai', 'tolak']) ? 'hidden' : '' }}" 
+                                            title="Update Estimate Complete">
                                         <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </button>
 
@@ -173,66 +178,71 @@
                 });
             @endif
 
-            let currentMahasiswaId = "{{ auth()->guard('mahasiswa')->user()->id_mahasiswa }}"
+            let currentMahasiswaId = @json(optional(auth()->guard('mahasiswa')->user())->id_mahasiswa);
+            if(!currentMahasiswaId) return;
 
-            if(typeof window.Echo !== 'undefined'){
-
-                window.Echo.channel('mahasiswa.' + currentMahasiswaId)
-                .listen('.StatusUpdated', (e) => {
-
-                    let statusBadge = document.getElementById('badge-status-' + e.id_request)
-
-                    let uploadContainer = document.getElementById('upload-container-' + e.id_request)
-
-                    let waktuSelesaiTarget = document.getElementById('waktu-selesai-' + e.id_request)
-
-                    if(waktuSelesaiTarget && e.perkiraan_selesai){
-                        waktuSelesaiTarget.innerText = e.perkiraan_selesai;
+            const initRealtime = () => {
+                if(typeof window.Echo !== 'undefined'){
+                    window.Echo.channel('mahasiswa.' + currentMahasiswaId)
+                    .listen('.StatusUpdated', (e) => {
+                        let statusBadge = document.getElementById('badge-status-' + e.id_request);
+                        let uploadContainer = document.getElementById('upload-container-' + e.id_request);
+                        let waktuSelesaiTarget = document.getElementById('waktu-selesai-' + e.id_request);
                         
-                        waktuSelesaiTarget.classList.add('text-slate-600', 'scale-110');
-                        setTimeout(() => {
-                            waktuSelesaiTarget.classList.remove('text-slate-600', 'scale-110');
-                        }, 1000);
-                    }
+                        let tombolUpdateWaktu = document.getElementById('btn-update-waktu-' + e.id_request); 
 
-                    if(statusBadge){
-                        let allClasses = [
-                            'bg-amber-100', 'text-amber-700', 
-                            'bg-slate-200', 'text-slate-950', 
-                            'bg-emerald-100', 'text-emerald-700',
-                            'bg-red-100', 'text-red-700'
-                        ];
-
-                        statusBadge.classList.remove(...allClasses)
-
-                        switch (e.status){
-                            case 'pending':
-                                statusBadge.classList.add('bg-amber-100', 'text-amber-700')
-                                statusBadge.innerText = 'WAITING AGREEMENT'
-                                if(uploadContainer) uploadContainer.classList.add('invisible')
-                                break;
-                            case 'setuju':
-                                statusBadge.classList.add('bg-slate-200', 'text-slate-950')
-                                statusBadge.innerText = 'RUNNING'
-                                if(uploadContainer) uploadContainer.classList.remove('invisible')
-                                break;
-                            case 'selesai':
-                                statusBadge.classList.add('bg-emerald-100', 'text-emerald-700')
-                                statusBadge.innerText = 'COMPLETED'
-                                if(uploadContainer) uploadContainer.classList.add('invisible')
-                                break;
-                            case 'tolak':
-                                statusBadge.classList.add('bg-red-100', 'text-red-700')
-                                statusBadge.innerText = 'REJECTED'
-                                if(uploadContainer) uploadContainer.classList.add('invisible')
-                                break;
+                        if(waktuSelesaiTarget && e.perkiraan_selesai){
+                            waktuSelesaiTarget.innerText = e.perkiraan_selesai;
+                            waktuSelesaiTarget.classList.add('text-slate-600', 'scale-110');
+                            setTimeout(() => {
+                                waktuSelesaiTarget.classList.remove('text-slate-600', 'scale-110');
+                            }, 1000);
                         }
-                    }
-                })
-            } else {
-                console.error("❌ [ECHO ERROR] Library Echo gagal dimuat. Pastikan Vite (npm run dev) sedang berjalan.");
-            }
 
+                        if(statusBadge){
+                            let allClasses = [
+                                'bg-amber-100', 'text-amber-700', 
+                                'bg-slate-200', 'text-slate-950', 
+                                'bg-emerald-100', 'text-emerald-700',
+                                'bg-red-100', 'text-red-700'
+                            ];
+                            statusBadge.classList.remove(...allClasses);
+
+                            switch (e.status){
+                                case 'pending':
+                                    statusBadge.classList.add('bg-amber-100', 'text-amber-700');
+                                    statusBadge.innerText = 'WAITING AGREEMENT';
+                                    if(uploadContainer) uploadContainer.classList.add('invisible');
+                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.remove('hidden'); 
+                                    break;
+                                case 'setuju':
+                                    statusBadge.classList.add('bg-slate-200', 'text-slate-950');
+                                    statusBadge.innerText = 'RUNNING';
+                                    if(uploadContainer) uploadContainer.classList.remove('invisible');
+                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.add('hidden'); 
+                                    break;
+                                case 'selesai':
+                                    statusBadge.classList.add('bg-emerald-100', 'text-emerald-700');
+                                    statusBadge.innerText = 'COMPLETED';
+                                    if(uploadContainer) uploadContainer.classList.add('invisible');
+                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.add('hidden'); 
+                                    break;
+                                case 'tolak':
+                                    statusBadge.classList.add('bg-red-100', 'text-red-700');
+                                    statusBadge.innerText = 'REJECTED';
+                                    if(uploadContainer) uploadContainer.classList.add('invisible');
+                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.add('hidden'); 
+                                    break;
+                            }
+                        }
+                    });
+                } else {
+                    console.warn("⏳ Menunggu Vite memuat Laravel Echo...");
+                    setTimeout(initRealtime, 100);
+                }
+            };
+
+            initRealtime();
         });
     </script>
     @endpush

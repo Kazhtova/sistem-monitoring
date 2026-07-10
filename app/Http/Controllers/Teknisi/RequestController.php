@@ -46,7 +46,7 @@ class RequestController extends Controller
         $query->latest();
     }
                              
-    $readRequest = $query->paginate(2)->withQueryString();    
+    $readRequest = $query->paginate(15)->withQueryString();    
     
     return view('teknisi.dashboard-teknisi', compact('readRequest'));
     }
@@ -55,7 +55,7 @@ class RequestController extends Controller
     /** @var \App\Models\Teknisi $user */
     $user = auth()->guard('teknisi')->user();
 
-    $query = $user->requests()
+    $query = $user->request()
                         ->with('mahasiswa')
                         ->whereIn('status', ['setuju', 'tolak', 'selesai']);
 
@@ -76,7 +76,7 @@ class RequestController extends Controller
         $query->latest();
     }
 
-    $readRequest = $query->paginate(3)->withQueryString();
+    $readRequest = $query->paginate(15)->withQueryString();
 
     return view('teknisi.accept-dashboard', compact('readRequest'));
     }

@@ -9,15 +9,12 @@
         </div>
     </x-slot>
 
-    {{-- WADAH UTAMA: Memiliki min-h-screen untuk latar belakang penuh --}}
     <div class="py-8 bg-slate-50/50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {{-- 1. AREA FILTER --}}
-            <div class="mb-8 bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+            <div class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                 <form method="GET" action="{{ route('teknisi.dashboard.pc_list') }}" class="flex flex-wrap items-center gap-3 w-full">
                 
-                    {{-- 1. Input Pencarian Nama Komputer --}}
                     <div class="relative flex-1 md:w-64 md:flex-none">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,7 +24,6 @@
                         <input type="text" name="search" value="{{ request('search') }}" class="pl-11 w-full rounded-xl border-slate-200 bg-slate-50/50 shadow-sm focus:bg-white outline-none focus:border-slate-500 focus:ring-slate-500 sm:text-sm transition-all duration-300" placeholder="Cari nama PC...">
                     </div>
 
-                    {{-- 2. Menu Pilihan Filter Laboratorium --}}
                     <select name="lab" onchange="this.form.submit()" class="px-7 ps-4 py-2 border border-slate-200 rounded-xl text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
                         <option value="">Semua Lab</option>
                         @foreach($labs as $lab)
@@ -37,7 +33,6 @@
                         @endforeach
                     </select>
 
-                    {{-- 3. Menu Pilihan Filter Status --}}
                     <select name="status" onchange="this.form.submit()" class="px-7 ps-4 py-2 border border-slate-200 rounded-xl text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
                         <option value="">Semua Status</option>
                         <option value="ready" {{ request('status') == 'ready' ? 'selected' : '' }}>Ready</option>
@@ -45,12 +40,10 @@
                         <option value="after_use" {{ request('status') == 'after_use' ? 'selected' : '' }}>After Use</option>
                     </select>
 
-                    {{-- 4. Tombol Eksekusi Filter --}}
                     <button type="submit" class="px-6 py-2 border border-slate-200 rounded-xl text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-sm text-sm font-semibold">
                         Filter
                     </button>
 
-                    {{-- 5. Tombol Reset Kondisi Pencarian --}}
                     @if(request('search') || request('lab') || request('status'))
                         <a href="{{ route('teknisi.dashboard.pc_list') }}" class="px-4 py-2 border border-slate-200 rounded-xl text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-sm flex items-center justify-center text-sm font-semibold">
                             Reset
@@ -60,7 +53,6 @@
                 </form>
             </div>
             
-            {{-- 2. AREA TABEL (Langsung diletakkan di bawah filter, DI DALAM wadah utama yang sama) --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-gray-100">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-100">
@@ -78,7 +70,6 @@
                     </table>
                 </div>
 
-                {{-- Paginasi --}}
                 <div class="bg-white px-6 py-4 border-t border-gray-100">
                     {{ $pc->links() }}
                 </div>

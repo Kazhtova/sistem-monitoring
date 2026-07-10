@@ -22,7 +22,7 @@ class RequestCreated implements ShouldBroadcast
 
     public function __construct(Request $request)
     {
-        $this->requestData = $request->load('mahasiswa');
+        $this->requestData = $request->load(['mahasiswa', 'komputer', 'laboratorium']);
     }
 
     /**

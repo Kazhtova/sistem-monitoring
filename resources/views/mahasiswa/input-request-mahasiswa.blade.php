@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
-                {{ __('Send Request') }}
+                {{ __('Send Request') }} To {{ $labTerpilih->nama_lab }}
             </h2>
             
             <a href="{{ route('mahasiswa.request.mahasiswa') }}" 
@@ -42,7 +42,7 @@
 
                                 @foreach ($komputerTersedia as $komputer)
                                     <option value="{{ $komputer->id_komputer }}" {{ old('id_komputer') == $komputer->id_komputer ? 'selected' : ''}}>
-                                        {{ $komputer->id_komputer }}
+                                        {{ $komputer->nama_komputer }}
                                     </option>
                                 @endforeach
                             </select>
