@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     
-                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-black tracking-widest bg-slate-100 text-slate-600 uppercase">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-black tracking-widest bg-slate-100 text-slate-900 uppercase">
                         Pending Review
                     </span>
                 </div>

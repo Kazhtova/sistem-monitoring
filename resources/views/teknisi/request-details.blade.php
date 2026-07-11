@@ -4,7 +4,7 @@
             <h2 class="font-bold text-2xl text-slate-900 tracking-tight">
                 {{ __('Details - Unpending Request') }}
             </h2>
-            <a href="{{ route('teknisi.dashboard.request') }}" 
+            <a href="{{ route('teknisi.dashboard.accept') }}" 
                class="inline-flex items-center px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-slate-300 hover:bg-slate-50 text-sm font-bold text-gray-600 hover:text-slate-600 transition-all duration-300 group">
                 <svg class="w-4 h-4 mr-2 text-gray-400 group-hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -16,6 +16,8 @@
 
     @php
     // 1. Parsing Waktu dengan Carbon
+    \Carbon\Carbon::setLocale('id');
+
     $mulai = \Carbon\Carbon::parse($data->tanggal_mulai);
     $selesai = \Carbon\Carbon::parse($data->perkiraan_selesai);
     $sekarang = \Carbon\Carbon::now();
@@ -23,9 +25,9 @@
     // 2. Kalkulasi Durasi Elapsed (Berjalan)
     $elapsedDiff = $mulai->diff($sekarang);
     $elapsedStr = [];
-    if ($elapsedDiff->d > 0) $elapsedStr[] = $elapsedDiff->d . 'd';
-    if ($elapsedDiff->h > 0) $elapsedStr[] = $elapsedDiff->h . 'h';
-    if ($elapsedDiff->i > 0) $elapsedStr[] = $elapsedDiff->i . 'm';
+    if ($elapsedDiff->d > 0) $elapsedStr[] = $elapsedDiff->d . ' Hari';
+    if ($elapsedDiff->h > 0) $elapsedStr[] = $elapsedDiff->h . ' Jam';
+    if ($elapsedDiff->i > 0) $elapsedStr[] = $elapsedDiff->i . ' Mnt';
     $waktuBerjalan = implode(' ', $elapsedStr) ?: '0m';
 
     // 3. Kalkulasi Persentase Progress Bar
@@ -38,10 +40,10 @@
     $durasiDiff = $mulai->diff($selesai);
     $durasiArray = [];
     
-    // Pecah menjadi format d (days), h (hours), dan m (minutes)
-    if ($durasiDiff->d > 0) $durasiArray[] = $durasiDiff->d . 'd';
-    if ($durasiDiff->h > 0) $durasiArray[] = $durasiDiff->h . 'h';
-    if ($durasiDiff->i > 0) $durasiArray[] = $durasiDiff->i . 'm';
+    // Pecah menjadi translatedFormat d (days), h (hours), dan m (minutes)
+    if ($durasiDiff->d > 0) $durasiArray[] = $durasiDiff->d . ' Hari';
+    if ($durasiDiff->h > 0) $durasiArray[] = $durasiDiff->h . ' Jam';
+    if ($durasiDiff->i > 0) $durasiArray[] = $durasiDiff->i . ' Mnt';
     
     // Gabungkan array menjadi teks tunggal (contoh keluaran: "3h 30m")
     $estimasiDurasi = implode(' ', $durasiArray) ?: '0m';
@@ -117,39 +119,39 @@
 
             <!-- 2. Request Details Card -->
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-                <h2 class="text-xl font-bold text-slate-900 mb-6">Request Details</h2>
+                <h2 class="text-xl font-bold text-slate-900 mb-6">Request Detail</h2>
                 <div class="w-full h-px bg-slate-100 mb-8"></div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <!-- Workstation -->
                     <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
+                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-slate-500 mb-0.5">Komputer</p>
+                            <p class="text-base font-bold text-slate-500 mb-0.5">Komputer</p>
                             <p class="text-base font-bold text-slate-900">{{ $data->komputer->nama_komputer }}</p>
                         </div>
                     </div>
 
                     <!-- Location -->
                     <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
+                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2M5 21H3m4 0h10M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5"></path></svg>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-slate-500 mb-0.5">Laboratorium</p>
+                            <p class="text-base font-bold text-slate-500 mb-0.5">Laboratorium</p>
                             <p class="text-base font-bold text-slate-900">{{ $data->laboratorium->nama_lab }}</p>
                         </div>
                     </div>
 
                     <!-- Software Required -->
                     <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
+                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-slate-500 mb-2">Software</p>
+                            <p class="text-base font-bold text-slate-500 mb-2">Software</p>
                             <div class="flex flex-wrap gap-2">
                                 @foreach($softwareList as $software)
                                     @if(!empty($software))
@@ -162,11 +164,11 @@
 
                     <!-- Contact -->
                     <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
+                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 text-slate-600 border border-slate-100">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-slate-500 mb-0.5">Contact</p>
+                            <p class="text-base font-bold text-slate-500 mb-0.5">Contact</p>
                             <p class="text-base font-bold text-slate-900">{{ $data->no_hp }}</p>
                         </div>
                     </div>
@@ -182,7 +184,7 @@
                     </div>
                     
                     <div>
-                        <p class="text-xs font-bold text-slate-500 mb-0.5">Dosen Pengampu / Supervisor</p>
+                        <p class="text-base font-bold text-slate-500 mb-0.5">Dosen</p>
                         <p class="text-base font-bold text-slate-900">{{ $data->dosen_ta }}</p>
                     </div>
                 </div>
@@ -194,7 +196,7 @@
             
             <!-- 3. Schedule Card -->
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-                <h2 class="text-xl font-bold text-slate-900 mb-6">Schedule Overview</h2>
+                <h2 class="text-xl font-bold text-slate-900 mb-6">Waktu Request</h2>
                 <div class="w-full h-px bg-slate-100 mb-8"></div>
 
                 <!-- Timeline Wrapper -->
@@ -205,13 +207,13 @@
                     <!-- 🟢 NODE 1: Waktu Mulai -->
                     <div class="relative pl-10 mb-10">
                         <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-white border-[5px] border-slate-600 ring-4 ring-white z-10"></div>
-                        <p class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-1.5">Waktu Mulai</p>
+                        <p class="text-[12px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Waktu Mulai</p>
                         
                         <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap (responsif mobile) -->
-                        <div class="flex flex-col gap-3.5">
-                            <p class="text-2xl font-black text-slate-900 leading-none">{{ $mulai->format('h:i A') }}</p>
-                            <p class="text-sm font-medium text-slate-500">
-                                &bull; {{ $mulai->isToday() ? 'Today, ' : '' }}{{ $mulai->format('d M Y') }}
+                        <div class="flex flex-col gap-2">
+                            <p class="text-2xl font-black text-slate-900 leading-none">{{ $mulai->translatedFormat('H:i') }} WIB</p>
+                            <p class="text-base font-medium text-slate-700">
+                                &bull; {{ $mulai->translatedFormat('D d M Y') }}
                             </p>
                         </div>
                     </div>
@@ -225,13 +227,17 @@
                             </svg>
                         </div>
                         
-                        <!-- 🛠️ PERBAIKAN: gap-3 (sedikit lebih lebar untuk memisahkan ikon dan teks) -->
-                        <div class="inline-flex flex-wrap items-center gap-3 px-4 py-2 bg-slate-50/80 border border-slate-100/50 rounded-lg">
+                        <!-- 🟢 PERBAIKAN 1: Hapus 'flex-wrap' dari wadah ini -->
+                        <div class="inline-flex items-center gap-3 px-4 py-2 bg-slate-50/80 border border-slate-100/50 rounded-lg">
                             <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-slate-500"></span>
                             </span>
-                            <p class="text-xs font-bold text-slate-700">In Progress <span class="text-slate-300 mx-2">|</span> {{ $waktuBerjalan }} elapsed</p>
+                            
+                            <!-- 🟢 PERBAIKAN 2: Gunakan 'text-sm' dan tambahkan 'whitespace-nowrap' -->
+                            <p class="text-sm font-bold text-slate-700 whitespace-nowrap">
+                                In Progress <span class="text-slate-300 mx-2">|</span> {{ $waktuBerjalan }} Berlalu
+                            </p>
                         </div>
                     </div>
 
@@ -243,22 +249,22 @@
                         <div class="flex flex-wrap lg:flex-nowrap justify-between items-start gap-6 pr-2">
                             <!-- Info Waktu Selesai -->
                             <div class="min-w-0">
-                                <p class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-1.5">Estimasi Selesai</p>
+                                <p class="text-[12px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Estimasi Selesai</p>
                                 
                                 <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap -->
-                                <div class="flex flex-wrap items-baseline gap-4">
+                                <div class="flex flex-wrap items-baseline gap-2">
                                     <p id="waktu-selesai-teknisi-{{ $data->id_request }}" class="text-2xl font-black text-slate-900 leading-none">
-                                        {{ $selesai->format('h:i A') }}
+                                        {{ $selesai->translatedFormat('H:i') }} WIB
                                     </p>
-                                    <p class="text-sm font-medium text-slate-500">
-                                        &bull; {{ $selesai->isToday() ? 'Today, ' : '' }}{{ $selesai->format('d M Y') }}
+                                    <p class="text-base font-medium text-slate-700">
+                                        &bull; {{ $selesai->translatedFormat('D d M Y') }}
                                     </p>
                                 </div>
                             </div>
                             
                             <!-- Info Durasi (Rata Kanan) -->
                             <div class="text-left lg:text-center flex-shrink-0">
-                                <p class="text-[10px] font-black tracking-widest text-slate-400 uppercase mb-2">Total Durasi</p>
+                                <p class="text-[10px] font-black tracking-widest text-slate-500 uppercase mb-2">Total Durasi</p>
                                 <span class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold bg-slate-50 text-slate-700 border border-slate-200 shadow-sm">
                                     {{ $estimasiDurasi }}
                                 </span>
