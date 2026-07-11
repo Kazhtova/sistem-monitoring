@@ -15,13 +15,13 @@ Route::get('/login', function () {
 
 
 Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name('teknisi.')->group(function () {
-    Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.request');
+    Route::get('/pending-list', [TeknisiRequest::class, 'listPending'])->name('dashboard.request');
 
-    Route::get('/request/list/{id}', [TeknisiRequest::class, 'viewPendingDetails'])->name('pending.details');
+    Route::get('/pending/list/{id}', [TeknisiRequest::class, 'viewPendingDetails'])->name('pending.details');
     
     Route::get('/dashboard-activity', [ActivityController::class, 'activityLogs'])->name('dashboard.activity');
     
-    Route::get('/accept-list', [TeknisiRequest::class, 'listAccept'])->name('dashboard.accept');
+    Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.accept');
     
     Route::patch('/request-list/accept/{id}', [TeknisiRequest::class, 'acceptRequest'])->name('accept.request');
     

@@ -77,6 +77,7 @@
 
                     const acceptUrl = `/teknisi/request-list/accept/${id}`; 
                     const rejectUrl = `/teknisi/request-list/reject/${id}`;
+                    const detailsUrl = `/teknisi/pending/list/${id}`;
 
                     let tbody = document.getElementById('request-table-body');
                     let emptyRow = document.getElementById('empty-state-row');
@@ -108,7 +109,10 @@
                                         <input type="hidden" name="_method" value="PATCH">
                                         <button type="submit" class="px-4 py-1.5 text-xs font-semibold text-white bg-slate-700 border border-transparent rounded-md hover:bg-slate-900 transition-colors duration-200 shadow-sm">Setujui</button>
                                     </form>
-                                    <button type="button" class="px-4 py-1.5 text-xs font-semibold text-violet-600 bg-transparent border border-violet-200 rounded-md hover:bg-violet-100 hover:border-violet-300 transition-colors duration-200">Details</button>
+                                    <a href="${detailsUrl}" 
+                                        class="inline-block px-4 py-1.5 text-xs font-semibold text-violet-600 bg-transparent border border-violet-200 rounded-md hover:bg-violet-100 hover:border-violet-300 transition-colors duration-200 text-center">
+                                        Details
+                                    </a>
                                 </div>
                             </td>
                         `;

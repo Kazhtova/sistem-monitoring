@@ -17,7 +17,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 
 class RequestController extends Controller
 {
-    public function listRequest(Request $request){
+    public function listPending(Request $request){
 
     /** @var \App\Models\Teknisi $user */
     $user = auth()->guard('teknisi')->user();
@@ -51,7 +51,7 @@ class RequestController extends Controller
     return view('teknisi.dashboard-teknisi', compact('readRequest'));
     }
 
-    public function listAccept(Request $request) {
+    public function listRequest(Request $request) {
     /** @var \App\Models\Teknisi $user */
     $user = auth()->guard('teknisi')->user();
 
@@ -108,7 +108,7 @@ class RequestController extends Controller
 
     })->afterResponse(); 
         
-    return redirect()->back()->with('success', 'Request Disetujui'); 
+    return redirect()->route('teknisi.dashboard.request')->with('success', 'Request Disetujui'); 
 }
 
     public function rejectRequest(int $id)
@@ -132,7 +132,7 @@ class RequestController extends Controller
         );
     })->afterResponse(); 
 
-    return redirect()->back()->with('reject', 'Request Ditolak');
+    return redirect()->route('teknisi.dashboard.request')->with('reject', 'Request Ditolak');
     }
 
     public function cancelRequest(int $id)
@@ -205,8 +205,8 @@ class RequestController extends Controller
 
     public function viewPendingDetails(int $id){
         
-        $request = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id);
+        $data = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id);
 
-        return view('teknisi.pending-details', compact('request'));
+        return view('teknisi.pending-details', compact('data'));
     }
 }
