@@ -194,44 +194,76 @@
             
             <!-- 3. Schedule Card -->
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-                <h2 class="text-xl font-bold text-slate-900 mb-6">Waktu</h2>
-                <div class="w-full h-px bg-slate-100 mb-6"></div>
+                <h2 class="text-xl font-bold text-slate-900 mb-6">Schedule Overview</h2>
+                <div class="w-full h-px bg-slate-100 mb-8"></div>
 
-                <!-- Timeline -->
-                <div class="relative mb-8">
-                    <div class="absolute left-2.5 top-2 bottom-2 w-0.5 bg-slate-200"></div>
+                <!-- Timeline Wrapper -->
+                <div class="relative">
+                    <!-- Garis Vertikal Utama -->
+                    <div class="absolute left-2.5 top-2 bottom-2 w-[2px] bg-slate-100"></div>
                     
-                    <div class="relative pl-10 mb-8">
-                        <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-white border-[5px] border-blue-600 ring-4 ring-white z-10"></div>
-                        <p class="text-[12px] font-bold tracking-widest text-slate-500 uppercase mb-1">Mulai</p>
-                        <p class="text-xl font-bold text-slate-900 mb-0.5">{{ $mulai->format('h:i A') }}</p>
+                    <!-- 🟢 NODE 1: Waktu Mulai -->
+                    <div class="relative pl-10 mb-10">
+                        <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-white border-[5px] border-slate-600 ring-4 ring-white z-10"></div>
+                        <p class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-1.5">Waktu Mulai</p>
                         
-                        <p class="text-base font-medium text-slate-500">
-                            {{ $mulai->isToday() ? 'Today, ' : '' }}{{ $mulai->format('M d, Y') }}
-                        </p>
-                    </div>
-
-                    <div class="relative pl-10 mb-8">
-                        <div class="absolute left-1.5 top-1.5 text-slate-400 bg-white z-10 py-1">
-                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
+                        <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap (responsif mobile) -->
+                        <div class="flex flex-col gap-3.5">
+                            <p class="text-2xl font-black text-slate-900 leading-none">{{ $mulai->format('h:i A') }}</p>
+                            <p class="text-sm font-medium text-slate-500">
+                                &bull; {{ $mulai->isToday() ? 'Today, ' : '' }}{{ $mulai->format('d M Y') }}
+                            </p>
                         </div>
-                        <p class="text-base font-medium text-slate-600">In Progress - {{ $waktuBerjalan }} elapsed</p>
                     </div>
 
+                    <!-- 🟢 NODE 2: Status Berjalan (In Progress) -->
+                    <div class="relative pl-10 mb-10">
+                        <!-- Ikon Dot -->
+                        <div class="absolute left-[7px] top-2 bg-white z-10 py-1">
+                            <svg class="w-3 h-3 text-slate-300" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- 🛠️ PERBAIKAN: gap-3 (sedikit lebih lebar untuk memisahkan ikon dan teks) -->
+                        <div class="inline-flex flex-wrap items-center gap-3 px-4 py-2 bg-slate-50/80 border border-slate-100/50 rounded-lg">
+                            <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-slate-500"></span>
+                            </span>
+                            <p class="text-xs font-bold text-slate-700">In Progress <span class="text-slate-300 mx-2">|</span> {{ $waktuBerjalan }} elapsed</p>
+                        </div>
+                    </div>
+
+                    <!-- 🟢 NODE 3: Estimasi Selesai & Total Durasi -->
                     <div class="relative pl-10">
-                        <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-slate-200 border-4 border-white ring-2 ring-slate-200 z-10"></div>
-                        <p class="text-[12px] font-bold tracking-widest text-slate-500 uppercase mb-1">Estimasi Selesai</p>
+                        <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-slate-100 border-4 border-white ring-2 ring-slate-100 z-10"></div>
                         
-                        <p id="waktu-selesai-teknisi-{{ $data->id_request }}" class="text-xl font-bold text-slate-900 mb-0.5">
-                            {{ $selesai->format('h:i A') }}
-                        </p>
-                        
-                        <p class="text-base font-medium text-slate-500">
-                            {{ $selesai->isToday() ? 'Today, ' : '' }}{{ $selesai->format('M d, Y') }}
-                        </p>
-                        <p class="text-base font-medium text-slate-600">
-                            Lama Durasi: {{ $estimasiDurasi }}
-                        </p>
+                        <!-- 🛠️ PERBAIKAN: Tambahkan gap-6 antara Waktu Selesai dan Kotak Total Durasi -->
+                        <div class="flex flex-wrap lg:flex-nowrap justify-between items-start gap-6 pr-2">
+                            <!-- Info Waktu Selesai -->
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-1.5">Estimasi Selesai</p>
+                                
+                                <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap -->
+                                <div class="flex flex-wrap items-baseline gap-4">
+                                    <p id="waktu-selesai-teknisi-{{ $data->id_request }}" class="text-2xl font-black text-slate-900 leading-none">
+                                        {{ $selesai->format('h:i A') }}
+                                    </p>
+                                    <p class="text-sm font-medium text-slate-500">
+                                        &bull; {{ $selesai->isToday() ? 'Today, ' : '' }}{{ $selesai->format('d M Y') }}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Info Durasi (Rata Kanan) -->
+                            <div class="text-left lg:text-center flex-shrink-0">
+                                <p class="text-[10px] font-black tracking-widest text-slate-400 uppercase mb-2">Total Durasi</p>
+                                <span class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold bg-slate-50 text-slate-700 border border-slate-200 shadow-sm">
+                                    {{ $estimasiDurasi }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
