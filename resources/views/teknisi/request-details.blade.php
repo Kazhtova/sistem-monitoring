@@ -207,13 +207,13 @@
                     <!-- 🟢 NODE 1: Waktu Mulai -->
                     <div class="relative pl-10 mb-10">
                         <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-white border-[5px] border-slate-600 ring-4 ring-white z-10"></div>
-                        <p class="text-[12px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Waktu Mulai</p>
+                        <p class="text-[13px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Waktu Mulai</p>
                         
                         <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap (responsif mobile) -->
                         <div class="flex flex-col gap-2">
-                            <p class="text-2xl font-black text-slate-900 leading-none">{{ $mulai->translatedFormat('H:i') }} WIB</p>
+                            <p class="text-2xl font-black text-slate-900 leading-none">{{ $mulai->translatedFormat('D d M Y') }}</p>
                             <p class="text-base font-medium text-slate-700">
-                                &bull; {{ $mulai->translatedFormat('D d M Y') }}
+                                &bull; {{ $mulai->translatedFormat('H:i') }} WIB
                             </p>
                         </div>
                     </div>
@@ -249,15 +249,15 @@
                         <div class="flex flex-wrap lg:flex-nowrap justify-between items-start gap-6 pr-2">
                             <!-- Info Waktu Selesai -->
                             <div class="min-w-0">
-                                <p class="text-[12px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Estimasi Selesai</p>
+                                <p class="text-[13px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Estimasi Selesai</p>
                                 
                                 <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap -->
                                 <div class="flex flex-wrap items-baseline gap-2">
                                     <p id="waktu-selesai-teknisi-{{ $data->id_request }}" class="text-2xl font-black text-slate-900 leading-none">
-                                        {{ $selesai->translatedFormat('H:i') }} WIB
+                                        {{ $selesai->translatedFormat('D d M Y') }}
                                     </p>
                                     <p class="text-base font-medium text-slate-700">
-                                        &bull; {{ $selesai->translatedFormat('D d M Y') }}
+                                        &bull;  {{ $selesai->translatedFormat('H:i') }} WIB
                                     </p>
                                 </div>
                             </div>
