@@ -106,7 +106,7 @@
 
                     <div class="col-span-1 lg:col-span-5">
                         <div class="bg-slate-50/50 rounded-2xl border border-slate-100 p-7 h-full">
-                            <h4 class="text-[12px] font-bold tracking-widest text-slate-500 uppercase mb-6">Schedule Request</h4>
+                            <h4 class="text-[12px] font-bold tracking-widest text-slate-700 uppercase mb-6">Waktu Request</h4>
                             
                             <div class="relative">
                                 <div class="absolute left-[7px] top-3 bottom-12 w-[2px] bg-slate-200 rounded-full"></div>
@@ -131,18 +131,18 @@
                                         <div class="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-slate-400 ring-4 ring-slate-50 z-10"></div>
                                         <p class="text-[12px] font-bold tracking-widest text-slate-500 uppercase mb-1">Mulai</p>
                                         
-                                        <p class="text-xl font-bold text-slate-900 mb-0.5">{{ $mulai->format('H:i') }} WIB</p>
+                                        <p class="text-xl font-bold text-slate-900 mb-0.5">{{ $mulai->format('d M Y') }}</p>
                                         
-                                        <p class="text-base font-medium text-slate-500">{{ $mulai->format('d M Y') }}</p>
+                                        <p class="text-base font-medium text-slate-500">{{ $mulai->format('H:i') }} WIB</p>
                                     </div>
 
                                     <div class="relative pl-7">
                                         <div class="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-slate-50 border-2 border-slate-400 ring-4 ring-slate-50 z-12"></div>
                                         <p class="text-[12px] font-bold tracking-widest text-slate-500 uppercase mb-1">Estimasi Selesai</p>
                                         
-                                        <p class="text-xl font-bold text-slate-900 mb-0.5">{{ $selesai->format('H:i') }} WIB</p>
+                                        <p class="text-xl font-bold text-slate-900 mb-0.5">{{ $selesai->format('d M Y') }}</p>
 
-                                        <p class="text-base font-medium text-slate-500">{{ $selesai->format('d M Y') }}</p>
+                                        <p class="text-base font-medium text-slate-500">{{ $selesai->format('H:i') }} WIB</p>
                                         
                                         <p class="text-sm font-medium text-slate-500 pt-1">Duration: {{ $stringDurasi }}</p>
                                     </div>
