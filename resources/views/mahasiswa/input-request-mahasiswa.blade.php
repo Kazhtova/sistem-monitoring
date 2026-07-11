@@ -58,7 +58,7 @@
 
                     <div class="mb-3">
                         <x-input-label for="software" :value="__('Software')" />
-                        <x-text-input id="software" class="block mt-1 w-full text-sm" type="text" name="software" :value="old('software')" required autofocus placeholder="Example: Jupiter, MitLab"/>
+                        <x-text-input id="software" class="block mt-1 w-full text-sm" type="text" name="software" :value="old('software')" required autofocus placeholder="Example: Jupiter, MatLab"/>
                         <x-input-error :messages="$errors->get('software')" class="mt-1" />
                     </div>
 

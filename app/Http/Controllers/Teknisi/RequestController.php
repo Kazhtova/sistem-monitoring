@@ -209,4 +209,11 @@ class RequestController extends Controller
 
         return view('teknisi.pending-details', compact('data'));
     }
+
+    public function viewRequestDetails(int $id){
+        
+        $data = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id);
+
+        return view('teknisi.request-details', compact('data'));
+    }
 }

@@ -19,6 +19,8 @@ Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name
 
     Route::get('/pending/list/{id}', [TeknisiRequest::class, 'viewPendingDetails'])->name('pending.details');
     
+    Route::get('/request/list/{id}', [TeknisiRequest::class, 'viewRequestDetails'])->name('request.details');
+    
     Route::get('/dashboard-activity', [ActivityController::class, 'activityLogs'])->name('dashboard.activity');
     
     Route::get('/request-list', [TeknisiRequest::class, 'listRequest'])->name('dashboard.accept');
