@@ -1,13 +1,13 @@
 <x-apps-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-bold text-2xl text-gray-800 tracking-tight">
+            <h2 class="font-bold text-2xl text-slate-800 tracking-tight">
                 {{ __('Send Request') }} To {{ $labTerpilih->nama_lab }}
             </h2>
             
             <a href="{{ route('mahasiswa.request.mahasiswa') }}" 
-               class="inline-flex items-center px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-slate-300 hover:bg-slate-50 text-sm font-bold text-gray-600 hover:text-slate-600 transition-all duration-300 group">
-                <svg class="w-4 h-4 mr-2 text-gray-400 group-hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               class="inline-flex items-center px-4 py-2 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-sm font-bold text-slate-600 hover:text-slate-900 transition-all duration-300 group">
+                <svg class="w-4 h-4 mr-2 text-slate-400 group-hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Back
@@ -17,11 +17,31 @@
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 
-
-    <div class="py-12">
+    <div class="py-12 bg-slate-50/50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-center">
             
-            <div class="w-full sm:max-w-md px-8 py-8 bg-white shadow-sm border border-gray-100 overflow-hidden rounded-3xl">
+            <div class="w-full sm:max-w-md px-8 py-8 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden rounded-[32px]">
+
+                <!-- 🟢 FITUR BARU: Modern Inline Error Banner -->
+                @if ($errors->any())
+                    <div class="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-100 flex items-start gap-3 animate-fade-in">
+                        <div class="mt-0.5 flex-shrink-0">
+                            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-rose-900">Sedang Dipakai</h3>
+                            <div class="mt-1 text-[13px] text-rose-600 font-medium leading-relaxed">
+                                <ul class="list-disc pl-4 space-y-1">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <form method="POST" action="{{ route('mahasiswa.request.post') }}" enctype="multipart/form-data">
                     @csrf
@@ -31,17 +51,11 @@
                     <input type="hidden" name="nama_mahasiswa" value="{{ auth()->guard('mahasiswa')->user()->nama_mahasiswa }}">
                     <input type="hidden" name="id_laboratorium" value="{{ $labId }}">
                     
-
                     <div class="mb-4">
-                        <x-input-label for="id_komputer" :value="__('Choose Computer Lab')" class="text-gray-700 font-semibold mb-2" />    
+                        <x-input-label for="id_komputer" :value="__('Choose Computer Lab')" class="text-slate-700 font-bold mb-2" />    
                         <div class="relative">
-                            <select id="id_komputer" 
-                                    name="id_komputer" 
-                                    class="tom-select-init block w-full"
-                                    required>
-                                
+                            <select id="id_komputer" name="id_komputer" class="tom-select-init block w-full" required>
                                 <option value="" disabled selected>-- Select Available Computers --</option>
-
                                 @foreach ($komputerTersedia as $komputer)
                                     <option value="{{ $komputer->id_komputer }}" {{ old('id_komputer') == $komputer->id_komputer ? 'selected' : ''}}>
                                         {{ $komputer->nama_komputer }}
@@ -49,49 +63,45 @@
                                 @endforeach
                             </select>
                         </div>
-                        <x-input-error :messages="$errors->get('id_komputer')" class="mt-1" />
                     </div>
 
-                    <div class="mb-3">
-                        <x-input-label for="dosen_ta" :value="__('Lecture')" />
-                        <x-text-input id="dosen_ta" class="block mt-1 w-full text-sm" type="text" name="dosen_ta" :value="old('dosen_ta')" required autofocus placeholder="Example: Mr Budi"/>
-                        <x-input-error :messages="$errors->get('dosen_ta')" class="mt-1" />
+                    <div class="mb-4">
+                        <x-input-label for="dosen_ta" :value="__('Lecture')" class="text-slate-700 font-bold" />
+                        <x-text-input id="dosen_ta" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="text" name="dosen_ta" :value="old('dosen_ta')" required placeholder="Example: Mr Budi"/>
                     </div>
 
-                    <div class="mb-3">
-                        <x-input-label for="software" :value="__('Software')" />
-                        <x-text-input id="software" class="block mt-1 w-full text-sm" type="text" name="software" :value="old('software')" required autofocus placeholder="Example: Jupiter, MatLab"/>
-                        <x-input-error :messages="$errors->get('software')" class="mt-1" />
+                    <div class="mb-4">
+                        <x-input-label for="software" :value="__('Software')" class="text-slate-700 font-bold" />
+                        <x-text-input id="software" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="text" name="software" :value="old('software')" required placeholder="Example: Jupiter, MatLab"/>
                     </div>
 
-                    <div class="mb-3">
-                        <x-input-label for="no_hp" :value="__('No HP')" />
-                        <x-text-input id="no_hp" class="block mt-1 w-full text-sm" type="number" name="no_hp" :value="old('no_hp')" required autofocus placeholder="Example: 0812345678"/>
-                        <x-input-error :messages="$errors->get('no_hp')" class="mt-1" />
+                    <div class="mb-4">
+                        <x-input-label for="no_hp" :value="__('No HP')" class="text-slate-700 font-bold" />
+                        <x-text-input id="no_hp" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="number" name="no_hp" :value="old('no_hp')" required placeholder="Example: 0812345678"/>
                     </div>
 
-                    <div class="mb-3">
-                        <x-input-label for="tanggal_mulai" :value="__('Time Start')" />
-                        <x-text-input id="tanggal_mulai" class="block mt-1 w-full text-sm" type="datetime-local" name="tanggal_mulai" :value="old('tanggal_mulai')" required autofocus />
-                        <x-input-error :messages="$errors->get('tanggal_mulai')" class="mt-1" />
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <x-input-label for="tanggal_mulai" :value="__('Time Start')" class="text-slate-700 font-bold" />
+                            <x-text-input id="tanggal_mulai" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="datetime-local" name="tanggal_mulai" :value="old('tanggal_mulai')" required />
+                        </div>
+
+                        <div>
+                            <x-input-label for="perkiraan_selesai" :value="__('Estimate')" class="text-slate-700 font-bold" />
+                            <x-text-input id="perkiraan_selesai" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="datetime-local" name="perkiraan_selesai" :value="old('perkiraan_selesai')" required />
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <x-input-label for="perkiraan_selesai" :value="__('Estimate Complete')" />
-                        <x-text-input id="perkiraan_selesai" class="block mt-1 w-full text-sm" type="datetime-local" name="perkiraan_selesai" :value="old('perkiraan_selesai')" required autofocus />
-                        <x-input-error :messages="$errors->get('perkiraan_selesai')" class="mt-1" />
+                    <div class="mb-6">
+                        <x-input-label for="catatan" :value="__('Note')" class="text-slate-700 font-bold" />
+                        <x-text-input id="catatan" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="text" name="catatan" :value="old('catatan')" required placeholder="Note..."/>
                     </div>
 
-                    <div class="mb-5">
-                        <x-input-label for="catatan" :value="__('Note')" />
-                        <x-text-input id="catatan" class="block mt-1 w-full text-sm" type="text" name="catatan" :value="old('catatan')" required autofocus />
-                        <x-input-error :messages="$errors->get('catatan')" class="mt-1" />
-                    </div>
-
-                    <div class="flex items-center justify-end pt-4 border-t border-gray-100">
-                        <x-primary-button class="w-full justify-center py-3 rounded-xl shadow-lg shadow-slate-200 hover:shadow-slate-300 transition-all">
+                    <div class="pt-2">
+                        <button type="submit" class="w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition-all shadow-sm active:scale-95">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
                             {{ __('Send Request') }}
-                        </x-primary-button>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -101,6 +111,7 @@
     
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     @vite(['resources/js/app.js'])
     <script type="module">
@@ -116,22 +127,41 @@
                 plugins: ['dropdown_input'], 
             });
 
+            // 🟢 Handle SweetAlert Success
             @if (session('success'))
                 Swal.fire({
                     icon: "success",
-                    title: "{{ session('success') }}",
+                    title: "Berhasil!",
+                    text: "{{ session('success') }}",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2000,
+                    customClass: { popup: 'rounded-3xl' }
+                });
+            @endif
+
+            // 🟢 FITUR BARU: Handle SweetAlert Error (Terutama Jadwal Bentrok)
+            @if ($errors->any())
+                // Mengambil pesan error pertama (Biasanya pesan bentrok jadwal)
+                let errorMessage = "{!! addslashes($errors->first()) !!}";
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Jadwal Tidak Tersedia',
+                    html: `<p class="text-sm font-medium text-slate-600 mt-2 leading-relaxed">${errorMessage}</p>`,
+                    confirmButtonColor: '#e11d48',
+                    confirmButtonText: 'Ubah Jadwal',
+                    customClass: { 
+                        popup: 'rounded-3xl',
+                        confirmButton: 'rounded-xl font-bold px-6 py-2.5'
+                    }
                 });
             @endif
 
             let currentLabId = "{{ $labId }}";
 
             if(typeof window.Echo !== 'undefined'){
-                
                 window.Echo.channel('laboratorium.' + currentLabId)
                 .listen('.ComputerAccepted', (e) => {
-                    
                     if(e.id_komputer){
                         komputerSelectBox.removeOption(e.id_komputer);
                         
@@ -141,7 +171,8 @@
                                 icon: "info",
                                 title: "Komputer Telah Diambil",
                                 text: "Komputer yang Anda pilih baru saja disetujui untuk mahasiswa lain. Silakan pilih komputer lain.",
-                                confirmButtonColor: '#4f46e5'
+                                confirmButtonColor: '#4f46e5',
+                                customClass: { popup: 'rounded-3xl' }
                             });
                         }
                     }

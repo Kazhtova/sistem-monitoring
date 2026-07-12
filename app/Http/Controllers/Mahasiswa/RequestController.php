@@ -33,18 +33,19 @@ class RequestController extends Controller
 
         $labChoose = Laboratorium::findOrFail($id);
 
-        $komputerUse = ModelsRequest::whereIn('status', ['pending', 'setuju'])->pluck('id_komputer');
-
-        $komputerAvailable = Komputer::whereNotIn('id_komputer', $komputerUse)
-        ->where('id_laboratorium', $id)->orderByRaw('LENGTH(nama_komputer) ASC')
-        ->orderBy('nama_komputer', 'asc')->get()->map(function ($item) {
-        $item->nama_komputer = preg_replace_callback('/\d+/', function ($matches) {
-            return str_pad($matches[0], 2, '0', STR_PAD_LEFT);
-        }, $item->nama_komputer);
-        return $item;
-    });;
+        $komputerAvailable = Komputer::where('id_laboratorium', $id)
+            ->orderByRaw('LENGTH(nama_komputer) ASC')
+            ->orderBy('nama_komputer', 'asc')
+            ->get()
+            ->map(function ($item) {
+                $item->nama_komputer = preg_replace_callback('/\d+/', function ($matches) {
+                    return str_pad($matches[0], 2, '0', STR_PAD_LEFT);
+                }, $item->nama_komputer);
+                
+                return $item;
+            });
     
-        return view('mahasiswa.input-request-mahasiswa', ['komputerTersedia' => $komputerAvailable, 'labId' => $id, 'labTerpilih'   => $labChoose]);
+        return view('mahasiswa.input-request-mahasiswa', ['komputerTersedia' => $komputerAvailable, 'labId' => $id, 'labTerpilih' => $labChoose]);
     }
 
     public function showProfile(Mahasiswa $mahasiswa)
@@ -72,14 +73,32 @@ class RequestController extends Controller
             'foto_bukti'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'id_teknisi'        => 'required|exists:teknisi,id_teknisi',
             'id_laboratorium'   => 'required|exists:laboratorium,id_laboratorium',
-            'nrp'      => 'required|exists:mahasiswa,nrp',
-            'id_komputer'       => ['required', 'exists:komputer,id_komputer', Rule::unique('request', 'id_komputer')->where(fn ($query) => $query->where('status', 'setuju'))]
+            'nrp'               => 'required|exists:mahasiswa,nrp',
+            'id_komputer'       => 'required|exists:komputer,id_komputer'
         ]);
+
+        $bentrok = ModelsRequest::where('id_komputer', $request->id_komputer)
+            ->where('status', 'setuju')
+            ->where(function ($query) use ($request) {
+                $query->where('tanggal_mulai', '<', $request->perkiraan_selesai)
+                      ->where('perkiraan_selesai', '>', $request->tanggal_mulai);
+            })
+            ->first(); 
+
+        if ($bentrok) {
+            \Carbon\Carbon::setLocale('id'); 
+            $waktuMulai = \Carbon\Carbon::parse($bentrok->tanggal_mulai)->translatedFormat('l, d M Y - H:i:s');
+            $waktuSelesai = \Carbon\Carbon::parse($bentrok->perkiraan_selesai)->translatedFormat('l, d M Y - H:i:s');
+            
+            return redirect()->back()->withInput()->withErrors([
+                'tanggal_mulai' => "Gagal! Komputer ini sedang aktif digunakan mulai {$waktuMulai} sampai {$waktuSelesai}. Silakan ajukan request di luar jam tersebut."
+            ]);
+        }
 
         $activeRequest = ModelsRequest::where('nrp', $request->nrp)->whereIn('status', ['pending', 'setuju'])->count();
 
-        if($activeRequest >=3){
-            return redirect()->back()->withInput()->with('error', 'Limit, You Already 3 Active Request');
+        if($activeRequest >= 3){
+            return redirect()->back()->withInput()->with('error', 'Limit, You Already have 3 Active Requests');
         }
 
         $newRequest = ModelsRequest::create([
@@ -92,7 +111,7 @@ class RequestController extends Controller
             'catatan'               => $request->catatan,
             'id_teknisi'            => $request->id_teknisi,
             'id_laboratorium'       => $request->id_laboratorium,
-            'nrp'          => $request->nrp,
+            'nrp'                   => $request->nrp,
             'id_komputer'           => $request->id_komputer
         ]);
 

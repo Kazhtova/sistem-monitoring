@@ -81,13 +81,20 @@ class RequestController extends Controller
     return view('teknisi.accept-dashboard', compact('readRequest'));
     }
 
-        public function acceptRequest(int $id) {
+    public function acceptRequest(int $id) {
         $request = ModelsRequest::with('mahasiswa', 'komputer')->findOrFail($id); 
+
+        $isKomputerSedangDipakai = ModelsRequest::where('id_komputer', $request->id_komputer)
+                                            ->where('status', 'setuju')
+                                            ->exists();
+
+        if ($isKomputerSedangDipakai) {
+            return redirect()->back()->with('error', 'Gagal! Komputer ini sedang dalam perbaikan (status SETUJU) pada request lain.');
+        }
 
         $request->update(['status' => 'setuju']);
 
         $idLab = $request->komputer->id_laboratorium;
-        
         
         dispatch(function () use ($request, $idLab) {
             
@@ -107,9 +114,10 @@ class RequestController extends Controller
         );
 
     })->afterResponse(); 
-        
+          
     return redirect()->route('teknisi.dashboard.request')->with('success', 'Request Disetujui'); 
-}
+    
+    }
 
     public function rejectRequest(int $id)
 {   
