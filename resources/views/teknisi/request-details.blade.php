@@ -53,37 +53,6 @@
 @endphp
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
-    
-    <!-- ================= TOP HEADER ================= -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <!-- Profil Info -->
-        <div class="flex items-center gap-4">
-            <div>
-                <h1 class="text-2xl font-bold text-slate-900">{{ $data->mahasiswa->nama_mahasiswa }}</h1>
-                <div class="flex items-center gap-2 mt-1">
-                    <span class="px-2 py-0.5 bg-slate-100 text-slate-900 text-[11px] font-bold rounded uppercase tracking-wider">Mahasiswa</span>
-                    <span class="text-slate-900 text-sm">&bull; NIM: {{ $data->mahasiswa->nim ?? 'N/A' }}</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tombol Aksi -->
-        <div class="flex items-center gap-3">
-            <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-50 transition shadow-sm">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                Edit
-            </button>
-            
-            <form id="form-reject-{{ $data->id_request }}" action="{{ route('teknisi.cancel.request', $data->id_request) }}" method="POST" class="m-0">
-                @csrf
-                @method('PATCH')
-                <button type="button" onclick="confirmDelete('{{ $data->id_request }}')" class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-600 border border-transparent text-white text-sm font-bold rounded-xl hover:bg-rose-700 transition shadow-sm active:scale-95">
-                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Selesaikan Request
-                </button>
-            </form>
-        </div>
-    </div>
 
     <!-- ================= MAIN GRID ================= -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -189,6 +158,44 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- KOLOM KANAN (Lebar 1/3) -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+                <h1 class="text-xl font-bold text-slate-900 mb-6">Data Profile</h1>
+                
+            <div class="w-full h-px bg-slate-100 mb-6"></div>
+
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">{{ $data->mahasiswa->nama_mahasiswa }}</h1>
+                    <div class="flex items-center gap-2 mt-4">
+                        <span class="px-2 py-0.5 bg-slate-100 text-slate-900 text-[12px] font-bold rounded uppercase tracking-wider">Mahasiswa</span>
+                        <span class="text-slate-900 text-sm">&bull; NIM: {{ $data->mahasiswa->nim ?? 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-sm font-medium text-slate-600 pt-7">
+            </div>
+
+            <div class="flex items-center gap-3 pt-10">
+                <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-50 transition shadow-sm">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    Edit
+                </button>
+                
+                <form id="form-reject-{{ $data->id_request }}" action="{{ route('teknisi.cancel.request', $data->id_request) }}" method="POST" class="m-0">
+                    @csrf
+                    @method('PATCH')
+                    <button type="button" onclick="confirmDelete('{{ $data->id_request }}')" class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-600 border border-transparent text-white text-sm font-bold rounded-xl hover:bg-rose-700 transition shadow-sm active:scale-95">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Selesaikan Request
+                    </button>
+                </form>
+            </div>
+
         </div>
 
         <!-- KOLOM KANAN (Lebar 1/3) -->
