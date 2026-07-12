@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teknisi;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Komputer;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,5 +38,46 @@ class ActivityController extends Controller
         ->paginate(15);
 
         return view('teknisi.activity-dashboard', compact('logs'));
+    }
+
+    public function viewKalender(int $id_komputer)
+    {
+        $komputer = Komputer::findOrFail($id_komputer);
+        return view('mahasiswa.kalender-komputer', compact('komputer'));
+    }
+
+    public function getJadwalKomputer(int $id_komputer)
+    {
+        $requests = ModelsRequest::where('id_komputer', $id_komputer)
+            ->where(function ($query) {
+                
+                $query->where('status', 'setuju')
+                      ->orWhere(function ($subQuery) {
+                          $subQuery->where('status', 'pending')
+                                   ->whereDate('tanggal_mulai', '>=', \Carbon\Carbon::today());
+                      });
+            })
+            ->get();
+
+            $events = $requests->map(function ($req) {
+            
+            $warnaBg = ($req->status === 'setuju') ? '#e11d48' : '#eab308';
+            
+            return [
+                'id'          => $req->id_request,
+                'title'       => ($req->status === 'setuju') ? '🔴 Running' : '🟡 Pending',
+                'start'       => $req->tanggal_mulai,
+                'end'         => $req->perkiraan_selesai,
+                'backgroundColor' => $warnaBg,
+                'borderColor'     => $warnaBg,
+                'textColor'       => '#ffffff',
+                'extendedProps' => [
+                    'mahasiswa' => $req->nama_mahasiswa,
+                    'software'  => $req->software
+                ]
+            ];
+        });
+
+        return response()->json($events);
     }
 }

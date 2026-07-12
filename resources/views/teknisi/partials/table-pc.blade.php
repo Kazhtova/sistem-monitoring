@@ -1,5 +1,5 @@
 @forelse ($pc as $item)
-    <tr class="hover:bg-gray-50/50 transition-colors group cursor-pointer">
+    <tr onclick="window.location.href='{{ route('mahasiswa.komputer.kalender', $item->id_komputer) }}'" class="hover:bg-gray-50/50 transition-colors group cursor-pointer">
         <td class="px-6 py-4 whitespace-nowrap">
             <div class="flex items-center gap-3">
                 <div>

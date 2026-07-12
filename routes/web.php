@@ -33,7 +33,10 @@ Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name
     Route::patch('/request/accept/cancle/{id}', [TeknisiRequest::class, 'cancelRequest'])->name('cancel.request');
 
     Route::get('/dashboard-list-pc', [TeknisiRequest::class, 'listPc'])->name('dashboard.pc_list');
-    
+
+    Route::get('/komputer/{id_komputer}/kalender', [ActivityController::class, 'viewKalender'])->name('komputer.kalender');
+
+    Route::get('/api/komputer/{id_komputer}/jadwal', [ActivityController::class, 'getJadwalKomputer'])->name('api.komputer.jadwal');
 });
 
 Route::middleware(['auth:mahasiswa', 'restrict:mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function (){
@@ -56,6 +59,10 @@ Route::middleware(['auth:mahasiswa', 'restrict:mahasiswa'])->prefix('mahasiswa')
     Route::get('/dashboard-list-pc', [MahasiswaRequest::class, 'listPc'])->name('dashboard.pc_list');
 
     Route::patch('/mahasiswa/password', [PasswordController::class, 'updatePassword'])->name('password.update');
+
+    Route::get('/komputer/{id_komputer}/kalender', [ActivityController::class, 'viewKalender'])->name('komputer.kalender');
+
+    Route::get('/api/komputer/{id_komputer}/jadwal', [ActivityController::class, 'getJadwalKomputer'])->name('api.komputer.jadwal');
 });
 
 
