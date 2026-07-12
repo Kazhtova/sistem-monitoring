@@ -178,7 +178,7 @@
                 });
             @endif
 
-            let currentMahasiswaId = @json(optional(auth()->guard('mahasiswa')->user())->id_mahasiswa);
+            let currentMahasiswaId = @json(optional(auth()->guard('mahasiswa')->user())->nrp);
             if(!currentMahasiswaId) return;
 
             const initRealtime = () => {

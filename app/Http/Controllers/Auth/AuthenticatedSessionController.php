@@ -28,22 +28,28 @@ class AuthenticatedSessionController extends Controller
 
     public function storeMahasiswa(Request $request): RedirectResponse
     {
-        $nama = Mahasiswa::where('nama_mahasiswa', $request->nama_mahasiswa)->exists();
-        if(!$nama){
-            return back()->withErrors([
-              'nama_mahasiswa'      => 'Nama Tidak Ditemukan'  
-            ])->withInput();
-        }
+        $request->validate([
+            'nrp'      => 'required|string',
+            'password' => 'required|string',
+        ]);
         
         $mahasiswa = Mahasiswa::where('nrp', $request->nrp)->first();
+        
         if(!$mahasiswa){
             return back()->withErrors([
-               'nrp'    => 'NRP Tidak Sesuai Mahasiswa' 
+               'nrp' => 'NRP tidak ditemukan di dalam sistem.' 
+            ])->withInput();
+        }
+
+        $isPasswordValid = (md5($request->password) === $mahasiswa->password);
+
+        if (!$isPasswordValid) {
+            return back()->withErrors([
+                'password' => 'Password yang Anda masukkan salah.'
             ])->withInput();
         }
 
         Auth::guard('mahasiswa')->login($mahasiswa, $request->boolean('remember'));
-            
         $request->session()->regenerate();
 
         $requestCount = $mahasiswa->requests()->count();
@@ -51,6 +57,7 @@ class AuthenticatedSessionController extends Controller
         if($requestCount === 0){
             return redirect()->route('mahasiswa.request.mahasiswa');
         }
+        
         return redirect()->intended(route('mahasiswa.dashboard.mahasiswa', absolute: false));
     }
 

@@ -16,7 +16,7 @@ class RequestStatusUpdated implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public int $id_request, public string $status, public int $id_mahasiswa)
+    public function __construct(public int $id_request, public string $status, public int $nrp)
     {
         //
     }
@@ -29,7 +29,7 @@ class RequestStatusUpdated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('mahasiswa.' . $this->id_mahasiswa),
+            new Channel('mahasiswa.' . $this->nrp),
         ];
     }
 

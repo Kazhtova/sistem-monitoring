@@ -13,12 +13,12 @@ class Mahasiswa extends Authenticatable
 
     protected $table = 'mahasiswa';
 
-    protected $primaryKey = 'id_mahasiswa';
+    protected $primaryKey = 'nrp';
 
-    protected $fillable = ['nrp', 'nama_mahasiswa', 'fcm_token'];
+    protected $fillable = ['nrp', 'nama_mahasiswa', 'password','fcm_token'];
 
     public function requests(){
-        return $this->hasMany(Request::class, 'id_mahasiswa', 'id_mahasiswa');
+        return $this->hasMany(Request::class, 'nrp', 'nrp');
     }
     
 }

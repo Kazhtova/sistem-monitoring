@@ -62,6 +62,7 @@ class RequestController extends Controller
 
     public function sendRequest(Request $request){
         $request->validate([
+            'nama_mahasiswa'    => 'required|string',
             'dosen_ta'          => 'required|string',
             'software'          => 'required|string',
             'no_hp'             => 'required|numeric',
@@ -71,17 +72,18 @@ class RequestController extends Controller
             'foto_bukti'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'id_teknisi'        => 'required|exists:teknisi,id_teknisi',
             'id_laboratorium'   => 'required|exists:laboratorium,id_laboratorium',
-            'id_mahasiswa'      => 'required|exists:mahasiswa,id_mahasiswa',
+            'nrp'      => 'required|exists:mahasiswa,nrp',
             'id_komputer'       => ['required', 'exists:komputer,id_komputer', Rule::unique('request', 'id_komputer')->where(fn ($query) => $query->where('status', 'setuju'))]
         ]);
 
-        $activeRequest = ModelsRequest::where('id_mahasiswa', $request->id_mahasiswa)->whereIn('status', ['pending', 'setuju'])->count();
+        $activeRequest = ModelsRequest::where('nrp', $request->nrp)->whereIn('status', ['pending', 'setuju'])->count();
 
         if($activeRequest >=3){
             return redirect()->back()->withInput()->with('error', 'Limit, You Already 3 Active Request');
         }
 
         $newRequest = ModelsRequest::create([
+            'nama_mahasiswa'        => $request->nama_mahasiswa,
             'dosen_ta'              => $request->dosen_ta,
             'software'              => $request->software,
             'no_hp'                 => $request->no_hp,
@@ -90,7 +92,7 @@ class RequestController extends Controller
             'catatan'               => $request->catatan,
             'id_teknisi'            => $request->id_teknisi,
             'id_laboratorium'       => $request->id_laboratorium,
-            'id_mahasiswa'          => $request->id_mahasiswa,
+            'nrp'          => $request->nrp,
             'id_komputer'           => $request->id_komputer
         ]);
 
@@ -148,7 +150,7 @@ class RequestController extends Controller
                 );
             })->afterResponse();
     
-            broadcast(new FotoView($dataRequest->id_request, $path, $dataRequest->id_mahasiswa))->toOthers();
+            broadcast(new FotoView($dataRequest->id_request, $path, $dataRequest->nrp))->toOthers();
     
             return redirect()->back()->with('success', 'Photo uploaded successfully!');
         }

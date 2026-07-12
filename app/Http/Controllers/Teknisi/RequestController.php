@@ -93,7 +93,7 @@ class RequestController extends Controller
             
         KirimNotifikasiFcm::dispatch($request->mahasiswa, $request->software, $request->id_request, $request->komputer->nama_komputer);
         ComputerView::dispatch($request->id_komputer, $idLab);
-        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->nrp);
 
         ActivityLogger::log(
             action: 'ACCEPT_REQUEST',
@@ -119,7 +119,7 @@ class RequestController extends Controller
         'status' => 'tolak' 
     ]);
 
-    RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+    RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->nrp);
 
     dispatch(function () use ($request) {
         ActivityLogger::log(
@@ -145,7 +145,7 @@ class RequestController extends Controller
 
     dispatch(function () use ($request) {
         
-        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->id_mahasiswa);
+        RequestStatusUpdated::dispatch($request->id_request, $request->status, $request->nrp);
 
         ActivityLogger::log(
             action: 'COMPLETE_REQUEST',

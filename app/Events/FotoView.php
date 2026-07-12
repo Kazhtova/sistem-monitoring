@@ -15,7 +15,7 @@ class FotoView implements ShouldBroadcastNow
     /**
      * Create a new event instance.
      */
-    public function __construct(public int $id_request, public string $path, public int $id_mahasiswa)
+    public function __construct(public int $id_request, public string $path, public int $nrp)
     {
         //
     }
