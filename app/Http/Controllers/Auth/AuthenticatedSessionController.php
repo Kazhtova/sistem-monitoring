@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
+use \Illuminate\Support\Facades\Hash;
 use App\Models\Mahasiswa;
 use App\Models\Teknisi;
 use Illuminate\Http\RedirectResponse;
@@ -26,40 +26,41 @@ class AuthenticatedSessionController extends Controller
         return view('auth.register');
     }
 
-    public function storeMahasiswa(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'nrp'      => 'required|string',
-            'password' => 'required|string',
-        ]);
-        
-        $mahasiswa = Mahasiswa::where('nrp', $request->nrp)->first();
-        
-        if(!$mahasiswa){
-            return back()->withErrors([
-               'nrp' => 'NRP tidak ditemukan di dalam sistem.' 
-            ])->withInput();
-        }
-
-        $isPasswordValid = (md5($request->password) === $mahasiswa->password);
-
-        if (!$isPasswordValid) {
-            return back()->withErrors([
-                'password' => 'Password yang Anda masukkan salah.'
-            ])->withInput();
-        }
-
-        Auth::guard('mahasiswa')->login($mahasiswa, $request->boolean('remember'));
-        $request->session()->regenerate();
-
-        $requestCount = $mahasiswa->requests()->count();
-
-        if($requestCount === 0){
-            return redirect()->route('mahasiswa.request.mahasiswa');
-        }
-        
-        return redirect()->intended(route('mahasiswa.dashboard.mahasiswa', absolute: false));
+public function storeMahasiswa(Request $request): RedirectResponse
+{
+    $request->validate([
+        'nrp'      => 'required|string',
+        'password' => 'required|string',
+    ]);
+    
+    $mahasiswa = Mahasiswa::where('nrp', $request->nrp)->first();
+    
+    if(!$mahasiswa){
+        return back()->withErrors(['nrp' => 'NRP tidak ditemukan.'])->withInput();
     }
+
+    // 🟢 Pengecekan adaptif untuk password baru (Bcrypt) & password lama (MD5)
+    $passwordInfo = password_get_info($mahasiswa->password);
+    $isPasswordValid = false;
+
+    if ($passwordInfo['algo'] !== 0 && $passwordInfo['algoName'] !== 'unknown') {
+        // Jika sudah diperbarui, dia akan masuk ke sini (Bcrypt)
+        $isPasswordValid = Hash::check($request->password, $mahasiswa->password);
+    } else {
+        // Jika masih menggunakan data MD5 lama
+        $isPasswordValid = (md5($request->password) === $mahasiswa->password);
+    }
+
+    if (!$isPasswordValid) {
+        return back()->withErrors(['password' => 'Password yang Anda masukkan salah.'])->withInput();
+    }
+
+    // Proses login jika berhasil
+    Auth::guard('mahasiswa')->login($mahasiswa, $request->boolean('remember'));
+    $request->session()->regenerate();
+
+    return redirect()->intended(route('mahasiswa.dashboard.mahasiswa', absolute: false));
+}
 
     /**
      * Handle an incoming authentication request.

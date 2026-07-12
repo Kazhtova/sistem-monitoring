@@ -3,6 +3,7 @@
 use App\Http\Controllers\Mahasiswa\RequestController as MahasiswaRequest;
 use App\Http\Controllers\Teknisi\RequestController as TeknisiRequest;
 use App\Http\Controllers\Teknisi\ActivityController;
+use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -53,6 +54,8 @@ Route::middleware(['auth:mahasiswa', 'restrict:mahasiswa'])->prefix('mahasiswa')
     Route::get('/profile/{mahasiswa}', [MahasiswaRequest::class, 'showProfile'])->name('show.profile');
 
     Route::get('/dashboard-list-pc', [MahasiswaRequest::class, 'listPc'])->name('dashboard.pc_list');
+
+    Route::patch('/mahasiswa/password', [PasswordController::class, 'updatePassword'])->name('password.update');
 });
 
 
