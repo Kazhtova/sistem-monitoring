@@ -197,14 +197,32 @@
 
             <div class="flex items-center gap-3 pt-10">
                 
-                <form id="form-reject-{{ $data->id_request }}" action="{{ route('teknisi.cancel.request', $data->id_request) }}" method="POST" class="m-0">
-                    @csrf
-                    @method('PATCH')
-                    <button type="button" onclick="confirmDelete('{{ $data->id_request }}')" class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-600 border border-transparent text-white text-sm font-bold rounded-xl hover:bg-rose-700 transition shadow-sm active:scale-95">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Selesaikan Request
-                    </button>
-                </form>
+                @if($data->status === 'setuju')
+                    <form id="form-reject-{{ $data->id_request }}" action="{{ route('teknisi.cancel.request', $data->id_request) }}" method="POST" class="m-0">
+                        @csrf
+                        @method('PATCH')
+                        <button type="button" onclick="confirmDelete('{{ $data->id_request }}')" class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-600 border border-transparent text-white text-sm font-bold rounded-xl hover:bg-rose-700 transition shadow-sm active:scale-95">
+                            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Selesaikan Request
+                        </button>
+                    </form>
+
+                @elseif($data->status === 'selesai')
+                    <div class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl shadow-sm cursor-default">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Selesai
+                    </div>
+
+                @elseif($data->status === 'tolak')
+                    <div class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-red-700 bg-red-50 border border-red-200 rounded-xl shadow-sm cursor-default">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        Ditolak
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -354,20 +372,15 @@
                 
                 if(tglTarget && jamTarget && e.waktu_baru) {
                     
-                    // 🟢 KUNCI FINAL: Deteksi KHUSUS Jam dan Menit berdasarkan letak Titik Dua (:)
-                    // Regex ini / (\d{1,2}):(\d{2}) / hanya akan menarik angka seperti "05:19"
-                    // Mengabaikan angka tanggal (14) atau tahun (2026) yang bikin error sebelumnya!
                     let timeMatch = e.waktu_baru.match(/(\d{1,2}):(\d{2})/);
                     
                     if (timeMatch) {
                         let jam = timeMatch[1].padStart(2, '0');
                         let menit = timeMatch[2].padStart(2, '0');
                         
-                        // Perbarui HANYA jamnya sesuai permintaanmu secara presisi
                         jamTarget.innerHTML = `&bull;  ${jam}:${menit} WIB`;
                     }
 
-                    // (Opsional) Amankan tanggal HANYA JIKA server mengirim format lengkap (YYYY-MM-DD)
                     let dateMatch = e.waktu_baru.match(/(\d{4})[-\/](\d{2})[-\/](\d{2})/);
                     if (dateMatch) {
                         let tahun = dateMatch[1];
@@ -381,14 +394,6 @@
                         tglTarget.innerText = `${hariIndo[dateObj.getDay()]} ${tanggal} ${bulanIndo[bulanIndex]} ${tahun}`;
                     }
 
-                    // Animasi Flash Highlight (Kuning halus menandakan waktu diupdate)
-                    // tglTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
-                    // jamTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
-                    
-                    // setTimeout(() => { 
-                    //     tglTarget.classList.remove('text-amber-500'); 
-                    //     jamTarget.classList.remove('text-amber-500'); 
-                    // }, 1500);
                 }
             });
         }
