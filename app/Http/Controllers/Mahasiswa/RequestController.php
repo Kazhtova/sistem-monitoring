@@ -27,7 +27,7 @@ class RequestController extends Controller
     public function viewRequest(Request $request, $id = null){
 
         if(empty($id)){
-            $daftarLab = Laboratorium::orderBy('nama_lab', 'asc')->get();
+            $daftarLab = Laboratorium::orderBy('id_laboratorium', 'asc')->get();
             return view('mahasiswa.pilih-lab', compact('daftarLab'));
         }
 
