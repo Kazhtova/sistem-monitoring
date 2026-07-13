@@ -14,27 +14,48 @@
             
             <div class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                 <form action="{{ route('teknisi.dashboard.accept') }}" method="GET" class="flex flex-wrap md:flex-nowrap w-full lg:w-auto flex-1 items-center gap-3">
-                    <div class="relative w-full md:w-80">
+                    <div class="relative w-full md:w-80 flex-shrink-0">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
-                               placeholder="Cari Dosen atau Mahasiswa..." 
+                               placeholder="Cari Dosen, Mahasiswa, atau Komputer..." 
                                class="pl-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 shadow-sm outline-none focus:bg-white focus:border-slate-500 focus:ring-slate-500 sm:text-sm transition-all duration-300">
                     </div>
                     
+                    <!-- 🟢 FITUR BARU: Filter Lab -->
+                    <select name="lab" onchange="this.form.submit()" 
+                        class="rounded-xl border-slate-200 text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
+                        <option value="all">Semua Lab</option>
+                        @foreach($daftarLab as $lab)
+                            <option value="{{ $lab->id_laboratorium }}" {{ request('lab') == $lab->id_laboratorium ? 'selected' : '' }}>
+                                {{ $lab->nama_lab }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <!-- 🟢 FITUR BARU: Filter Status (Khusus Setuju, Tolak, Selesai) -->
+                    <select name="status" onchange="this.form.submit()" 
+                        class="rounded-xl border-slate-200 text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
+                        <option value="all">Semua Status</option>
+                        <option value="setuju" {{ request('status') == 'setuju' ? 'selected' : '' }}>Running (Setuju)</option>
+                        <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="tolak" {{ request('status') == 'tolak' ? 'selected' : '' }}>Ditolak</option>
+                    </select>
+
                     <select name="sort" onchange="this.form.submit()" 
-                            class="rounded-xl border-slate-200 text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
+                            class="rounded-xl border-slate-200 text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300 flex-shrink-0">
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                         <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     </select>
 
-                    <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 shadow-sm active:scale-95">
+                    <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 shadow-sm active:scale-95 flex-shrink-0">
                         Cari
                     </button>
                     
-                    @if(request('search') || request('sort'))
-                        <a href="{{ route('teknisi.dashboard.accept') }}" class="text-sm text-slate-400 hover:text-red-500 font-semibold transition-colors flex items-center gap-1">
+                    <!-- 🟢 PERBAIKAN: Tombol Reset akan muncul jika ada aktivitas pada search, sort, lab, ATAU status -->
+                    @if(request('search') || request('sort') || request('lab') || request('status'))
+                        <a href="{{ route('teknisi.dashboard.accept') }}" class="text-sm text-slate-400 hover:text-red-500 font-semibold transition-colors flex items-center gap-1 flex-shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                             Reset
                         </a>

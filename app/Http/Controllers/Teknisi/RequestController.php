@@ -24,11 +24,20 @@ class RequestController extends Controller
 
     session(['has_opened_request_list' => true]);
 
-    $query = $user
-            ->request()
-            ->with('mahasiswa')
+    // 1. Ambil daftar lab yang dikelola oleh teknisi ini untuk dropdown filter
+    $daftarLab = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
+
+    // 2. 🟢 KUNCI MUTLAK: Inisiasi Query dasar yang HANYA memanggil status pending
+    $query = $user->request()
+            ->with(['mahasiswa', 'komputer', 'laboratorium'])
             ->whereNotIn('status', ['setuju', 'tolak', 'selesai']);
 
+    // 3. Logika Filter Laboratorium (Tersisa)
+    if ($request->filled('lab') && $request->lab !== 'all') {
+        $query->where('id_laboratorium', $request->lab);
+    }
+
+    // 4. Logika Pencarian (Search)
     if($request->filled('search')){
         $search = $request->search;
         $query->where(function($q) use ($search){
@@ -39,6 +48,7 @@ class RequestController extends Controller
         });
     }
 
+    // 5. Logika Pengurutan (Sort)
     $sort = $request->input('sort', 'latest');
     if($sort === 'oldest'){
         $query->oldest();
@@ -48,37 +58,58 @@ class RequestController extends Controller
                              
     $readRequest = $query->paginate(15)->withQueryString();    
     
-    return view('teknisi.dashboard-teknisi', compact('readRequest'));
+    return view('teknisi.dashboard-teknisi', compact('readRequest', 'daftarLab'));
     }
 
     public function listRequest(Request $request) {
     /** @var \App\Models\Teknisi $user */
     $user = auth()->guard('teknisi')->user();
 
-    $query = $user->request()
-                        ->with('mahasiswa')
-                        ->whereIn('status', ['setuju', 'tolak', 'selesai']);
+    // 1. Ambil daftar lab untuk dropdown filter
+    $daftarLab = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
 
-    if($request->filled('search')){
+    // 2. Kueri Dasar: HANYA panggil yang berstatus setuju, tolak, atau selesai
+    $query = $user->request()
+            ->with(['mahasiswa', 'komputer', 'laboratorium'])
+            ->whereIn('status', ['setuju', 'tolak', 'selesai']);
+
+    // 3. 🟢 FITUR BARU: Filter Status Spesifik
+    if ($request->filled('status') && $request->status !== 'all') {
+        $query->where('status', $request->status);
+    }
+
+    // 4. 🟢 FITUR BARU: Filter Laboratorium
+    if ($request->filled('lab') && $request->lab !== 'all') {
+        $query->where('id_laboratorium', $request->lab);
+    }
+
+    // 5. Logika Search
+    if ($request->filled('search')) {
         $search = $request->search;
-        $query->where(function($q) use ($search){
+        $query->where(function($q) use ($search) {
             $q->where('dosen_ta', 'like', "%{$search}%")
-            ->orWhereHas('mahasiswa', function($mq) use ($search){
-                $mq->where('nama_mahasiswa', 'like', "%{$search}%");
-            });
+              ->orWhere('software', 'like', "%{$search}%")
+              ->orWhereHas('mahasiswa', function($mq) use ($search) {
+                  $mq->where('nama_mahasiswa', 'like', "%{$search}%");
+              })              
+              ->orWhereHas('komputer', function($kq) use ($search) {
+                  $kq->where('nama_komputer', 'like', "%{$search}%");
+              });
         });
     }
 
+    // 6. Logika Sort
     $sort = $request->input('sort', 'latest');
-    if($sort === 'oldest'){
+    if ($sort === 'oldest') {
         $query->oldest();
-    }else{
+    } else {
         $query->latest();
     }
-
-    $readRequest = $query->paginate(15)->withQueryString();
-
-    return view('teknisi.accept-dashboard', compact('readRequest'));
+                             
+    $readRequest = $query->paginate(15)->withQueryString();    
+    
+    // Jangan lupa kirim $daftarLab ke View
+    return view('teknisi.accept-dashboard', compact('readRequest', 'daftarLab'));
     }
 
     public function acceptRequest(int $id) {

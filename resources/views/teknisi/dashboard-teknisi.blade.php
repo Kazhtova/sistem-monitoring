@@ -23,6 +23,16 @@
                         placeholder="Cari dosen atau mahasiswa..." 
                         class="pl-11 w-full rounded-xl border-slate-200 bg-slate-50/50 shadow-sm outline-none focus:bg-white focus:border-slate-500 focus:ring-slate-500 text-sm py-2.5 transition-all duration-300">
                 </div>
+
+                <select name="lab" onchange="this.form.submit()" 
+                    class="rounded-xl border-slate-200 text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
+                    <option value="all">Semua Lab</option>
+                    @foreach($daftarLab as $lab)
+                        <option value="{{ $lab->id_laboratorium }}" {{ request('lab') == $lab->id_laboratorium ? 'selected' : '' }}>
+                            {{ $lab->nama_lab }}
+                        </option>
+                    @endforeach
+                </select>
                 
                 <select name="sort" onchange="this.form.submit()" 
                     class="rounded-xl border-slate-200 text-sm shadow-sm bg-slate-50/50 text-slate-600 outline-none focus:bg-white focus:ring-1 focus:ring-slate-500 focus:border-slate-500 transition-all duration-300">
