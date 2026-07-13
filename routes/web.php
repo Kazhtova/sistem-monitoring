@@ -34,7 +34,7 @@ Route::middleware(['auth:teknisi', 'restrict:teknisi'])->prefix('teknisi')->name
 
     Route::get('/dashboard-list-pc', [TeknisiRequest::class, 'listPc'])->name('dashboard.pc_list');
 
-    Route::get('/komputer/{id_komputer}/kalender', [ActivityController::class, 'viewKalender'])->name('komputer.kalender');
+    Route::get('/komputer/{id_komputer}/kalender', [ActivityController::class, 'viewKalenderTeknisi'])->name('komputer.kalender');
 
     Route::get('/api/komputer/{id_komputer}/jadwal', [ActivityController::class, 'getJadwalKomputer'])->name('api.komputer.jadwal');
 });

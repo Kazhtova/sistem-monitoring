@@ -45,6 +45,12 @@ class ActivityController extends Controller
         $komputer = Komputer::findOrFail($id_komputer);
         return view('mahasiswa.kalender-komputer', compact('komputer'));
     }
+    
+    public function viewKalenderTeknisi(int $id_komputer)
+    {
+        $komputer = Komputer::findOrFail($id_komputer);
+        return view('teknisi.kalender-komputer', compact('komputer'));
+    }
 
     public function getJadwalKomputer(int $id_komputer)
     {
