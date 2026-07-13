@@ -382,13 +382,13 @@
                     }
 
                     // Animasi Flash Highlight (Kuning halus menandakan waktu diupdate)
-                    tglTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
-                    jamTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
+                    // tglTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
+                    // jamTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
                     
-                    setTimeout(() => { 
-                        tglTarget.classList.remove('text-amber-500'); 
-                        jamTarget.classList.remove('text-amber-500'); 
-                    }, 1500);
+                    // setTimeout(() => { 
+                    //     tglTarget.classList.remove('text-amber-500'); 
+                    //     jamTarget.classList.remove('text-amber-500'); 
+                    // }, 1500);
                 }
             });
         }
