@@ -183,7 +183,7 @@ class RequestController extends Controller
 
         $readRequest = $user->requests()
                                 ->with(['teknisi', 'laboratorium'])
-                                ->whereIn('status', ['pending', 'tolak'])
+                                ->whereIn('status', ['pending', 'setuju'])
                                 ->latest()
                                 ->get();
 

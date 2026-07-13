@@ -142,23 +142,43 @@
                                                 Details
                                             </a>
 
-                                            <form id="form-reject-{{ $data_request->id_request }}" action="{{ route('teknisi.cancel.request', $data_request->id_request) }}" method="POST" class="m-0"> 
-                                                @csrf 
-                                                @method('PATCH')
-                                                
-                                                <!-- 🟢 Tambahkan gap-1.5 pada class button agar ada jarak presisi antara SVG dan Teks -->
-                                                <button type="button" 
-                                                        onclick="confirmDelete('{{ $data_request->id_request }}')" 
-                                                        class="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-red-500 border border-transparent rounded-lg hover:bg-red-600 transition-colors shadow-sm active:scale-95">
+                                            @if($data_request->status === 'setuju')
+                                                <!-- 🟢 HANYA MUNCUL JIKA STATUS SETUJU (RUNNING) -->
+                                                <form id="form-reject-{{ $data_request->id_request }}" action="{{ route('teknisi.cancel.request', $data_request->id_request) }}" method="POST" class="m-0"> 
+                                                    @csrf 
+                                                    @method('PATCH')
                                                     
-                                                    <!-- Ikon Check Circle -->
+                                                    <!-- 🟢 Tambahkan gap-1.5 pada class button agar ada jarak presisi antara SVG dan Teks -->
+                                                    <button type="button" 
+                                                            onclick="confirmDelete('{{ $data_request->id_request }}')" 
+                                                            class="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-red-500 border border-transparent rounded-lg hover:bg-red-600 transition-colors shadow-sm active:scale-95">
+                                                        
+                                                        <!-- Ikon Check Circle -->
+                                                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        </svg>
+                                                        Selesaikan Request 
+                                                    </button>
+                                                </form>
+
+                                            @elseif($data_request->status === 'selesai')
+                                                <!-- 🔵 TAMPILAN JIKA STATUS SUDAH SELESAI -->
+                                                <div class="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg shadow-sm cursor-default">
                                                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                                                     </svg>
-                                                    
-                                                    Selesaikan Request 
-                                                </button>
-                                            </form>
+                                                    Selesai
+                                                </div>
+
+                                            @elseif($data_request->status === 'tolak')
+                                                <!-- 🔴 TAMPILAN JIKA STATUS DITOLAK -->
+                                                <div class="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-red-700 bg-red-50 border border-red-200 rounded-lg shadow-sm cursor-default">
+                                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                    Ditolak
+                                                </div>
+                                            @endif
                                         </div>
                                     </td>
                                     

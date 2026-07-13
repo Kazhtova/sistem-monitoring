@@ -257,11 +257,11 @@
                                 <p class="text-[13px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Estimasi Selesai</p>
                                 
                                 <div class="flex flex-wrap items-baseline gap-2">
-                                    <p id="waktu-selesai-teknisi-{{ $data->id_request }}" class="text-2xl font-black text-slate-900 leading-none whitespace-nowrap">
+                                    <p id="tgl-selesai-teknisi-{{ $data->id_request }}" class="text-2xl font-black text-slate-900 leading-none whitespace-nowrap">
                                         {{ $selesai->translatedFormat('D d M Y') }}
                                     </p>
                                     
-                                    <p class="text-base font-medium text-slate-700 whitespace-nowrap">
+                                    <p id="jam-selesai-teknisi-{{ $data->id_request }}" class="text-base font-medium text-slate-700 whitespace-nowrap">
                                         &bull;  {{ $selesai->translatedFormat('H:i') }} WIB
                                     </p>
                                 </div>
@@ -347,14 +347,48 @@
                 }
             });
 
-            // Listener Waktu Realtime
             window.Echo.channel('teknisi-channel')
             .listen('.WaktuUpdated', (e) => {
-                let waktuTarget = document.getElementById('waktu-selesai-teknisi-' + e.id_request);
-                if(waktuTarget) {
-                    waktuTarget.innerText = e.waktu_baru;
-                    waktuTarget.classList.add('text-slate-600');
-                    setTimeout(() => { waktuTarget.classList.remove('text-slate-600'); }, 1000);
+                let tglTarget = document.getElementById('tgl-selesai-teknisi-' + e.id_request);
+                let jamTarget = document.getElementById('jam-selesai-teknisi-' + e.id_request);
+                
+                if(tglTarget && jamTarget && e.waktu_baru) {
+                    
+                    // 🟢 KUNCI FINAL: Deteksi KHUSUS Jam dan Menit berdasarkan letak Titik Dua (:)
+                    // Regex ini / (\d{1,2}):(\d{2}) / hanya akan menarik angka seperti "05:19"
+                    // Mengabaikan angka tanggal (14) atau tahun (2026) yang bikin error sebelumnya!
+                    let timeMatch = e.waktu_baru.match(/(\d{1,2}):(\d{2})/);
+                    
+                    if (timeMatch) {
+                        let jam = timeMatch[1].padStart(2, '0');
+                        let menit = timeMatch[2].padStart(2, '0');
+                        
+                        // Perbarui HANYA jamnya sesuai permintaanmu secara presisi
+                        jamTarget.innerHTML = `&bull;  ${jam}:${menit} WIB`;
+                    }
+
+                    // (Opsional) Amankan tanggal HANYA JIKA server mengirim format lengkap (YYYY-MM-DD)
+                    let dateMatch = e.waktu_baru.match(/(\d{4})[-\/](\d{2})[-\/](\d{2})/);
+                    if (dateMatch) {
+                        let tahun = dateMatch[1];
+                        let bulanIndex = parseInt(dateMatch[2]) - 1;
+                        let tanggal = dateMatch[3].padStart(2, '0');
+                        
+                        let dateObj = new Date(tahun, bulanIndex, tanggal);
+                        const hariIndo = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+                        const bulanIndo = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+
+                        tglTarget.innerText = `${hariIndo[dateObj.getDay()]} ${tanggal} ${bulanIndo[bulanIndex]} ${tahun}`;
+                    }
+
+                    // Animasi Flash Highlight (Kuning halus menandakan waktu diupdate)
+                    tglTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
+                    jamTarget.classList.add('text-amber-500', 'transition-colors', 'duration-300');
+                    
+                    setTimeout(() => { 
+                        tglTarget.classList.remove('text-amber-500'); 
+                        jamTarget.classList.remove('text-amber-500'); 
+                    }, 1500);
                 }
             });
         }
