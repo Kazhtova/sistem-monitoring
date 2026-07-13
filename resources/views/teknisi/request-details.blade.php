@@ -80,8 +80,23 @@
                 <!-- Badge Status (Kanan Atas) -->
                 <div class="absolute top-6 right-6 z-10">
                     <span class="inline-flex items-center gap-1.5 bg-slate-900/75 backdrop-blur-sm border border-white/20 text-white px-3 py-1.5 rounded-full text-[11px] font-black shadow-sm cursor-default transition-all duration-300 hover:bg-slate-900 hover:border-white/40 uppercase">
-                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                        {{ $data->status == 'setuju' ? 'Running' : $data->status }}
+                        @php
+                            $statusText = ucfirst($data->status);
+                            $dotColor = 'bg-slate-400'; 
+
+                            if ($data->status === 'setuju') {
+                                $statusText = 'Running';
+                                $dotColor   = 'bg-emerald-500'; 
+                            } elseif ($data->status === 'selesai') {
+                                $statusText = 'Selesai';
+                                $dotColor   = 'bg-blue-500';    
+                            } elseif ($data->status === 'tolak') {
+                                $statusText = 'Ditolak';
+                                $dotColor   = 'bg-red-500';    
+                            }
+                        @endphp
+                        <span class="w-1.5 h-1.5 rounded-full {{ $dotColor }}"></span>
+                        {{ $statusText }}
                     </span>
                 </div>
             </div>
@@ -181,10 +196,6 @@
             </div>
 
             <div class="flex items-center gap-3 pt-10">
-                <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-50 transition shadow-sm">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                    Edit
-                </button>
                 
                 <form id="form-reject-{{ $data->id_request }}" action="{{ route('teknisi.cancel.request', $data->id_request) }}" method="POST" class="m-0">
                     @csrf
@@ -198,25 +209,19 @@
 
         </div>
 
-        <!-- KOLOM KANAN (Lebar 1/3) -->
         <div class="lg:col-span-1 space-y-6">
             
-            <!-- 3. Schedule Card -->
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
                 <h2 class="text-xl font-bold text-slate-900 mb-6">Waktu Request</h2>
                 <div class="w-full h-px bg-slate-100 mb-8"></div>
 
-                <!-- Timeline Wrapper -->
                 <div class="relative">
-                    <!-- Garis Vertikal Utama -->
                     <div class="absolute left-2.5 top-2 bottom-2 w-[2px] bg-slate-200"></div>
                     
-                    <!-- 🟢 NODE 1: Waktu Mulai -->
                     <div class="relative pl-10 mb-10">
                         <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-white border-[5px] border-slate-600 ring-4 ring-white z-10"></div>
                         <p class="text-[13px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Waktu Mulai</p>
                         
-                        <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap (responsif mobile) -->
                         <div class="flex flex-col gap-2">
                             <p class="text-2xl font-black text-slate-900 leading-none">{{ $mulai->translatedFormat('D d M Y') }}</p>
                             <p class="text-base font-medium text-slate-700">
@@ -225,51 +230,43 @@
                         </div>
                     </div>
 
-                    <!-- 🟢 NODE 2: Status Berjalan (In Progress) -->
                     <div class="relative pl-10 mb-10">
-                        <!-- Ikon Dot -->
                         <div class="absolute left-[7px] top-2 bg-white z-10 py-1">
                             <svg class="w-3 h-3 text-slate-400" fill="currentColor" viewBox="0 0 16 16">
                                 <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                             </svg>
                         </div>
                         
-                        <!-- 🟢 PERBAIKAN 1: Hapus 'flex-wrap' dari wadah ini -->
                         <div class="inline-flex items-center gap-3 px-4 py-2 bg-slate-50/80 border border-slate-100/50 rounded-lg">
                             <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-slate-500"></span>
                             </span>
                             
-                            <!-- 🟢 PERBAIKAN 2: Gunakan 'text-sm' dan tambahkan 'whitespace-nowrap' -->
                             <p class="text-sm font-bold text-slate-700 whitespace-nowrap">
                                 In Progress <span class="text-slate-300 mx-2">|</span> {{ $waktuBerjalan }} Berlalu
                             </p>
                         </div>
                     </div>
 
-                    <!-- 🟢 NODE 3: Estimasi Selesai & Total Durasi -->
                     <div class="relative pl-10">
                         <div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-slate-600 border-4 border-white ring-2 ring-slate-600 z-10"></div>
                         
-                        <!-- 🛠️ PERBAIKAN: Tambahkan gap-6 antara Waktu Selesai dan Kotak Total Durasi -->
                         <div class="flex flex-wrap lg:flex-nowrap justify-between items-start gap-6 pr-2">
-                            <!-- Info Waktu Selesai -->
                             <div class="min-w-0">
                                 <p class="text-[13px] font-black tracking-widest text-slate-500 uppercase mb-1.5">Estimasi Selesai</p>
                                 
-                                <!-- 🛠️ PERBAIKAN: gap-4 (lebar) dan flex-wrap -->
                                 <div class="flex flex-wrap items-baseline gap-2">
-                                    <p id="waktu-selesai-teknisi-{{ $data->id_request }}" class="text-2xl font-black text-slate-900 leading-none">
+                                    <p id="waktu-selesai-teknisi-{{ $data->id_request }}" class="text-2xl font-black text-slate-900 leading-none whitespace-nowrap">
                                         {{ $selesai->translatedFormat('D d M Y') }}
                                     </p>
-                                    <p class="text-base font-medium text-slate-700">
+                                    
+                                    <p class="text-base font-medium text-slate-700 whitespace-nowrap">
                                         &bull;  {{ $selesai->translatedFormat('H:i') }} WIB
                                     </p>
                                 </div>
                             </div>
                             
-                            <!-- Info Durasi (Rata Kanan) -->
                             <div class="text-left lg:text-center flex-shrink-0">
                                 <p class="text-[10px] font-black tracking-widest text-slate-500 uppercase mb-2">Total Durasi</p>
                                 <span class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold bg-slate-50 text-slate-700 border border-slate-200 shadow-sm">
@@ -284,8 +281,6 @@
     </div>
 </div>
 
-<!-- ================= MODAL & SCRIPT ================= -->
-<!-- Tetap pertahankan script Modal dan Reverb bawaanmu di bawah sini -->
 <div id="modalGambar" class="fixed inset-0 z-[999] hidden bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-8 transition-opacity duration-300" onclick="tutupModal()">
     <div class="relative max-w-5xl w-full flex justify-center">
         <button class="absolute -top-12 right-0 text-white/70 text-5xl font-light hover:text-red-500 hover:rotate-90 transition-all duration-300">&times;</button>

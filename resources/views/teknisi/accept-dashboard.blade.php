@@ -118,10 +118,14 @@
                                                 $bgColor = 'bg-slate-50';
                                                 $textColor = 'text-slate-600';
                                                 $dotColor = 'bg-slate-900';
-                                            } elseif($status == 'pending') {
+                                            } elseif($status == 'selesai') {
                                                 $bgColor = 'bg-amber-50';
                                                 $textColor = 'text-amber-600';
                                                 $dotColor = 'bg-amber-500';
+                                            } elseif($status == 'tolak') {
+                                                $bgColor = 'bg-red-50';
+                                                $textColor = 'text-red-600';
+                                                $dotColor = 'bg-red-500';
                                             }
                                         @endphp
 
