@@ -76,7 +76,7 @@
                                     <button type="button" 
                                             id="btn-update-waktu-{{ $request->id_request }}"
                                             onclick="bukaModalWaktu('{{ $request->id_request }}', '{{ $request->perkiraan_selesai }}')" 
-                                            class="w-8 h-10 flex-shrink-0 flex items-center justify-center text-gray-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all duration-300 shadow-sm hover:shadow border border-transparent hover:border-slate-100 ml-1.5 {{ in_array($request->status, ['setuju', 'selesai', 'tolak']) ? 'hidden' : '' }}" 
+                                            class="w-8 h-10 flex-shrink-0 flex items-center justify-center text-gray-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all duration-300 shadow-sm hover:shadow border border-transparent hover:border-slate-100 ml-1.5 {{ $request->status !== 'setuju' ? 'hidden' : '' }}" 
                                             title="Update Estimate Complete">
                                         <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </button>
@@ -213,13 +213,15 @@
                                     statusBadge.classList.add('bg-amber-100', 'text-amber-700');
                                     statusBadge.innerText = 'WAITING AGREEMENT';
                                     if(uploadContainer) uploadContainer.classList.add('invisible');
-                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.remove('hidden'); 
+                                    // 🟢 PERBAIKAN: Sembunyikan tombol saat antrean masih pending
+                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.add('hidden'); 
                                     break;
                                 case 'setuju':
                                     statusBadge.classList.add('bg-slate-200', 'text-slate-950');
                                     statusBadge.innerText = 'RUNNING';
                                     if(uploadContainer) uploadContainer.classList.remove('invisible');
-                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.add('hidden'); 
+                                    // 🟢 PERBAIKAN: Munculkan tombol saat request disetujui
+                                    if(tombolUpdateWaktu) tombolUpdateWaktu.classList.remove('hidden'); 
                                     break;
                                 case 'selesai':
                                     statusBadge.classList.add('bg-emerald-100', 'text-emerald-700');
