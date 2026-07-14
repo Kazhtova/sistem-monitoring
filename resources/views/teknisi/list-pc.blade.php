@@ -37,7 +37,6 @@
                         <option value="">Semua Status</option>
                         <option value="ready" {{ request('status') == 'ready' ? 'selected' : '' }}>Ready</option>
                         <option value="in_use" {{ request('status') == 'in_use' ? 'selected' : '' }}>In Use</option>
-                        <option value="after_use" {{ request('status') == 'after_use' ? 'selected' : '' }}>After Use</option>
                     </select>
 
                     <button type="submit" class="px-6 py-2 border border-slate-200 rounded-xl text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-sm text-sm font-semibold">

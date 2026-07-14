@@ -20,8 +20,7 @@
         
         <td class="px-6 py-4 whitespace-nowrap">
             @php
-                $hasUse = $item->requests->whereIn('status', ['setuju', 'pending'])->first();
-                $hasAfterUse = $item->requests->whereIn('status', ['tolak', 'selesai'])->first();
+                $hasUse = $item->requests->where('status', 'setuju')->first();
 
                 $statusText = 'Ready';
                 $colorClass = 'bg-emerald-50 text-emerald-700 border-emerald-100'; 
@@ -29,12 +28,8 @@
                 if ($hasUse) {
                     $statusText = 'In Use';
                     $colorClass = 'bg-slate-950 text-white border-slate-950'; 
-                } elseif ($hasAfterUse) {
-                    $statusText = 'After Use';
-                    $colorClass = 'bg-blue-50 text-blue-700 border-blue-100'; 
                 }
             @endphp
-
             <span class="px-2.5 py-0.5 inline-flex text-[11px] leading-5 font-bold uppercase tracking-wider rounded-full border {{ $colorClass }} transition-colors">
                 {{ $statusText }}
             </span>

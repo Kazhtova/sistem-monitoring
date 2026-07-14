@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-black text-2xl text-gray-900 tracking-tight">
-                    {{ __('Accept List') }}
+                    {{ __('Request List') }}
                 </h2>
             </div>
         </div>

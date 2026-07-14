@@ -266,14 +266,15 @@ class RequestController extends Controller
     }
 
     if ($filterStatus === 'in_use') {
-        $query->whereHas('requests', function($q) {
-            $q->whereIn('status', ['setuju', 'pending']);
-        });
-    } elseif ($filterStatus === 'ready') {
-        $query->whereDoesntHave('requests', function($q) {
-            $q->whereIn('status', ['setuju', 'pending']);
-        });
-    }
+            $query->whereHas('requests', function($q) {
+                $q->where('status', 'setuju');
+            });
+        } elseif ($filterStatus === 'ready') {
+            $query->whereDoesntHave('requests', function($q) {
+                $q->where('status', 'setuju');
+            });
+        }
+
 
     $pc = $query->paginate(15)->appends($request->query());
 

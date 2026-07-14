@@ -223,15 +223,11 @@ class RequestController extends Controller
 
         if ($filterStatus === 'in_use') {
             $query->whereHas('requests', function($q) {
-                $q->whereIn('status', ['setuju', 'pending']);
-            });
-        } elseif ($filterStatus === 'after_use') {
-            $query->whereHas('requests', function($q) {
-                $q->whereIn('status', ['tolak', 'selesai']);
+                $q->where('status', 'setuju');
             });
         } elseif ($filterStatus === 'ready') {
             $query->whereDoesntHave('requests', function($q) {
-                $q->whereIn('status', ['setuju', 'pending']);
+                $q->where('status', 'setuju');
             });
         }
 

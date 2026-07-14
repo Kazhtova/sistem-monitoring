@@ -19,15 +19,15 @@
         </td>
         
         <td class="px-6 py-4 whitespace-nowrap">
-            @php
-                $hasUse = $item->requests->whereIn('status', ['setuju', 'pending'])->first();
+             @php
+                $hasUse = $item->requests->where('status', 'setuju')->first();
 
                 $statusText = 'Ready';
-                $colorClass = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+                $colorClass = 'bg-emerald-50 text-emerald-700 border-emerald-100'; 
 
                 if ($hasUse) {
                     $statusText = 'In Use';
-                    $colorClass = 'bg-slate-950 text-white border-slate-950';
+                    $colorClass = 'bg-slate-950 text-white border-slate-950'; 
                 }
             @endphp
 
