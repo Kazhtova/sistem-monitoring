@@ -120,7 +120,7 @@ class RequestController extends Controller
                                             ->exists();
 
         if ($isKomputerSedangDipakai) {
-            return redirect()->back()->with('error', 'Gagal! Komputer ini sedang dalam perbaikan (status SETUJU) pada request lain.');
+            return redirect()->back()->with('error', 'Gagal! Komputer ini sedang Running (status SETUJU) pada request lain.');
         }
 
         $request->update(['status' => 'setuju']);
@@ -146,8 +146,7 @@ class RequestController extends Controller
 
     })->afterResponse(); 
           
-    return redirect()->route('teknisi.dashboard.request')->with('success', 'Request Disetujui'); 
-    
+    return redirect()->back()->with('success', 'Request Disetujui'); 
     }
 
     public function rejectRequest(int $id)

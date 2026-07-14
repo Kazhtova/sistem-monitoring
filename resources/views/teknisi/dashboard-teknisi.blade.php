@@ -151,6 +151,22 @@
 
     @vite(['resources/js/app.js'])
     <script type="module">
+        
+        @if(session('error'))
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Akses Ditolak!',
+                    text: '{{ session('error') }}',
+                    confirmButtonColor: '#ef4444',
+                    background: '#fff',
+                    customClass: {
+                        popup: 'rounded-2xl shadow-sm border border-slate-200'
+                    }
+                });
+            });
+        @endif
+        
         let currentTeknisiId = "{{ auth()->guard('teknisi')->id() }}";
 
         window.Echo.channel('teknisi-channel')
