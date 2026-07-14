@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="w-full bg-white rounded-[24px] p-8 shadow-sm border border-slate-200">
+            {{-- <div class="w-full bg-white rounded-[24px] p-8 shadow-sm border border-slate-200">
                 
                 <div class="flex items-center gap-3 mb-8">
                     <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700">
@@ -117,7 +117,7 @@
                     </div>
                 </form>
 
-            </div>
+            </div> --}}
         </div>
     </div>
 

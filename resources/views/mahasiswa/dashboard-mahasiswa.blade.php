@@ -128,7 +128,7 @@
                 @method('PATCH')
                 <div class="mb-8">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Estimate Complete (New)</label>
-                    <input type="datetime-local" 
+                    <input type="date" 
                         name="perkiraan_selesai" 
                         id="inputWaktuSelesai" 
                         required 

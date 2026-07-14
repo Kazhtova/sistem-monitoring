@@ -72,7 +72,7 @@
                         
                         <thead>
                             <tr class="bg-slate-50/50 border-b border-slate-200">
-                                <th class="py-4 px-6 text-xs font-bold text-slate-900 uppercase tracking-wider">Student</th>
+                                <th class="py-4 px-6 text-xs font-bold text-slate-900 uppercase tracking-wider">Mahasiswa</th>
                                 <th class="py-4 px-6 text-xs font-bold text-slate-900 uppercase tracking-wider">Computer</th>
                                 <th class="py-4 px-6 text-xs font-bold text-slate-900 uppercase tracking-wider">Lab</th>
                                 <th class="py-4 px-6 text-xs font-bold text-slate-900 uppercase tracking-wider">No Telp</th>

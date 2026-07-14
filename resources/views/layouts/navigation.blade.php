@@ -140,10 +140,6 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link>
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 

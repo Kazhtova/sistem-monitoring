@@ -83,12 +83,12 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <x-input-label for="tanggal_mulai" :value="__('Time Start')" class="text-slate-700 font-bold" />
-                            <x-text-input id="tanggal_mulai" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="datetime-local" name="tanggal_mulai" :value="old('tanggal_mulai')" required />
+                            <x-text-input id="tanggal_mulai" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="date" name="tanggal_mulai" :value="old('tanggal_mulai')" required />
                         </div>
 
                         <div>
                             <x-input-label for="perkiraan_selesai" :value="__('Estimate')" class="text-slate-700 font-bold" />
-                            <x-text-input id="perkiraan_selesai" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="datetime-local" name="perkiraan_selesai" :value="old('perkiraan_selesai')" required />
+                            <x-text-input id="perkiraan_selesai" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="date" name="perkiraan_selesai" :value="old('perkiraan_selesai')" required />
                         </div>
                     </div>
 

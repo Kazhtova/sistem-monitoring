@@ -107,7 +107,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('mahasiswa.show.profile', ['mahasiswa' => auth()->user()])" :active="request()->routeIs('mahasiswa.show.profile')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

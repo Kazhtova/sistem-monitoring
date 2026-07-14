@@ -62,7 +62,7 @@
                         <thead>
                             <tr class="bg-slate-50/50 border-b border-gray-100">
                                 <th class="py-4 px-6 text-xs font-bold text-gray-900 uppercase tracking-wider w-16">No</th>
-                                <th class="py-4 px-6 text-xs font-bold text-gray-900 uppercase tracking-wider">Student</th>
+                                <th class="py-4 px-6 text-xs font-bold text-gray-900 uppercase tracking-wider">Mahasiswa</th>
                                 <th class="py-4 px-6 text-xs font-bold text-gray-900 uppercase tracking-wider">Komputer</th>
                                 <th class="py-4 px-6 text-xs font-bold text-gray-900 uppercase tracking-wider">Lab</th>
                                 <th class="py-4 px-6 text-xs font-bold text-gray-900 uppercase tracking-wider text-center">Actions</th>
@@ -166,7 +166,7 @@
                 });
             });
         @endif
-        
+
         let currentTeknisiId = "{{ auth()->guard('teknisi')->id() }}";
 
         window.Echo.channel('teknisi-channel')

@@ -63,7 +63,7 @@ class RequestController extends Controller
 
     public function sendRequest(Request $request){
         $request->validate([
-            'nama_mahasiswa'              => 'required|string',
+            'nama_mahasiswa'    => 'required|string',
             'dosen_ta'          => 'required|string',
             'software'          => 'required|string',
             'no_hp'             => 'required|numeric',
