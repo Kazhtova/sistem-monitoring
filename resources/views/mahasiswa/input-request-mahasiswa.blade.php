@@ -48,7 +48,7 @@
 
                     <input type="hidden" name="id_teknisi" value="{{ $labTerpilih->id_teknisi }}">
                     <input type="hidden" name="nrp" value="{{ auth()->guard('mahasiswa')->user()->nrp }}">
-                    <input type="hidden" name="nama_mahasiswa" value="{{ auth()->guard('mahasiswa')->user()->nama_mahasiswa }}">
+                    <input type="hidden" name="nama_mahasiswa" value="{{ auth()->guard('mahasiswa')->user()->nama }}">
                     <input type="hidden" name="id_laboratorium" value="{{ $labId }}">
                     
                     <div class="mb-4">

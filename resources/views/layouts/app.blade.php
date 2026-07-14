@@ -65,7 +65,7 @@
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
                             title: 'Request Baru!',
-                            text: `Dari: ${data.mahasiswa?.nama_mahasiswa || 'Mahasiswa'}`,
+                            text: `Dari: ${data.mahasiswa?.nama || 'Mahasiswa'}`,
                             icon: 'info',
                             toast: true,
                             position: 'top',
@@ -92,7 +92,7 @@
                             <td class="py-4 px-6 text-sm font-medium text-gray-400">New</td>
                             <td class="py-4 px-6">
                                 <div class="flex flex-col">
-                                    <span class="text-sm font-bold text-gray-900">${data.mahasiswa?.nama_mahasiswa || 'N/A'}</span>
+                                    <span class="text-sm font-bold text-gray-900">${data.mahasiswa?.nama || 'N/A'}</span>
                                 </div>
                             </td>
                             <td class="py-4 px-6 text-sm font-medium text-gray-600">${data.komputer?.nama_komputer || 'N/A'}</td>

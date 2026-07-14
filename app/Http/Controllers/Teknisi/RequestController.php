@@ -43,7 +43,7 @@ class RequestController extends Controller
         $query->where(function($q) use ($search){
             $q->where('dosen_ta', 'like', "%{$search}%")
             ->orWhereHas('mahasiswa', function($mq) use ($search){
-                $mq->where('nama_mahasiswa', 'like', "%{$search}%");
+                $mq->where('nama', 'like', "%{$search}%");
             });
         });
     }
@@ -90,7 +90,7 @@ class RequestController extends Controller
             $q->where('dosen_ta', 'like', "%{$search}%")
               ->orWhere('software', 'like', "%{$search}%")
               ->orWhereHas('mahasiswa', function($mq) use ($search) {
-                  $mq->where('nama_mahasiswa', 'like', "%{$search}%");
+                  $mq->where('nama', 'like', "%{$search}%");
               })              
               ->orWhereHas('komputer', function($kq) use ($search) {
                   $kq->where('nama_komputer', 'like', "%{$search}%");
@@ -136,7 +136,7 @@ class RequestController extends Controller
         ActivityLogger::log(
             action: 'ACCEPT_REQUEST',
             subject: $request,
-            description: "Teknisi menyetujui request perbaikan dari Mahasiswa: {$request->mahasiswa->nama_mahasiswa} (PC: {$request->id_komputer})",
+            description: "Teknisi menyetujui request perbaikan dari Mahasiswa: {$request->mahasiswa->nama} (PC: {$request->id_komputer})",
             properties: [
                 'id_komputer' => $request->id_komputer,
                 'software'    => $request->software,

@@ -63,7 +63,7 @@ class RequestController extends Controller
 
     public function sendRequest(Request $request){
         $request->validate([
-            'nama_mahasiswa'    => 'required|string',
+            'nama_mahasiswa'              => 'required|string',
             'dosen_ta'          => 'required|string',
             'software'          => 'required|string',
             'no_hp'             => 'required|numeric',
@@ -80,8 +80,8 @@ class RequestController extends Controller
         $bentrok = ModelsRequest::where('id_komputer', $request->id_komputer)
             ->where('status', 'setuju')
             ->where(function ($query) use ($request) {
-                $query->where('tanggal_mulai', '<', $request->perkiraan_selesai)
-                      ->where('perkiraan_selesai', '>', $request->tanggal_mulai);
+                $query->where('tanggal_mulai', '<=', $request->perkiraan_selesai)
+                      ->where('perkiraan_selesai', '>=', $request->tanggal_mulai);
             })
             ->first(); 
 

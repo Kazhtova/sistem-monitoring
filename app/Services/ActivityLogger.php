@@ -30,7 +30,7 @@ class ActivityLogger
             $causer_name = $causer->nama_teknisi;
         } elseif (Auth::guard('mahasiswa')->check()) {
             $causer = Auth::guard('mahasiswa')->user();
-            $causer_name = $causer->nama_mahasiswa;
+            $causer_name = $causer->nama;
         }
 
         ActivityLog::create([

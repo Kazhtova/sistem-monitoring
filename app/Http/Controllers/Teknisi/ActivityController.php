@@ -78,7 +78,7 @@ class ActivityController extends Controller
                 'borderColor'     => $warnaBg,
                 'textColor'       => '#ffffff',
                 'extendedProps' => [
-                    'mahasiswa' => $req->nama_mahasiswa,
+                    'mahasiswa' => $req->nama,
                     'software'  => $req->software
                 ]
             ];

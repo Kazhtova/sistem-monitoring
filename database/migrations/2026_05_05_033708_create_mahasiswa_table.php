@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id('id_mahasiswa');
             $table->string('nrp')->unique();
-            $table->string('nama_mahasiswa');
+            $table->string('nama');
             $table->timestamps();
         });
     }

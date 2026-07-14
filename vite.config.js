@@ -24,7 +24,6 @@ function getLocalIPv4() {
 const activeIP = getLocalIPv4();
 
 console.log(`
-🚀 [Vite Auto IP] Berhasil mengunci IP Jaringan Asli:
 Local   : http://localhost:5173
 Network : http://${activeIP}:5173
 `);

@@ -17,7 +17,7 @@
                         $pcListUrl = $mahasiswa ? route('mahasiswa.dashboard.pc_list') : route('mahasiswa.dashboard.pc_list');
 
                         $user = $mahasiswa ? Auth::guard('mahasiswa')->user() : Auth::guard('mahasiswa')->user();
-                        $name = $mahasiswa ? $user->nama_mahasiswa : $user->nama_mahasiswa;
+                        $name = $mahasiswa ? $user->nama : $user->nama;
                     @endphp
                     
                     <a href="{{ $dashboardUrl }}">

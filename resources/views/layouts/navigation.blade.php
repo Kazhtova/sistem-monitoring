@@ -27,7 +27,7 @@
 
                     $user = $teknisi ? Auth::guard('teknisi')->user() : Auth::guard('mahasiswa')->user();
 
-                    $name = $teknisi ? $user->nama_teknisi : $user->nama_mahasiswa;
+                    $name = $teknisi ? $user->nama_teknisi : $user->nama;
 
                     $jumlahPending = $teknisi ? \App\Models\Request::where('status', 'pending')->count() : 0;
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,9 +11,21 @@ class Komputer extends Model
 {
     use HasFactory;
 
-    protected $table = 'komputer';
+    // 1. Deklarasikan properti tanpa nilai teks langsung
+    protected $table;
     protected $primaryKey = 'id_komputer';
     protected $fillable = ['nama_komputer', 'id_laboratorium'];
+
+    // 2. Set nilai tabel secara dinamis ke database utama
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        
+        $mainDb = config('database.connections.mysql.database'); // Mengambil 'sistem_monitoring'
+        
+        // Menghasilkan 'sistem_monitoring.komputer'
+        $this->table = $mainDb . '.komputer'; 
+    }
 
     public function laboratorium(): BelongsTo{
         return $this->belongsTo(Laboratorium::class, 'id_laboratorium');

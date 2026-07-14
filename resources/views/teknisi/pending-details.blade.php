@@ -22,7 +22,7 @@
                 <div class="px-8 py-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div class="flex items-center gap-4">
                         <div>
-                            <h3 class="text-xl font-bold text-slate-900">{{ $data->mahasiswa->nama_mahasiswa }}</h3>
+                            <h3 class="text-xl font-bold text-slate-900">{{ $data->mahasiswa->nama }}</h3>
                             <p class="text-sm font-medium text-slate-500 mt-0.5">Mahasiswa &bull; ID: 19876554</p>
                         </div>
                     </div>

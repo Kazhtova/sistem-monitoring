@@ -19,7 +19,7 @@ class MahasiswaFactory extends Factory
     {
         return [
             'nrp'   => fake()->unique()->numberBetween('##########'),
-            'nama_mahasiswa'    => fake()->name(),
+            'nama'    => fake()->name(),
         ];
     }
 }

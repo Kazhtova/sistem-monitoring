@@ -87,7 +87,7 @@
                                     <td class="py-4 px-6">
                                             <div class="flex flex-col">
                                                 <span class="text-sm font-bold text-slate-800">
-                                                    {{ $data_request->mahasiswa->nama_mahasiswa }}
+                                                    {{ $data_request->mahasiswa->nama }}
                                                 </span>
                                             </div>
                                         </div>

@@ -184,7 +184,7 @@
 
             <div class="flex items-center gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-900">{{ $data->mahasiswa->nama_mahasiswa }}</h1>
+                    <h1 class="text-2xl font-bold text-slate-900">{{ $data->mahasiswa->nama }}</h1>
                     <div class="flex items-center gap-2 mt-4">
                         <span class="px-2 py-0.5 bg-slate-100 text-slate-900 text-[12px] font-bold rounded uppercase tracking-wider">Mahasiswa</span>
                         <span class="font-bold text-slate-900 text-sm">&bull; NRP: {{ $data->mahasiswa->nrp ?? 'N/A' }}</span>
