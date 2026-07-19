@@ -167,7 +167,7 @@ class RequestController extends Controller
 
     })->afterResponse(); 
           
-    return redirect()->back()->with('success', 'Request Disetujui'); 
+    return redirect()->route('teknisi.dashboard.request')->with('success', 'Request Disetujui'); 
     }
 
     public function rejectRequest(int $id)
