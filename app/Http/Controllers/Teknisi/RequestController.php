@@ -157,7 +157,7 @@ class RequestController extends Controller
         ActivityLogger::log(
             action: 'ACCEPT_REQUEST',
             subject: $request,
-            description: "Teknisi menyetujui request perbaikan dari Mahasiswa: {$request->mahasiswa->nama} (PC: {$request->id_komputer})",
+            description: "Teknisi menyetujui request perbaikan dari Mahasiswa: {$request->mahasiswa->nama_mahasiswa} (PC: {$request->id_komputer})",
             properties: [
                 'id_komputer' => $request->id_komputer,
                 'software'    => $request->software,

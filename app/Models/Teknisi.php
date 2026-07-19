@@ -11,19 +11,9 @@ class Teknisi extends Authenticatable
 {
     use HasRoles, HasFactory;
 
-    // 1. Deklarasikan properti tanpa nilai teks langsung
-    protected $table;
+    protected $table = 'teknisi';
     protected $primaryKey = 'id_teknisi';
     protected $fillable = ['nama_teknisi'];
-
-    // 2. Set nilai tabel secara dinamis ke database utama
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        
-        $mainDb = config('database.connections.mysql.database'); 
-        $this->table = $mainDb . '.teknisi'; 
-    }
 
     public function request(){
         return $this->hasMany(Request::class, 'id_teknisi', 'id_teknisi');

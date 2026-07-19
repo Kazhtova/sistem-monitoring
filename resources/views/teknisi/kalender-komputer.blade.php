@@ -136,8 +136,9 @@
                 let title = info.event.title;
                 let mulai = info.event.start.toLocaleString('id-ID');
                 let selesai = info.event.end ? info.event.end.toLocaleString('id-ID') : 'N/A';
+                let mahasiswa = props.nama_mahasiswa || 'Tidak Tertera';
 
-                alert(`Status: ${title}\nMahasiswa: ${props.mahasiswa}\nSoftware: ${props.software}\nMulai: ${mulai}\nSelesai: ${selesai}`);
+                alert(`Status: ${title}\nMahasiswa: ${mahasiswa}\nSoftware: ${props.software}\nMulai: ${mulai}\nSelesai: ${selesai}`);
             }
         });
 

@@ -50,9 +50,9 @@ class ActivityController extends Controller
 
     public function getJadwalKomputer(int $id_komputer)
     {
-        $requests = ModelsRequest::where('id_komputer', $id_komputer)
+        $requests = ModelsRequest::with('mahasiswa')
+            ->where('id_komputer', $id_komputer)
             ->where(function ($query) {
-                
                 $query->where('status', 'setuju')
                       ->orWhere(function ($subQuery) {
                           $subQuery->where('status', 'pending')
@@ -60,7 +60,6 @@ class ActivityController extends Controller
                       });
             })
             ->get();
-
             $events = $requests->map(function ($req) {
             
             $warnaBg = ($req->status === 'setuju') ? '#e11d48' : '#eab308';
@@ -74,7 +73,7 @@ class ActivityController extends Controller
                 'borderColor'     => $warnaBg,
                 'textColor'       => '#ffffff',
                 'extendedProps' => [
-                    'mahasiswa' => $req->nama,
+                    'nama_mahasiswa' => $req->mahasiswa->nama_mahasiswa ?? 'Mahasiswa Anonim',
                     'software'  => $req->software
                 ]
             ];

@@ -147,21 +147,21 @@
     @vite(['resources/js/app.js'])
     <script>
 
-        function bukaModalWaktu(idRequest, waktuSaatIni) {
-            const modal = document.getElementById('modalWaktu');
-            const form = document.getElementById('formUpdateWaktu');
-            const inputWaktu = document.getElementById('inputWaktuSelesai');
+    function bukaModalWaktu(idRequest, waktuSaatIni) {
+        const modal = document.getElementById('modalWaktu');
+        const form = document.getElementById('formUpdateWaktu');
+        const inputWaktu = document.getElementById('inputWaktuSelesai');
             
-            const basePath = window.location.pathname.split('/mahasiswa')[0]; 
-            form.action = `${window.location.origin}${basePath}/mahasiswa/update-time-mahasiswa/${idRequest}`; 
+        const basePath = window.location.pathname.split('/mahasiswa')[0]; 
+        form.action = `${window.location.origin}${basePath}/mahasiswa/update-time-mahasiswa/${idRequest}`; 
             
-            if(waktuSaatIni) {
-                inputWaktu.value = waktuSaatIni.split(' ')[0];
-            }
-            
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
+        if(waktuSaatIni) {
+            inputWaktu.value = waktuSaatIni.split(' ')[0];
         }
+            
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; 
+    }
 
     function tutupModalWaktu() {
         const modal = document.getElementById('modalWaktu');
