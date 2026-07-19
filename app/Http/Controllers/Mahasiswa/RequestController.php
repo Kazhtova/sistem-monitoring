@@ -6,6 +6,7 @@ use App\Events\FotoView;
 use App\Events\RequestCreated;
 use App\Events\WaktuUpdated;
 use App\Http\Controllers\Controller;
+use App\Models\Dosen;
 use App\Models\Komputer;
 use App\Models\Laboratorium;
 use App\Models\Mahasiswa;
@@ -33,6 +34,8 @@ class RequestController extends Controller
 
         $labChoose = Laboratorium::findOrFail($id);
 
+        $daftarDosen = Dosen::orderBy('nama_dosen', 'asc')->get();
+
         $komputerAvailable = Komputer::where('id_laboratorium', $id)
             ->orderByRaw('LENGTH(nama_komputer) ASC')
             ->orderBy('nama_komputer', 'asc')
@@ -45,7 +48,7 @@ class RequestController extends Controller
                 return $item;
             });
     
-        return view('mahasiswa.input-request-mahasiswa', ['komputerTersedia' => $komputerAvailable, 'labId' => $id, 'labTerpilih' => $labChoose]);
+        return view('mahasiswa.input-request-mahasiswa', ['komputerTersedia' => $komputerAvailable, 'labId' => $id, 'labTerpilih' => $labChoose, 'daftarDosen' => $daftarDosen]);
     }
 
     public function showProfile(Mahasiswa $mahasiswa)
@@ -241,31 +244,30 @@ class RequestController extends Controller
             );
         })->afterResponse();
 
-        $formatWaktu = \Carbon\Carbon::parse($request->perkiraan_selesai)->format('d M, H:i');
+        $waktuBaru = \Carbon\Carbon::parse($request->perkiraan_selesai)->format('Y-m-d H:i:s');
 
-        broadcast(new WaktuUpdated($dataRequest->id_request, $formatWaktu))->toOthers();
+        broadcast(new WaktuUpdated($dataRequest->id_request, $waktuBaru))->toOthers();
 
         return redirect()->back()->with('success', 'Estimated completion time successfully extended.');
     }
 
     public function listPc(Request $request)
-{
+    {
+        $search = $request->input('search');
+        $filterLab = $request->input('lab');
+        $filterStatus = $request->input('status');
 
-    $search = $request->input('search');
-    $filterLab = $request->input('lab');
-    $filterStatus = $request->input('status');
+        $query = Komputer::whereHas('laboratorium')->with(['laboratorium.teknisi', 'requests']);
 
-    $query = Komputer::whereHas('laboratorium')->with(['laboratorium.teknisi', 'requests']);
+        if ($search) {
+            $query->where('nama_komputer', 'like', '%' . $search . '%');
+        }
 
-    if ($search) {
-        $query->where('nama_komputer', 'like', '%' . $search . '%');
-    }
+        if ($filterLab) {
+            $query->where('id_laboratorium', $filterLab);
+        }
 
-    if ($filterLab) {
-        $query->where('id_laboratorium', $filterLab);
-    }
-
-    if ($filterStatus === 'in_use') {
+        if ($filterStatus === 'in_use') {
             $query->whereHas('requests', function($q) {
                 $q->where('status', 'setuju');
             });
@@ -275,11 +277,27 @@ class RequestController extends Controller
             });
         }
 
+        $query->orderBy(
+            Laboratorium::select('nama_lab')
+                ->whereColumn('laboratorium.id_laboratorium', 'komputer.id_laboratorium')
+                ->limit(1), 
+            'asc'
+        )
+        ->orderByRaw('LENGTH(nama_komputer) ASC')
+        ->orderBy('nama_komputer', 'asc');
 
-    $pc = $query->paginate(15)->appends($request->query());
+        $pc = $query->paginate(15)->appends($request->query());
 
-    $labs = Laboratorium::get();
+        $pc->through(function ($item) {
+            $item->nama_komputer = preg_replace_callback('/\d+/', function ($matches) {
+                return str_pad($matches[0], 2, '0', STR_PAD_LEFT);
+            }, $item->nama_komputer);
+            
+            return $item;
+        });
 
-    return view('mahasiswa.list-pc', compact('pc', 'labs'));
-}
+        $labs = Laboratorium::get();
+
+        return view('mahasiswa.list-pc', compact('pc', 'labs'));
+    }
 }

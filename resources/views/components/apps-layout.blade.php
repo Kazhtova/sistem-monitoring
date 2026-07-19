@@ -15,7 +15,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-        <script>eruda.init();</script>
+        {{-- <script>eruda.init();</script> --}}
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -67,14 +67,13 @@
                         .then((currentToken) => {
                             if (!currentToken) return console.warn('Token kosong');
 
-                            // ✅ Ambil CSRF dari meta tag, bukan dari Blade di dalam SW
                             const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                             fetch('/mahasiswa/update-fcm-token', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': csrf // ✅ Benar
+                                    'X-CSRF-TOKEN': csrf 
                                 },
                                 body: JSON.stringify({ fcm_token: currentToken })
                             })
@@ -89,7 +88,6 @@
         });
     }
 
-    // ✅ TAMBAHAN: Handler notifikasi saat app sedang terbuka (foreground)
     onMessage(messaging, (payload) => {
         console.log('[Foreground] Pesan masuk:', payload);
         const title = payload.notification?.title || 'Notifikasi';

@@ -75,9 +75,9 @@
                         });
                     }
 
-                    const acceptUrl = `/teknisi/request-list/accept/${id}`; 
-                    const rejectUrl = `/teknisi/request-list/reject/${id}`;
-                    const detailsUrl = `/teknisi/pending/list/${id}`;
+                    const acceptUrl = `/monlab/teknisi/request-list/accept/${id}`; 
+                    const rejectUrl = `/monlab/teknisi/request-list/reject/${id}`;
+                    const detailsUrl = `/monlab/teknisi/pending/list/${id}`;
 
                     let tbody = document.getElementById('request-table-body');
                     let emptyRow = document.getElementById('empty-state-row');

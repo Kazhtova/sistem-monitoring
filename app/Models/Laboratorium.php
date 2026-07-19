@@ -22,7 +22,6 @@ class Laboratorium extends Model
         
         $mainDb = config('database.connections.mysql.database'); // Mengambil 'sistem_monitoring'
         
-        // 🛠️ PERBAIKAN DI SINI: Ubah dari '.teknisi' menjadi '.laboratorium'
         $this->table = $mainDb . '.laboratorium'; 
     }
 

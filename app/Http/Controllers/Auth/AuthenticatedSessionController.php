@@ -39,15 +39,12 @@ public function storeMahasiswa(Request $request): RedirectResponse
         return back()->withErrors(['nrp' => 'NRP tidak ditemukan.'])->withInput();
     }
 
-    // 🟢 Pengecekan adaptif untuk password baru (Bcrypt) & password lama (MD5)
     $passwordInfo = password_get_info($mahasiswa->password);
     $isPasswordValid = false;
 
     if ($passwordInfo['algo'] !== 0 && $passwordInfo['algoName'] !== 'unknown') {
-        // Jika sudah diperbarui, dia akan masuk ke sini (Bcrypt)
         $isPasswordValid = Hash::check($request->password, $mahasiswa->password);
     } else {
-        // Jika masih menggunakan data MD5 lama
         $isPasswordValid = (md5($request->password) === $mahasiswa->password);
     }
 
@@ -55,7 +52,6 @@ public function storeMahasiswa(Request $request): RedirectResponse
         return back()->withErrors(['password' => 'Password yang Anda masukkan salah.'])->withInput();
     }
 
-    // Proses login jika berhasil
     Auth::guard('mahasiswa')->login($mahasiswa, $request->boolean('remember'));
     $request->session()->regenerate();
 

@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model; // 🌟 1. TAMBAHKAN IMPORT INI
-use Illuminate\Support\Facades\Request; // 🌟 TAMBAHKAN INI
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request; 
 
 class ActivityLogger
 {
@@ -18,7 +18,6 @@ class ActivityLogger
      * @param array|null $properties
      * @return void
      */
-    // 🌟 2. TAMBAHKAN "?Model" DI DEPAN $subject
     public static function log(string $action, ?Model $subject = null, string $description = '', ?array $properties = null): void
     {
         $causer = null;

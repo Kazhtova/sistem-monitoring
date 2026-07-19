@@ -255,16 +255,17 @@
                             </svg>
                         </div>
                         
-                        <div class="inline-flex items-center gap-3 px-4 py-2 bg-slate-50/80 border border-slate-100/50 rounded-lg">
+                        @if($data->status === 'setuju')
+                            <div class="inline-flex items-center gap-1 px-1 py-2 bg-slate-50/80 border border-slate-100/50 rounded-lg">
                             <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-slate-500"></span>
                             </span>
-                            
                             <p class="text-sm font-bold text-slate-700 whitespace-nowrap">
                                 In Progress <span class="text-slate-300 mx-2">|</span> {{ $waktuBerjalan }} Berlalu
                             </p>
-                        </div>
+                        </div> 
+                        @endif
                     </div>
 
                     <div class="relative pl-10">

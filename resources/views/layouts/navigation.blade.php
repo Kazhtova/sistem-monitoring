@@ -62,6 +62,38 @@
                         {{ __('Dashboard Activity') }}
                     </x-nav-link>
                 </div>
+
+                @if($teknisi)
+                <div class="hidden sm:flex sm:items-center sm:ms-10">
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 h-16 border-b-2 {{ request()->is('*master*') ? 'border-slate-700 text-gray-900' : 'border-transparent' }}">
+                                <div>Master Data</div>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('teknisi.master-teknisi.index')">
+                                Data Teknisi
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('teknisi.master-lab.index')">
+                                Data Laboratorium
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('teknisi.master-komputer.index')">
+                                Data Komputer
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('teknisi.master-dosen.index')">
+                                Data Dosen
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+                @endif
                 
             </div>
 
@@ -130,8 +162,29 @@
             <x-responsive-nav-link :href="$activityDashboardUrl" :active="request()->routeIs($routeActivity)">
                 {{ __('Dashboard Activity') }}
             </x-responsive-nav-link>
-
         </div>
+
+        @if($teknisi)
+        <div class="pt-4 pb-2 border-t border-gray-200 bg-slate-50">
+            <div class="px-4 mb-2">
+                <div class="font-bold text-xs uppercase tracking-wider text-slate-500">Master Data</div>
+            </div>
+            <div class="space-y-1">
+                <x-responsive-nav-link :href="route('teknisi.master-teknisi.index')" :active="request()->routeIs('teknisi.master-teknisi.*')">
+                    Data Teknisi
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('teknisi.master-lab.index')" :active="request()->routeIs('teknisi.master-lab.*')">
+                    Data Laboratorium
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('teknisi.master-komputer.index')" :active="request()->routeIs('teknisi.master-komputer.*')">
+                    Data Komputer
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('teknisi.master-dosen.index')" :active="request()->routeIs('teknisi.master-dosen.*')">
+                    Data Dosen
+                </x-responsive-nav-link>
+            </div>
+        </div>
+        @endif
 
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">

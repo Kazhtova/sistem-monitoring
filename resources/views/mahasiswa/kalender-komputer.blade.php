@@ -67,6 +67,7 @@
     <!-- Panggil CSS FullCalendar -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 
+
     <div class="py-12 bg-slate-50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
@@ -111,7 +112,6 @@
                 slotDuration: '00:30:00', 
                 expandRows: true,
 
-                // 🔴 HAPUS: eventMinHeight & eventShortHeight agar presisi waktu berjalan murni!
 
                 events: "{{ route('mahasiswa.api.komputer.jadwal', $komputer->id_komputer) }}",
 
@@ -120,7 +120,6 @@
                     let timeText = arg.timeText;
                     let titleText = arg.event.title;
                     
-                    // 🟢 Terapkan class .custom-event-card
                     let htmlString = `
                         <div class="custom-event-card" style="background-color: ${bgColor};">
                             <div style="font-size: 10px; opacity: 0.95; font-weight: 700; letter-spacing: 0.5px; line-height: 1.2;">

@@ -152,21 +152,22 @@
             const form = document.getElementById('formUpdateWaktu');
             const inputWaktu = document.getElementById('inputWaktuSelesai');
             
-            form.action = `/mahasiswa/update-time-mahasiswa/${idRequest}`; 
+            const basePath = window.location.pathname.split('/mahasiswa')[0]; 
+            form.action = `${window.location.origin}${basePath}/mahasiswa/update-time-mahasiswa/${idRequest}`; 
             
             if(waktuSaatIni) {
-                inputWaktu.value = waktuSaatIni.replace(' ', 'T');
+                inputWaktu.value = waktuSaatIni.split(' ')[0];
             }
             
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; 
         }
 
-        function tutupModalWaktu() {
-            const modal = document.getElementById('modalWaktu');
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
+    function tutupModalWaktu() {
+        const modal = document.getElementById('modalWaktu');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
 
         document.addEventListener('DOMContentLoaded', function () {
             @if (session('success'))
@@ -213,14 +214,12 @@
                                     statusBadge.classList.add('bg-amber-100', 'text-amber-700');
                                     statusBadge.innerText = 'WAITING AGREEMENT';
                                     if(uploadContainer) uploadContainer.classList.add('invisible');
-                                    // 🟢 PERBAIKAN: Sembunyikan tombol saat antrean masih pending
                                     if(tombolUpdateWaktu) tombolUpdateWaktu.classList.add('hidden'); 
                                     break;
                                 case 'setuju':
                                     statusBadge.classList.add('bg-slate-200', 'text-slate-950');
                                     statusBadge.innerText = 'RUNNING';
                                     if(uploadContainer) uploadContainer.classList.remove('invisible');
-                                    // 🟢 PERBAIKAN: Munculkan tombol saat request disetujui
                                     if(tombolUpdateWaktu) tombolUpdateWaktu.classList.remove('hidden'); 
                                     break;
                                 case 'selesai':

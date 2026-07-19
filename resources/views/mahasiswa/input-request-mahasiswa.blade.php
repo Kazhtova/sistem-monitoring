@@ -66,9 +66,19 @@
                     </div>
 
                     <div class="mb-4">
-                        <x-input-label for="dosen_ta" :value="__('Lecture')" class="text-slate-700 font-bold" />
-                        <x-text-input id="dosen_ta" class="block mt-1.5 w-full text-sm rounded-xl border-slate-200" type="text" name="dosen_ta" :value="old('dosen_ta')" required placeholder="Example: Mr Budi"/>
-                    </div>
+    <x-input-label for="dosen_ta" :value="__('Lecture')" class="text-slate-700 font-bold mb-2" />
+    <div class="relative">
+        <!-- 🟢 KUNCI: Bersihkan class block w-full bawaan select standar agar dicover penuh oleh TomSelect -->
+        <select id="dosen_ta" name="dosen_ta" required>
+            <option value="" disabled selected>-- Select Lecture --</option>
+            @foreach ($daftarDosen as $dosen)
+                <option value="{{ $dosen->nama_dosen }}" {{ old('dosen_ta') == $dosen->nama_dosen ? 'selected' : ''}}>
+                    {{ $dosen->nama_dosen }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+</div>
 
                     <div class="mb-4">
                         <x-input-label for="software" :value="__('Software')" class="text-slate-700 font-bold" />
@@ -127,7 +137,19 @@
                 plugins: ['dropdown_input'], 
             });
 
-            // 🟢 Handle SweetAlert Success
+            let dosenSelectBox = new TomSelect('#dosen_ta', {
+                create: false,
+                sortField: { field: "text", direction: "asc" },
+                allowEmptyOption: false,
+                plugins: ['dropdown_input'],
+                controlInput: null,
+                render: {
+                    item: function(data, escape) {
+                        return '<div class="text-sm rounded-xl border-slate-200">' + escape(data.text) + '</div>';
+                    }
+                }
+            });
+
             @if (session('success'))
                 Swal.fire({
                     icon: "success",
@@ -139,9 +161,7 @@
                 });
             @endif
 
-            // 🟢 FITUR BARU: Handle SweetAlert Error (Terutama Jadwal Bentrok)
             @if ($errors->any())
-                // Mengambil pesan error pertama (Biasanya pesan bentrok jadwal)
                 let errorMessage = "{!! addslashes($errors->first()) !!}";
                 
                 Swal.fire({

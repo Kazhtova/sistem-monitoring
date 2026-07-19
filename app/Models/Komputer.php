@@ -21,7 +21,7 @@ class Komputer extends Model
     {
         parent::__construct($attributes);
         
-        $mainDb = config('database.connections.mysql.database'); // Mengambil 'sistem_monitoring'
+        $mainDb = config('database.connections.mysql.database');
         
         // Menghasilkan 'sistem_monitoring.komputer'
         $this->table = $mainDb . '.komputer'; 
@@ -34,5 +34,37 @@ class Komputer extends Model
     public function requests(): HasMany
     {
         return $this->hasMany(Request::class, 'id_komputer');
+    }
+
+    // 3. SENSOR OTOMATIS (MODEL EVENTS) UNTUK JUMLAH KOMPUTER DI LAB
+    protected static function booted()
+    {
+        // A. Saat Komputer BARU ditambahkan -> Tambah +1 ke Lab terkait
+        static::created(function ($komputer) {
+            $komputer->laboratorium()->increment('jumlah_komputer');
+        });
+
+        // B. Saat Komputer DIHAPUS -> Kurangi -1 dari Lab terkait
+        static::deleted(function ($komputer) {
+            $komputer->laboratorium()->decrement('jumlah_komputer');
+        });
+
+        // C. Saat Komputer DIPINDAH ke Lab lain -> Kurangi dari Lab lama, Tambah ke Lab baru
+        static::updated(function ($komputer) {
+            // Cek apakah data kolom 'id_laboratorium' benar-benar mengalami perubahan
+            if ($komputer->wasChanged('id_laboratorium')) {
+                
+                // Ambil ID lab yang lama sebelum diganti
+                $idLabLama = $komputer->getOriginal('id_laboratorium');
+                
+                // Kurangi -1 dari Lab yang lama (jika lab lamanya ditemukan)
+                if ($idLabLama) {
+                    Laboratorium::find($idLabLama)?->decrement('jumlah_komputer');
+                }
+                
+                // Tambah +1 ke Lab yang baru
+                $komputer->laboratorium()->increment('jumlah_komputer');
+            }
+        });
     }
 }

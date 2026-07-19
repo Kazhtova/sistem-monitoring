@@ -26,9 +26,9 @@ messaging.onBackgroundMessage((payload) => {
         icon:    '/favicon.ico',
         badge:   '/favicon.ico',
         vibrate: [200, 100, 200],
-        tag:     payload.data?.type || 'default', // ✅ Cegah notif duplikat
+        tag:     payload.data?.type || 'default', 
         data: {
-            url: '/mahasiswa/dashboard-mahasiswa', // ✅ URL tujuan saat diklik
+            url: '/mahasiswa/dashboard-mahasiswa',
             ...payload.data
         }
     };
@@ -36,7 +36,6 @@ messaging.onBackgroundMessage((payload) => {
     return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// ✅ TAMBAHAN: Handler klik notifikasi
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
     const targetUrl = event.notification.data?.url || '/';

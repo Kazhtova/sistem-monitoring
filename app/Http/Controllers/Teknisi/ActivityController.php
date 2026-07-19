@@ -14,20 +14,16 @@ class ActivityController extends Controller
     {
         $id_teknisi_login = Auth::guard('teknisi')->id();
 
-        // 2. Ambil list ID Request yang ditugaskan/ditangani oleh Teknisi ini
         $relatedRequestIds = ModelsRequest::where('id_teknisi', $id_teknisi_login)
                                             ->pluck('id_request');
 
-        // 3. 🌟 AMBIL LOG DARI DUA SISI (TEKNISI & REQUEST MAHASISWA)
         $logs = ActivityLog::where(function ($query) use ($id_teknisi_login, $relatedRequestIds) {
             
-            // SISI A: Semua aktivitas yang dilakukan OLEH Teknisi ini sendiri (sebagai Causer)
             $query->where(function ($q) use ($id_teknisi_login) {
-                $q->where('causer_type', 'App\Models\Teknisi') // Sesuaikan namespace model Teknisi-mu
+                $q->where('causer_type', 'App\Models\Teknisi') 
                   ->where('causer_id', $id_teknisi_login);
             })
             
-            // SISI B: ATAU semua aktivitas yang terjadi PADA Request yang ditangani teknisi ini (oleh Mahasiswa)
             ->orWhere(function ($q) use ($relatedRequestIds) {
                 $q->where('subject_type', ModelsRequest::class)
                   ->whereIn('subject_id', $relatedRequestIds);

@@ -21,8 +21,8 @@ class Teknisi extends Authenticatable
     {
         parent::__construct($attributes);
         
-        $mainDb = config('database.connections.mysql.database'); // Mengambil 'sistem_monitoring'
-        $this->table = $mainDb . '.teknisi'; // Menghasilkan 'sistem_monitoring.teknisi'
+        $mainDb = config('database.connections.mysql.database'); 
+        $this->table = $mainDb . '.teknisi'; 
     }
 
     public function request(){

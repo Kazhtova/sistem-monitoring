@@ -17,10 +17,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login-mahasiswa', [AuthenticatedSessionController::class, 'storeMahasiswa']);
 
-    Route::get('login-teknisi', [AuthenticatedSessionController::class, 'createTeknisi'])
+    Route::get('login-teknisi-mtk', [AuthenticatedSessionController::class, 'createTeknisi'])
         ->name('login.teknisi');
 
-    Route::post('login-teknisi', [AuthenticatedSessionController::class, 'storeTeknisi']);
+    Route::post('login-teknisi-mtk', [AuthenticatedSessionController::class, 'storeTeknisi']);
  
 });
 

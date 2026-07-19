@@ -24,31 +24,41 @@ class RequestController extends Controller
 
     session(['has_opened_request_list' => true]);
 
-    // 1. Ambil daftar lab yang dikelola oleh teknisi ini untuk dropdown filter
     $daftarLab = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
 
-    // 2. 🟢 KUNCI MUTLAK: Inisiasi Query dasar yang HANYA memanggil status pending
     $query = $user->request()
             ->with(['mahasiswa', 'komputer', 'laboratorium'])
             ->whereNotIn('status', ['setuju', 'tolak', 'selesai']);
 
-    // 3. Logika Filter Laboratorium (Tersisa)
     if ($request->filled('lab') && $request->lab !== 'all') {
         $query->where('id_laboratorium', $request->lab);
     }
 
-    // 4. Logika Pencarian (Search)
-    if($request->filled('search')){
-        $search = $request->search;
-        $query->where(function($q) use ($search){
-            $q->where('dosen_ta', 'like', "%{$search}%")
-            ->orWhereHas('mahasiswa', function($mq) use ($search){
-                $mq->where('nama', 'like', "%{$search}%");
-            });
-        });
-    }
+    // if($request->filled('search')){
+    //     $search = $request->search;
+    //     $query->where(function($q) use ($search){
+    //         $q->where('dosen_ta', 'like', "%{$search}%")
+    //         ->orWhereHas('mahasiswa', function($mq) use ($search){
+    //             $mq->where('nama', 'like', "%{$search}%");
+    //         });
+    //     });
+    // }
 
-    // 5. Logika Pengurutan (Sort)
+        if($request->filled('search')){
+            $search = $request->search;
+            $query->where(function($q) use ($search){
+                $q->where('dosen_ta', 'like', "%{$search}%")
+                ->orWhereExists(function ($mq) use ($search) {
+                    $mq->select(DB::raw(1))
+                       ->from('mhs.mhs') 
+                       ->whereColumn('request.nrp', 'mhs.mhs.nrp')
+                       ->where('nama', 'like', "%{$search}%");
+                });
+                
+            });
+        }
+    
+
     $sort = $request->input('sort', 'latest');
     if($sort === 'oldest'){
         $query->oldest();
@@ -65,40 +75,52 @@ class RequestController extends Controller
     /** @var \App\Models\Teknisi $user */
     $user = auth()->guard('teknisi')->user();
 
-    // 1. Ambil daftar lab untuk dropdown filter
     $daftarLab = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
 
-    // 2. Kueri Dasar: HANYA panggil yang berstatus setuju, tolak, atau selesai
     $query = $user->request()
             ->with(['mahasiswa', 'komputer', 'laboratorium'])
             ->whereIn('status', ['setuju', 'tolak', 'selesai']);
 
-    // 3. 🟢 FITUR BARU: Filter Status Spesifik
     if ($request->filled('status') && $request->status !== 'all') {
         $query->where('status', $request->status);
     }
 
-    // 4. 🟢 FITUR BARU: Filter Laboratorium
     if ($request->filled('lab') && $request->lab !== 'all') {
         $query->where('id_laboratorium', $request->lab);
     }
 
-    // 5. Logika Search
-    if ($request->filled('search')) {
-        $search = $request->search;
-        $query->where(function($q) use ($search) {
-            $q->where('dosen_ta', 'like', "%{$search}%")
-              ->orWhere('software', 'like', "%{$search}%")
-              ->orWhereHas('mahasiswa', function($mq) use ($search) {
-                  $mq->where('nama', 'like', "%{$search}%");
-              })              
-              ->orWhereHas('komputer', function($kq) use ($search) {
-                  $kq->where('nama_komputer', 'like', "%{$search}%");
-              });
-        });
-    }
+    // if ($request->filled('search')) {
+    //     $search = $request->search;
+    //     $query->where(function($q) use ($search) {
+    //         $q->where('dosen_ta', 'like', "%{$search}%")
+    //           ->orWhere('software', 'like', "%{$search}%")
+    //           ->orWhereHas('mahasiswa', function($mq) use ($search) {
+    //               $mq->where('nama', 'like', "%{$search}%");
+    //           })              
+    //           ->orWhereHas('komputer', function($kq) use ($search) {
+    //               $kq->where('nama_komputer', 'like', "%{$search}%");
+    //           });
+    //     });
+    // }
 
-    // 6. Logika Sort
+    if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('dosen_ta', 'like', "%{$search}%")
+                  ->orWhere('software', 'like', "%{$search}%")
+                  ->orWhereExists(function ($mq) use ($search) {
+                      $mq->select(DB::raw(1))
+                         ->from('mhs.mhs') 
+                         ->whereColumn('request.nrp', 'mhs.mhs.nrp')
+                         ->where('nama', 'like', "%{$search}%");
+                  }) 
+                               
+                  ->orWhereHas('komputer', function($kq) use ($search) {
+                      $kq->where('nama_komputer', 'like', "%{$search}%");
+                  });
+            });
+        }
+
     $sort = $request->input('sort', 'latest');
     if ($sort === 'oldest') {
         $query->oldest();
@@ -108,7 +130,6 @@ class RequestController extends Controller
                              
     $readRequest = $query->paginate(15)->withQueryString();    
     
-    // Jangan lupa kirim $daftarLab ke View
     return view('teknisi.accept-dashboard', compact('readRequest', 'daftarLab'));
     }
 
@@ -200,17 +221,13 @@ class RequestController extends Controller
     return redirect()->back()->with('success', 'Perbaikan Telah Selesai Ditangani');
     }
 
-    public function listPc(Request $request)
+        public function listPc(Request $request)
     {
-        $user = auth()->guard('teknisi')->user();
-
         $search = $request->input('search');
         $filterLab = $request->input('lab');
         $filterStatus = $request->input('status');
 
-        $query = Komputer::whereHas('laboratorium', function($q) use ($user) {
-            $q->where('id_teknisi', $user->id_teknisi);
-        })->with(['laboratorium.teknisi', 'requests']);
+        $query = Komputer::whereHas('laboratorium')->with(['laboratorium.teknisi', 'requests']);
 
         if ($search) {
             $query->where('nama_komputer', 'like', '%' . $search . '%');
@@ -230,9 +247,26 @@ class RequestController extends Controller
             });
         }
 
+        $query->orderBy(
+            Laboratorium::select('nama_lab')
+                ->whereColumn('laboratorium.id_laboratorium', 'komputer.id_laboratorium')
+                ->limit(1), 
+            'asc'
+        )
+        ->orderByRaw('LENGTH(nama_komputer) ASC')
+        ->orderBy('nama_komputer', 'asc');
+
         $pc = $query->paginate(15)->appends($request->query());
 
-        $labs = Laboratorium::where('id_teknisi', $user->id_teknisi)->get();
+        $pc->through(function ($item) {
+            $item->nama_komputer = preg_replace_callback('/\d+/', function ($matches) {
+                return str_pad($matches[0], 2, '0', STR_PAD_LEFT);
+            }, $item->nama_komputer);
+            
+            return $item;
+        });
+
+        $labs = Laboratorium::get();
 
         return view('teknisi.list-pc', compact('pc', 'labs'));
     }

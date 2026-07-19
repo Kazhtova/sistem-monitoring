@@ -9,7 +9,6 @@ function getLocalIPv4() {
     for (const name of Object.keys(interfaces)) {
         for (const iface of interfaces[name] ?? []) {
             if (iface.family === 'IPv4' && !iface.internal) {
-                // 🟢 OTOMATIS: Prioritaskan IP Wi-Fi asli (ITS/Home) & abaikan IP virtual virtualbox/wsl
                 if (iface.address.startsWith('10.') || iface.address.startsWith('192.168.')) {
                     return iface.address;
                 }
@@ -45,7 +44,7 @@ export default defineConfig({
         strictPort: true,
 
         hmr: {
-            host: activeIP, // 🟢 Otomatis mendistribusikan IP Wi-Fi asli ke HP
+            host: activeIP, 
         },
 
         cors: true,
