@@ -24,6 +24,7 @@ Route::middleware('guest')->group(function () {
  
 });
 
+// Logout For Teknisi And Mahasiswa
 Route::middleware('auth:mahasiswa,teknisi')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
