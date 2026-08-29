@@ -54,4 +54,4 @@ Pastikan perangkat kamu sudah terinstal:
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Kazhtova/sistem-monitoring.git
-   cd invenkoryz
+   cd sistem-monitoring
