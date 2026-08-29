@@ -11,13 +11,13 @@
   <a href="#"><img src="https://img.shields.io/badge/Real--Time-Reverb-orange?style=for-the-badge" alt="Laravel Reverb"></a>
 </p>
 
-## 📌 About The Project
+## About The Project
 
 **Invenkoryz** adalah Sistem Monitoring Laboratorium terintegrasi yang dirancang untuk mengelola, melacak, dan menjadwalkan penggunaan unit komputer (PC) di berbagai laboratorium. Sistem ini memfasilitasi mahasiswa dalam mengajukan *request* perbaikan atau peminjaman, serta membantu teknisi dalam memantau aset secara *real-time*.
 
 Aplikasi ini mengimplementasikan *Role-Based Access Control* (RBAC) yang ketat, memisahkan hak akses antara Mahasiswa, Teknisi Penanggung Jawab, dan Super Admin (Observer).
 
-## ✨ Key Features
+## Key Features
 
 - **Real-time Monitoring & Notifications:** Pembaruan status *request* dan notifikasi langsung kepada mahasiswa dan teknisi menggunakan WebSockets (Laravel Reverb & Echo).
 - **Smart Scheduling System:** Visualisasi jadwal pemakaian PC secara interaktif menggunakan FullCalendar untuk mencegah bentrok jadwal (*double-booking*).
