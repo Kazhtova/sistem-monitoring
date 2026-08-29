@@ -28,7 +28,7 @@ Aplikasi ini mengimplementasikan *Role-Based Access Control* (RBAC) yang ketat, 
 - **Activity Logging:** Pelacakan rekam jejak (*audit trail*) yang komprehensif untuk setiap tindakan yang dilakukan di dalam sistem.
 - **Responsive UI:** Antarmuka modern dan responsif yang dibangun menggunakan komponen Blade dan Tailwind CSS.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend:** Laravel (PHP)
 - **Frontend:** Laravel Blade, Tailwind CSS, Alpine.js
@@ -37,7 +37,7 @@ Aplikasi ini mengimplementasikan *Role-Based Access Control* (RBAC) yang ketat, 
 - **Assets/Libraries:** FullCalendar, SweetAlert2
 - **Infrastructure:** Docker (Support for containerized environments)
 
-## 🚀 Getting Started
+## Getting Started
 
 Ikuti langkah-langkah di bawah ini untuk menjalankan proyek Invenkoryz di mesin lokal (*local development environment*).
 
