@@ -11,7 +11,7 @@
   <a href="#"><img src="https://img.shields.io/badge/Real--Time-Reverb-orange?style=for-the-badge" alt="Laravel Reverb"></a>
 </p>
 
-## About The P
+## About The Pr
 
 **Invenkoryz** adalah Sistem Monitoring Laboratorium terintegrasi yang dirancang untuk mengelola, melacak, dan menjadwalkan penggunaan unit komputer (PC) di berbagai laboratorium. Sistem ini memfasilitasi mahasiswa dalam mengajukan *request* perbaikan atau peminjaman, serta membantu teknisi dalam memantau aset secara *real-time*.
 
