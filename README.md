@@ -30,12 +30,12 @@ Aplikasi ini mengimplementasikan *Role-Based Access Control* (RBAC) yang ketat, 
 
 ## Tech Stack
 
-- **Backend:** Laravel (PHP)
-- **Frontend:** Laravel Blade, Tailwind CSS, Alpine.js
-- **Database:** MySQL
-- **WebSockets:** Laravel Reverb & Laravel Echo
-- **Assets/Libraries:** FullCalendar, SweetAlert2
-- **Infrastructure:** Docker (Support for containerized environments)
+- **Backend:** Laravel (PHP).
+- **Frontend:** Laravel Blade, Tailwind CSS, Alpine.js.
+- **Database:** MySQL.
+- **WebSockets:** Laravel Reverb & Laravel Echo.
+- **Assets/Libraries:** FullCalendar, SweetAlert2.
+- **Infrastructure:** Docker (Support for containerized environments).
 
 ## Getting Started
 
