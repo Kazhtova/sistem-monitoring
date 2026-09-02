@@ -39,7 +39,7 @@ Aplikasi ini mengimplementasikan *Role-Based Access Control* (RBAC) yang ketat, 
 
 ## Getting Started
 
-Ikuti langkah-langkah di bawah ini untuk menjalankan proyek Invenkoryz di mesin lokal (*local development environment*).
+Ikuti langkah-langkah di bawah ini untuk menjalankan proyek Invenkoryz di mesin lokal (*local development environment*)
 
 ### Prerequisites
 
