@@ -44,7 +44,7 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan proyek Invenkoryz di mesin 
 ### Prerequisites
 
 Pastikan perangkat kamu sudah terinstal:
-- [PHP](https://www.php.net/) (v8.2 atau lebih baru)
+- [PHP](https://www.php.net/) (v8.2)
 - [Composer](https://getcomposer.org/)
 - [Node.js & npm](https://nodejs.org/)
 - MySQL / MariaDB
