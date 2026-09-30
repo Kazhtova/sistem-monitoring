@@ -8,7 +8,6 @@ use App\Models\Teknisi;
 
 class TeknisiController extends Controller
 {
-    // 1. Tampilkan halaman tabel
     public function index()
     {
         return view('crud.teknisi.index', [
@@ -16,7 +15,6 @@ class TeknisiController extends Controller
         ]);
     }
 
-    // 2. Tampilkan form tambah (Kirim objek kosongan)
     public function create()
     {
         return view('crud.teknisi.form', ['teknisi' => new Teknisi()]);
