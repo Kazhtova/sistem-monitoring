@@ -2,6 +2,8 @@
   <img src="public/images/M.svg" width="150" alt="Invenkoryz Logo">
 </p>
 
+---
+
 <h1 align="center">Invenkoryz - Sistem Monitoring Laboratorium</h1>
 
 <p align="center">
