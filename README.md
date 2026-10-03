@@ -59,4 +59,3 @@ Pastikan perangkat kamu sudah terinstal:
    ```bash
    git clone https://github.com/Kazhtova/sistem-monitoring.git
    cd sistem-monitoring
-```
