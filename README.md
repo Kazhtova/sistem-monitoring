@@ -2,7 +2,7 @@
   <img src="public/images/M.svg" width="150" alt="Invenkoryz Logo">
 </p>
 
-
+---
 
 <h1 align="center">Invenkoryz - Sistem Monitoring Laboratorium</h1>
 
@@ -13,7 +13,7 @@
   <a href="#"><img src="https://img.shields.io/badge/Real--Time-Reverb-orange?style=for-the-badge" alt="Laravel Reverb"></a>
 </p>
 
-
+---
 
 ## About The Project
 
